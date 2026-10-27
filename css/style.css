@@ -1,0 +1,44 @@
+﻿body{
+    margin:0;
+    background:#111;
+    color:#fff;
+    font-family:sans-serif;
+}
+
+header{
+    text-align:center;
+    padding:30px 15px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+    padding:20px;
+}
+
+.card{
+    background:#222;
+    padding:20px;
+    border-radius:12px;
+}
+
+.area-list{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+    padding:20px;
+}
+
+.area-list a{
+    color:white;
+    text-decoration:none;
+    background:#222;
+    padding:20px;
+    border-radius:12px;
+    text-align:center;
+}
+
+.area-list a:hover{
+    background:#333;
+}

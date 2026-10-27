@@ -1,57 +1,52 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARフォト図鑑</title>
-
-<style>
-body{
-    background:#121212;
-    color:white;
-    font-family:sans-serif;
-    text-align:center;
-}
-
-h1{
-    margin-top:50px;
-}
-
-.area-list{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:10px;
-    max-width:500px;
-    margin:auto;
-}
-
-.area{
-    border:1px solid #444;
-    padding:20px;
-    border-radius:10px;
-    background:#222;
-}
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARフォト図鑑</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<h1>ARフォト図鑑</h1>
+<header>
+    <h1>ARフォト図鑑</h1>
+    <p>地図から辿る写真図鑑</p>
+</header>
 
-<p>地図から辿る写真図鑑</p>
+<main>
 
-<div class="area-list">
+<section class="stats">
+    <div class="card">
+        <h2>写真数</h2>
+        <p>0</p>
+    </div>
 
-<div class="area">北海道</div>
-<div class="area">東北</div>
-<div class="area">関東</div>
-<div class="area">中部</div>
-<div class="area">近畿</div>
-<div class="area">中国</div>
-<div class="area">四国</div>
-<div class="area">九州</div>
+    <div class="card">
+        <h2>撮影地点</h2>
+        <p>0</p>
+    </div>
 
-</div>
+    <div class="card">
+        <h2>都道府県</h2>
+        <p>0</p>
+    </div>
+</section>
 
+<section class="area-list">
+
+<a href="areas/hokkaido.html">北海道</a>
+<a href="areas/tohoku.html">東北</a>
+<a href="areas/kanto.html">関東</a>
+<a href="areas/chubu.html">中部</a>
+<a href="areas/kinki.html">近畿</a>
+<a href="areas/chugoku.html">中国</a>
+<a href="areas/shikoku.html">四国</a>
+<a href="areas/kyushu.html">九州</a>
+
+</section>
+
+<script src="js/main.js"></script>
+
+</main>
 </body>
 </html>

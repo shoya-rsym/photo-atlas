@@ -1,0 +1,20 @@
+﻿[
+  {
+    "id":"photo001",
+    "title":"横浜駅AR",
+    "file":"photos/sample/photo1.jpg",
+    "date":"2026-01-01",
+    "prefecture":"kanagawa",
+    "location":"yokohama_station",
+    "tags":[
+      "ARフォト",
+      "夜景"
+    ],
+    "characters":[
+      "オリジナル"
+    ],
+    "comment":"横浜駅で撮影",
+    "lat":35.465,
+    "lng":139.622
+  }
+]
