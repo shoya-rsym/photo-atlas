@@ -2,18 +2,143 @@
 
 地図から辿る写真図鑑
 
-## 構成
+---
 
-- HTML
-- CSS
-- JavaScript
-- JSON
+# コンセプト
 
-## 今後の実装予定
+利用者は日本地図から写真へ辿り着く。
 
-- Leaflet地図連携
-- 検索機能
-- タグ機能
-- ギャラリー表示
-- GPSマーカー
-- ARフォト管理
+```text
+TOP
+ ↓
+日本地図
+ ↓
+地域
+ ↓
+都道府県
+ ↓
+撮影地点
+ ↓
+写真
+```
+
+---
+
+# システム思想
+
+Photoを中心エンティティとして設計する。
+
+Location中心設計ではない。
+
+将来的に以下へ拡張可能。
+
+- タグ別閲覧
+- キャラクター別閲覧
+- 季節別閲覧
+
+---
+
+# MVP機能
+
+- SVG日本地図
+- 地域ページ
+- 都道府県ページ
+- Leaflet地図
+- 撮影地点ページ
+- 写真詳細
+- 検索
+- フィルター
+
+---
+
+# 技術スタック
+
+```text
+Next.js
+TypeScript
+Tailwind CSS
+Leaflet
+React Leaflet
+GitHub Pages
+```
+
+---
+
+# データ
+
+```text
+areas.json
+prefectures.json
+locations.json
+photos.json
+tags.json
+characters.json
+japan-map-regions.json
+```
+
+---
+
+# SVG地図
+
+配置
+
+```text
+public/maps/japan-regions.svg
+```
+
+---
+
+重要
+
+```text
+都道府県単位SVG
+```
+
+で構築する。
+
+---
+
+# 画像
+
+原寸
+
+```text
+public/photos
+```
+
+---
+
+サムネイル
+
+```text
+public/thumbnails
+```
+
+---
+
+# MVP対象外
+
+- AI
+- 認証
+- DB
+- 管理画面
+- ランキング
+- 達成率
+
+---
+
+# ドキュメント
+
+詳細は docs/ 配下を参照。
+
+特に以下を優先。
+
+```text
+03_data-model.md
+04_routing.md
+05_ui-spec.md
+06_feature-spec.md
+13_acceptance-criteria.md
+19_mvp-scope.md
+20_copilot-task-list.md
+```
