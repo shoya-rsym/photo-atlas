@@ -10,9 +10,12 @@ export type AreaCardItem = {
   photo?: Photo;
 };
 
-type Props = { areas: AreaCardItem[] };
+type Props = { areas: AreaCardItem[]; headingId?: string };
 
-export default function AreaCards({ areas }: Props) {
+export default function AreaCards({
+  areas,
+  headingId = "area-cards-title",
+}: Props) {
   return (
     <section aria-labelledby="area-cards-title">
       <div className="mb-4 flex items-end justify-between gap-4">
@@ -20,7 +23,7 @@ export default function AreaCards({ areas }: Props) {
           <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
             Explore by region
           </p>
-          <h2 id="area-cards-title" className="mt-1 text-2xl font-bold">
+          <h2 id={headingId} className="mt-1 text-2xl font-bold">
             地域から探す
           </h2>
         </div>
@@ -28,7 +31,7 @@ export default function AreaCards({ areas }: Props) {
           気になる地域を選んで写真を見つけよう
         </p>
       </div>
-      <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <ul className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {areas.map((area) => (
           <li key={area.id}>
             <Link

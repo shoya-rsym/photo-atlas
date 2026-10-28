@@ -1,6 +1,7 @@
 import AreaCards from "@/components/AreaCards";
 import HomeHero from "@/components/HomeHero";
 import JapanMap from "@/components/JapanMap";
+import MobilePhotoRail from "@/components/MobilePhotoRail";
 import PopularTags from "@/components/PopularTags";
 import RecentPhotos from "@/components/RecentPhotos";
 import RecommendationSpot from "@/components/RecommendationSpot";
@@ -73,48 +74,85 @@ export default function HomePage() {
     .slice(0, 6);
 
   return (
-    <div className="space-y-8 sm:space-y-10">
-      <HomeHero photo={heroPhoto} locationName={heroLocation?.name} />
+    <>
+      <div className="space-y-7 md:hidden">
+        <HomeHero
+          photo={heroPhoto}
+          locationName={heroLocation?.name}
+          mobilePresentation
+        />
+        <RecommendationSpot spots={recommendationSpots} />
 
-      <section aria-label="図鑑の統計情報">
-        <StatsPanel statistics={statistics} />
-      </section>
-
-      <section
-        id="explore"
-        aria-label="地図と写真から探索"
-        className="grid items-start gap-5 lg:grid-cols-[minmax(0,1.7fr)_minmax(280px,0.8fr)]"
-      >
-        <div className="min-w-0">
-          <div className="mb-4">
+        <section
+          id="explore"
+          aria-label="地図と写真から探索"
+          className="scroll-mt-20"
+        >
+          <div className="mb-3">
             <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
               Map of Japan
             </p>
-            <h2 className="mt-1 text-2xl font-bold">日本地図から探す</h2>
+            <h2 className="mt-1 text-xl font-bold">日本地図から探す</h2>
           </div>
           <JapanMap
             units={getAreaUnits()}
             ariaLabel="日本地図"
             variant="home"
+            idPrefix="mobile"
           />
-        </div>
+        </section>
 
-        <aside className="space-y-4">
-          <RecommendationSpot spots={recommendationSpots} />
-          <section aria-labelledby="recent-title" className="rounded-2xl border border-border bg-card p-4">
-            <div className="mb-3 flex items-center justify-between gap-3">
-              <h2 id="recent-title" className="font-bold">
-                最近追加された写真
-              </h2>
-              <span className="text-xs text-muted">新着</span>
+        <MobilePhotoRail photos={recentPhotos} />
+        <section aria-label="図鑑の統計情報">
+          <StatsPanel statistics={statistics} />
+        </section>
+        <AreaCards areas={areaCards} headingId="mobile-area-cards-title" />
+      </div>
+
+      <div className="hidden space-y-8 sm:space-y-10 md:block">
+        <HomeHero photo={heroPhoto} locationName={heroLocation?.name} />
+
+        <section aria-label="図鑑の統計情報">
+          <StatsPanel statistics={statistics} />
+        </section>
+
+        <section
+          id="desktop-explore"
+          aria-label="地図と写真から探索"
+          className="grid scroll-mt-20 items-start gap-5 lg:grid-cols-[minmax(0,1.7fr)_minmax(280px,0.8fr)]"
+        >
+          <div className="min-w-0">
+            <div className="mb-4">
+              <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
+                Map of Japan
+              </p>
+              <h2 className="mt-1 text-2xl font-bold">日本地図から探す</h2>
             </div>
-            <RecentPhotos photos={recentPhotos} compact />
-          </section>
-          <PopularTags tags={popularTags} />
-        </aside>
-      </section>
+            <JapanMap
+              units={getAreaUnits()}
+              ariaLabel="日本地図"
+              variant="home"
+              idPrefix="desktop"
+            />
+          </div>
 
-      <AreaCards areas={areaCards} />
-    </div>
+          <aside className="space-y-4">
+            <RecommendationSpot spots={recommendationSpots} />
+            <section aria-labelledby="recent-title" className="rounded-2xl border border-border bg-card p-4">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <h2 id="recent-title" className="font-bold">
+                  最近追加された写真
+                </h2>
+                <span className="text-xs text-muted">新着</span>
+              </div>
+              <RecentPhotos photos={recentPhotos} compact />
+            </section>
+            <PopularTags tags={popularTags} />
+          </aside>
+        </section>
+
+        <AreaCards areas={areaCards} />
+      </div>
+    </>
   );
 }

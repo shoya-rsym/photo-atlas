@@ -8,13 +8,24 @@ import type { Photo } from "@/types";
 type Props = {
   photo?: Photo;
   locationName?: string;
+  mobilePresentation?: boolean;
 };
 
-export default function HomeHero({ photo, locationName }: Props) {
+export default function HomeHero({
+  photo,
+  locationName,
+  mobilePresentation = false,
+}: Props) {
   const [imageFailed, setImageFailed] = useState(false);
 
   return (
-    <section className="relative isolate flex min-h-[25rem] items-end overflow-hidden rounded-2xl border border-border bg-[#111827] sm:min-h-[30rem]">
+    <section
+      className={`relative isolate flex min-h-[25rem] items-end overflow-hidden border border-border bg-[#111827] sm:min-h-[30rem] ${
+        mobilePresentation
+          ? "-mx-4 min-h-[30rem] rounded-none border-x-0 md:mx-0 md:rounded-2xl md:border-x"
+          : "rounded-2xl"
+      }`}
+    >
       {photo && !imageFailed ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
@@ -63,7 +74,7 @@ export default function HomeHero({ photo, locationName }: Props) {
           日本の風景とキャラクターが出会った場所を探そう
         </p>
         <Link
-          href="#explore"
+          href={mobilePresentation ? "#explore" : "#desktop-explore"}
           className="mt-7 inline-flex items-center gap-2 rounded-full bg-sky-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-sky-950/30 transition hover:bg-sky-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
         >
           地図から探す <span aria-hidden="true">→</span>

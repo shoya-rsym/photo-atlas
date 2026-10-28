@@ -1,10 +1,11 @@
-import { locations, prefectures, tags } from "@/lib/data";
-import { getTagName } from "@/lib/photos";
+import { characters, locations, prefectures, tags } from "@/lib/data";
+import { getCharacterName, getTagName } from "@/lib/photos";
 import type { Photo } from "@/types";
 
 export type SearchFilters = {
   keyword: string;
   tagId: string;
+  characterId: string;
   year: string;
   prefectureId: string;
 };
@@ -12,6 +13,7 @@ export type SearchFilters = {
 export const EMPTY_FILTERS: SearchFilters = {
   keyword: "",
   tagId: "",
+  characterId: "",
   year: "",
   prefectureId: "",
 };
@@ -33,6 +35,13 @@ export function getTagOptions() {
   return tags.map((tag) => ({ id: tag.id, name: tag.name }));
 }
 
+export function getCharacterOptions() {
+  return characters.map((character) => ({
+    id: character.id,
+    name: character.name,
+  }));
+}
+
 export function getPrefectureOptions() {
   return prefectures.map((p) => ({ id: p.id, name: p.name }));
 }
@@ -42,6 +51,9 @@ export function searchPhotos(photos: Photo[], filters: SearchFilters): Photo[] {
   const keyword = filters.keyword.trim().toLowerCase();
   return photos.filter((photo) => {
     if (filters.tagId && !photo.tags.includes(filters.tagId)) return false;
+    if (filters.characterId && photo.characterId !== filters.characterId) {
+      return false;
+    }
     if (filters.year && photo.date?.slice(0, 4) !== filters.year) return false;
     if (
       filters.prefectureId &&
@@ -55,6 +67,7 @@ export function searchPhotos(photos: Photo[], filters: SearchFilters): Photo[] {
       photo.title,
       photo.comment ?? "",
       location?.name ?? "",
+      ...(photo.characterId ? [getCharacterName(photo.characterId)] : []),
       ...photo.tags.map(getTagName),
     ]
       .join("\n")

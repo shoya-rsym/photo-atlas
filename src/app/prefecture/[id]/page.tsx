@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import FeaturedPhotoCard from "@/components/FeaturedPhotoCard";
 import LinkCard from "@/components/LinkCard";
 import PrefectureMap from "@/components/PrefectureMap";
 import SummaryCards from "@/components/SummaryCards";
@@ -38,6 +39,22 @@ export default async function PrefecturePage({ params }: Props) {
 
   const area = findArea(prefecture.areaId);
   const locations = getLocationsByPrefecture(prefecture.id);
+  const recommendedLocation = locations
+    .flatMap((location) => {
+      const photo = getRepresentativePhoto(
+        photos.filter((item) => item.locationId === location.id),
+      );
+      return photo
+        ? [
+            {
+              location,
+              photo,
+              photoCount: getLocationStatistics(location.id).photoCount,
+            },
+          ]
+        : [];
+    })
+    .sort((a, b) => b.photoCount - a.photoCount)[0];
   const prefectureLocationIds = new Set(locations.map((location) => location.id));
   const prefecturePhotos = photos.filter((photo) =>
     prefectureLocationIds.has(photo.locationId),
@@ -93,7 +110,7 @@ export default async function PrefecturePage({ params }: Props) {
   };
 
   return (
-    <div className="space-y-8 sm:space-y-10">
+    <div className="space-y-7 sm:space-y-10">
       <VisualHero
         eyebrow={area?.name ?? "Explore the prefecture"}
         title={prefecture.name}
@@ -103,6 +120,7 @@ export default async function PrefecturePage({ params }: Props) {
           ...(area ? [{ label: area.name, href: `/area/${area.id}` }] : []),
           { label: prefecture.name },
         ]}
+        mobilePresentation
       />
       <SummaryCards
         items={[
@@ -111,34 +129,48 @@ export default async function PrefecturePage({ params }: Props) {
           { label: "地域", value: area?.name ?? "日本" },
         ]}
       />
+      {recommendedLocation ? (
+        <div className="md:hidden">
+          <FeaturedPhotoCard
+            photo={recommendedLocation.photo}
+            href={`/location/${recommendedLocation.location.id}`}
+            label="おすすめ地点"
+            title={recommendedLocation.location.name}
+            detail={`写真 ${recommendedLocation.photoCount} 枚 · ${prefecture.name}`}
+          />
+        </div>
+      ) : null}
 
       <section
         aria-label="撮影地点地図と一覧"
         className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]"
       >
-        <div>
+        <div className="order-2 md:order-1">
           <div className="mb-4">
             <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
               Locations on the map
             </p>
-            <h2 className="mt-1 text-2xl font-bold">{prefecture.name}の地図</h2>
+            <h2 className="mt-1 text-xl font-bold md:text-2xl">{prefecture.name}の地図</h2>
           </div>
           <PrefectureMap items={previews} />
         </div>
 
-        <div>
+        <div className="order-1 md:order-2">
           <div className="mb-4">
             <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
               Field guide
             </p>
-            <h2 className="mt-1 text-2xl font-bold">撮影地点を探す</h2>
+            <h2 className="mt-1 text-xl font-bold md:text-2xl">
+              <span className="md:hidden">撮影地点一覧</span>
+              <span className="hidden md:inline">撮影地点を探す</span>
+            </h2>
           </div>
           {locations.length === 0 ? (
             <p className="rounded-xl border border-border bg-card p-5 text-muted">
               撮影地点が登録されていません
             </p>
           ) : (
-            <div className="max-h-[34rem] space-y-6 overflow-y-auto pr-1">
+            <div className="space-y-6 md:max-h-[34rem] md:overflow-y-auto md:pr-1">
               {groups.map((group) => (
                 <section
                   key={group.id}
@@ -151,7 +183,7 @@ export default async function PrefecturePage({ params }: Props) {
                   {group.items.length === 0 ? (
                     <p className="text-sm text-muted">撮影地点が登録されていません</p>
                   ) : (
-                    <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <ul className="grid grid-cols-1 gap-3 md:grid-cols-2">
                       {group.items.map(renderLocation)}
                     </ul>
                   )}

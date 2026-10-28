@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumb";
+import MobilePhotoDetail from "@/components/MobilePhotoDetail";
 import PhotoGrid from "@/components/PhotoGrid";
 import PhotoTags from "@/components/PhotoTags";
 import PhotoThumbnail from "@/components/PhotoThumbnail";
@@ -55,117 +56,142 @@ export default async function PhotoPage({ params }: Props) {
   const prev = index > 0 ? siblings[index - 1] : undefined;
   const next = index < siblings.length - 1 ? siblings[index + 1] : undefined;
   const relatedPhotos = siblings.filter((item) => item.id !== photo.id).slice(0, 6);
+  const breadcrumbItems = [
+    ...(area ? [{ label: area.name, href: `/area/${area.id}` }] : []),
+    ...(prefecture
+      ? [{ label: prefecture.name, href: `/prefecture/${prefecture.id}` }]
+      : []),
+    { label: location.name, href: `/location/${location.id}` },
+    { label: photo.title },
+  ];
 
   return (
-    <div className="space-y-8 sm:space-y-10">
-      <Breadcrumb
-        items={[
-          ...(area ? [{ label: area.name, href: `/area/${area.id}` }] : []),
-          ...(prefecture
-            ? [{ label: prefecture.name, href: `/prefecture/${prefecture.id}` }]
-            : []),
-          { label: location.name, href: `/location/${location.id}` },
-          { label: photo.title },
-        ]}
-      />
-
-      <section className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.55fr)_minmax(300px,0.8fr)]">
-        <figure className="overflow-hidden rounded-2xl border border-border bg-card p-2 sm:p-3">
-          <div className="aspect-[4/3] max-h-[78vh] overflow-hidden rounded-xl bg-background">
-            <PhotoThumbnail src={photo.image} alt={photo.title} contain />
-          </div>
-          <figcaption className="flex flex-wrap items-center justify-between gap-2 px-2 py-3 text-sm text-muted">
-            <span>{location.name}</span>
-            <span>{formatPhotoDate(photo.date)}</span>
-          </figcaption>
-        </figure>
-
-        <aside className="rounded-2xl border border-border bg-card p-5 sm:p-6">
-          <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
-            Photo archive
-          </p>
-          <h1 className="mt-2 text-2xl font-black leading-tight sm:text-3xl">
-            {photo.title}
-          </h1>
-          <dl className="mt-6 space-y-5">
-            <div>
-              <dt className="text-xs text-muted">撮影日</dt>
-              <dd className="mt-1 font-semibold">{formatPhotoDate(photo.date)}</dd>
-            </div>
-            <div>
-              <dt className="text-xs text-muted">撮影場所</dt>
-              <dd className="mt-1">
-                <Link
-                  href={`/location/${location.id}`}
-                  className="font-semibold text-accent hover:underline"
-                >
-                  {location.name} →
-                </Link>
-              </dd>
-            </div>
-            {photo.characterId ? (
-              <div>
-                <dt className="text-xs text-muted">キャラクター</dt>
-                <dd className="mt-1 font-semibold">{getCharacterName(photo.characterId)}</dd>
-              </div>
-            ) : null}
-            <div>
-              <dt className="mb-2 text-xs text-muted">タグ</dt>
-              <dd>
-                <PhotoTags tagIds={photo.tags} />
-              </dd>
-            </div>
-            <div>
-              <dt className="text-xs text-muted">コメント</dt>
-              <dd className="mt-1 whitespace-pre-line leading-6">
-                {photo.comment ?? "コメントはありません"}
-              </dd>
-            </div>
-          </dl>
-        </aside>
-      </section>
-
-      <nav aria-label="写真ナビゲーション" className="grid grid-cols-3 gap-3">
-        {prev ? (
-          <Link href={`/photo/${prev.id}`} className={navClass}>
-            前へ
-          </Link>
-        ) : (
-          <span className={disabledClass}>前へ</span>
-        )}
-        <Link href={`/location/${location.id}`} className={navClass}>
-          一覧へ
-        </Link>
-        {next ? (
-          <Link href={`/photo/${next.id}`} className={navClass}>
-            次へ
-          </Link>
-        ) : (
-          <span className={disabledClass}>次へ</span>
-        )}
-      </nav>
-
-      {relatedPhotos.length > 0 ? (
-        <section aria-labelledby="related-photos-title">
-          <div className="mb-4 flex items-end justify-between gap-4">
-            <div>
-              <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
+    <>
+      <div className="space-y-6 md:hidden">
+        <MobilePhotoDetail
+          photo={photo}
+          locationId={location.id}
+          locationName={location.name}
+          previousId={prev?.id}
+          nextId={next?.id}
+          breadcrumbs={breadcrumbItems}
+        />
+        {relatedPhotos.length > 0 ? (
+          <section aria-labelledby="mobile-related-photos-title">
+            <div className="mb-3">
+              <p className="text-xs font-semibold tracking-[0.18em] text-accent uppercase">
                 From the same place
               </p>
-              <h2 id="related-photos-title" className="mt-1 text-2xl font-bold">
-                同じ場所で撮影された写真
+              <h2 id="mobile-related-photos-title" className="mt-1 text-xl font-bold">
+                関連写真
               </h2>
             </div>
-            <Link
-              href={`/location/${location.id}`}
-              className="text-sm font-semibold text-accent hover:underline"
-            >
-              すべて見る →
-            </Link>
-          </div>
-          <PhotoGrid photos={relatedPhotos} />
+            <PhotoGrid photos={relatedPhotos} />
+          </section>
+        ) : null}
+      </div>
+
+      <div className="hidden space-y-8 sm:space-y-10 md:block">
+        <Breadcrumb items={breadcrumbItems} />
+
+        <section className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.55fr)_minmax(300px,0.8fr)]">
+          <figure className="overflow-hidden rounded-2xl border border-border bg-card p-2 sm:p-3">
+            <div className="aspect-[4/3] max-h-[78vh] overflow-hidden rounded-xl bg-background">
+              <PhotoThumbnail src={photo.image} alt={photo.title} contain />
+            </div>
+            <figcaption className="flex flex-wrap items-center justify-between gap-2 px-2 py-3 text-sm text-muted">
+              <span>{location.name}</span>
+              <span>{formatPhotoDate(photo.date)}</span>
+            </figcaption>
+          </figure>
+
+          <aside className="rounded-2xl border border-border bg-card p-5 sm:p-6">
+            <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
+              Photo archive
+            </p>
+            <h1 className="mt-2 text-2xl font-black leading-tight sm:text-3xl">
+              {photo.title}
+            </h1>
+            <dl className="mt-6 space-y-5">
+              <div>
+                <dt className="text-xs text-muted">撮影日</dt>
+                <dd className="mt-1 font-semibold">{formatPhotoDate(photo.date)}</dd>
+              </div>
+              <div>
+                <dt className="text-xs text-muted">撮影場所</dt>
+                <dd className="mt-1">
+                  <Link
+                    href={`/location/${location.id}`}
+                    className="font-semibold text-accent hover:underline"
+                  >
+                    {location.name} →
+                  </Link>
+                </dd>
+              </div>
+              {photo.characterId ? (
+                <div>
+                  <dt className="text-xs text-muted">キャラクター</dt>
+                  <dd className="mt-1 font-semibold">{getCharacterName(photo.characterId)}</dd>
+                </div>
+              ) : null}
+              <div>
+                <dt className="mb-2 text-xs text-muted">タグ</dt>
+                <dd>
+                  <PhotoTags tagIds={photo.tags} />
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs text-muted">コメント</dt>
+                <dd className="mt-1 whitespace-pre-line leading-6">
+                  {photo.comment ?? "コメントはありません"}
+                </dd>
+              </div>
+            </dl>
+          </aside>
         </section>
-      ) : null}
-    </div>
+
+        <nav aria-label="写真ナビゲーション" className="grid grid-cols-3 gap-3">
+          {prev ? (
+            <Link href={`/photo/${prev.id}`} className={navClass}>
+              前へ
+            </Link>
+          ) : (
+            <span className={disabledClass}>前へ</span>
+          )}
+          <Link href={`/location/${location.id}`} className={navClass}>
+            一覧へ
+          </Link>
+          {next ? (
+            <Link href={`/photo/${next.id}`} className={navClass}>
+              次へ
+            </Link>
+          ) : (
+            <span className={disabledClass}>次へ</span>
+          )}
+        </nav>
+
+        {relatedPhotos.length > 0 ? (
+          <section aria-labelledby="related-photos-title">
+            <div className="mb-4 flex items-end justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
+                  From the same place
+                </p>
+                <h2 id="related-photos-title" className="mt-1 text-2xl font-bold">
+                  同じ場所で撮影された写真
+                </h2>
+              </div>
+              <Link
+                href={`/location/${location.id}`}
+                className="text-sm font-semibold text-accent hover:underline"
+              >
+                すべて見る →
+              </Link>
+            </div>
+            <PhotoGrid photos={relatedPhotos} />
+          </section>
+        ) : null}
+      </div>
+    </>
   );
 }

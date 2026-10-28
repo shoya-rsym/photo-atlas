@@ -11,6 +11,7 @@ type Props = {
   eyebrow: string;
   photo?: Photo;
   breadcrumbs: BreadcrumbItem[];
+  mobilePresentation?: boolean;
 };
 
 export default function VisualHero({
@@ -19,11 +20,18 @@ export default function VisualHero({
   eyebrow,
   photo,
   breadcrumbs,
+  mobilePresentation = false,
 }: Props) {
   const [imageFailed, setImageFailed] = useState(false);
 
   return (
-    <section className="relative isolate flex min-h-[19rem] items-end overflow-hidden rounded-2xl border border-white/10 bg-[#101923] sm:min-h-[23rem]">
+    <section
+      className={`relative isolate flex min-h-[19rem] items-end overflow-hidden border border-white/10 bg-[#101923] sm:min-h-[23rem] ${
+        mobilePresentation
+          ? "-mx-4 min-h-[20rem] rounded-none border-x-0 md:mx-0 md:min-h-[23rem] md:rounded-2xl md:border-x"
+          : "rounded-2xl"
+      }`}
+    >
       {photo && !imageFailed ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img

@@ -33,7 +33,7 @@ export default function PhotoGrid({ photos, showLocation = false }: Props) {
 
   return (
     <>
-      <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+      <ul className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {photos.map((photo, index) => (
           <li
             key={photo.id}

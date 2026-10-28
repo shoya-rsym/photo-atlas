@@ -22,6 +22,7 @@ type Props = {
   ariaLabel: string;
   hint?: string;
   variant?: "default" | "home";
+  idPrefix?: string;
 };
 
 type LoadState =
@@ -50,16 +51,30 @@ function unitShapes(unit: MapUnit, map: MapShapes): PrefectureShape[] {
   });
 }
 
+function unitSvgId(idPrefix: string, unitId: string): string {
+  return `unit-${idPrefix ? `${idPrefix}-` : ""}${unitId}`;
+}
+
+function clipPathId(
+  idPrefix: string,
+  unitId: string,
+  prefectureId: string,
+): string {
+  return `clip-${idPrefix ? `${idPrefix}-` : ""}${unitId}-${prefectureId}`;
+}
+
 type Offsets = Record<string, [number, number]>;
 
 function UnitShapes({
   unit,
   map,
   offsets,
+  idPrefix,
 }: {
   unit: MapUnit;
   map: MapShapes;
   offsets: Offsets;
+  idPrefix: string;
 }) {
   return (
     <>
@@ -74,7 +89,9 @@ function UnitShapes({
             data-prefecture={shape.prefectureId}
             transform={transform || undefined}
             clipPath={
-              unit.clip ? `url(#clip-${unit.id}-${shape.prefectureId})` : undefined
+              unit.clip
+                ? `url(#${clipPathId(idPrefix, unit.id, shape.prefectureId)})`
+                : undefined
             }
           >
             {shape.elements.map((el, i) =>
@@ -96,11 +113,13 @@ function Overlay({
   map,
   offsets,
   tone,
+  idPrefix,
 }: {
   unit: MapUnit;
   map: MapShapes;
   offsets: Offsets;
   tone: Tone;
+  idPrefix: string;
 }) {
   const s = TONE_STYLE[tone];
   return (
@@ -109,7 +128,12 @@ function Overlay({
       pointerEvents="none"
       style={{ fill: s.fill, stroke: s.stroke, strokeWidth: s.width }}
     >
-      <UnitShapes unit={unit} map={map} offsets={offsets} />
+      <UnitShapes
+        unit={unit}
+        map={map}
+        offsets={offsets}
+        idPrefix={idPrefix}
+      />
     </g>
   );
 }
@@ -120,6 +144,7 @@ export default function JapanMap({
   ariaLabel,
   hint = "地図の地域にカーソルを合わせる（スマホはタップ）と、写真のプレビューが表示されます。",
   variant = "default",
+  idPrefix = "",
 }: Props) {
   const router = useRouter();
   const [load, setLoad] = useState<LoadState>({ status: "loading" });
@@ -209,7 +234,7 @@ export default function JapanMap({
                   ? unitShapes(unit, load.map).map((shape) => (
                       <clipPath
                         key={`${unit.id}-${shape.prefectureId}`}
-                        id={`clip-${unit.id}-${shape.prefectureId}`}
+                        id={clipPathId(idPrefix, unit.id, shape.prefectureId)}
                       >
                         <polygon points={clipPoints(shape, unit.clip ?? [])} />
                       </clipPath>
@@ -223,7 +248,7 @@ export default function JapanMap({
                 return (
                   <g
                     key={unit.id}
-                    id={`unit-${unit.id}`}
+                    id={unitSvgId(idPrefix, unit.id)}
                     className="map-unit"
                     role="link"
                     tabIndex={0}
@@ -259,7 +284,12 @@ export default function JapanMap({
                     }}
                   >
                     <title>{unit.name}</title>
-                    <UnitShapes unit={unit} map={load.map} offsets={offsets} />
+                    <UnitShapes
+                      unit={unit}
+                      map={load.map}
+                      offsets={offsets}
+                      idPrefix={idPrefix}
+                    />
                   </g>
                 );
               })}
@@ -269,6 +299,7 @@ export default function JapanMap({
                   map={load.map}
                   offsets={offsets}
                   tone="selected"
+                  idPrefix={idPrefix}
                 />
               ) : null}
               {hoveredId && activeUnit && hoveredId !== selectedId ? (
@@ -277,6 +308,7 @@ export default function JapanMap({
                   map={load.map}
                   offsets={offsets}
                   tone="hover"
+                  idPrefix={idPrefix}
                 />
               ) : null}
             </g>
@@ -298,7 +330,10 @@ export default function JapanMap({
               />
               写真未登録
             </span>
-            <span className="text-accent">Hoverで写真をプレビュー</span>
+            <span className="hidden text-accent md:inline">
+              Hoverで写真をプレビュー
+            </span>
+            <span className="text-accent md:hidden">タップで写真をプレビュー</span>
           </div>
         ) : null}
       </div>
@@ -338,14 +373,22 @@ export default function JapanMap({
             {variant === "home" ? (
               <>
                 <p className="text-lg font-bold">地図から写真を探す</p>
-                <p className="mt-2 text-sm leading-6 text-muted">
+                <p className="mt-2 hidden text-sm leading-6 text-muted md:block">
                   気になる地域にカーソルを合わせると、その場所の写真が見られます。
                   地域を選んで、まだ知らない景色を探してみましょう。
                 </p>
-                <p className="mt-4 text-xs text-muted">{hint}</p>
+                <p className="mt-2 text-sm leading-6 text-muted md:hidden">
+                  地域をタップして写真を見てみましょう。もう一度タップすると地域ページへ進みます。
+                </p>
+                <p className="mt-4 hidden text-xs text-muted md:block">{hint}</p>
               </>
             ) : (
-              <p className="text-muted">{hint}</p>
+              <>
+                <p className="hidden text-muted md:block">{hint}</p>
+                <p className="text-sm leading-6 text-muted md:hidden">
+                  地図をタップすると写真をプレビューできます。もう一度タップするとページへ移動します。
+                </p>
+              </>
             )}
           </div>
         )}

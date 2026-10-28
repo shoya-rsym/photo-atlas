@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import PhotoGrid from "@/components/PhotoGrid";
 import {
   EMPTY_FILTERS,
+  getCharacterOptions,
   getPrefectureOptions,
   getTagOptions,
   getYearOptions,
@@ -22,15 +23,25 @@ export default function SearchView({ photos }: Props) {
   const [filters, setFilters] = useState<SearchFilters>(EMPTY_FILTERS);
 
   useEffect(() => {
-    const tagId = new URLSearchParams(window.location.search).get("tag");
-    if (tagId && getTagOptions().some((tag) => tag.id === tagId)) {
-      setFilters((current) => ({ ...current, tagId }));
-    }
+    const params = new URLSearchParams(window.location.search);
+    const tagId = params.get("tag");
+    const characterId = params.get("character");
+    setFilters((current) => ({
+      ...current,
+      ...(tagId && getTagOptions().some((tag) => tag.id === tagId)
+        ? { tagId }
+        : {}),
+      ...(characterId &&
+      getCharacterOptions().some((character) => character.id === characterId)
+        ? { characterId }
+        : {}),
+    }));
   }, []);
 
   const sorted = useMemo(() => sortPhotosByDate(photos), [photos]);
   const results = useMemo(() => searchPhotos(sorted, filters), [sorted, filters]);
   const tagOptions = useMemo(() => getTagOptions(), []);
+  const characterOptions = useMemo(() => getCharacterOptions(), []);
   const yearOptions = useMemo(() => getYearOptions(photos), [photos]);
   const prefectureOptions = useMemo(() => getPrefectureOptions(), []);
 
@@ -53,7 +64,7 @@ export default function SearchView({ photos }: Props) {
             onChange={(e) => update({ keyword: e.target.value })}
           />
         </label>
-        <label className="block">
+        <label id="tag-filter" className="scroll-mt-24 block">
           <span className="mb-1 block text-sm text-muted">タグ</span>
           <select
             value={filters.tagId}
@@ -64,6 +75,24 @@ export default function SearchView({ photos }: Props) {
             {tagOptions.map((tag) => (
               <option key={tag.id} value={tag.id}>
                 {tag.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label
+          id="character-filter"
+          className="scroll-mt-24 block md:hidden"
+        >
+          <span className="mb-1 block text-sm text-muted">キャラクター</span>
+          <select
+            value={filters.characterId}
+            className={fieldClass}
+            onChange={(e) => update({ characterId: e.target.value })}
+          >
+            <option value="">すべて</option>
+            {characterOptions.map((character) => (
+              <option key={character.id} value={character.id}>
+                {character.name}
               </option>
             ))}
           </select>
