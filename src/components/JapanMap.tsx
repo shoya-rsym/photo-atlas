@@ -3,152 +3,180 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { withBasePath } from "@/lib/paths";
-import type { Area, AreaTooltipData, JapanMapRegion, Prefecture } from "@/types";
+import PreviewCard from "@/components/PreviewCard";
+import {
+  clipPoints,
+  computeOffsets,
+  fitViewBox,
+  loadJapanSvg,
+  type MapShapes,
+  type PrefectureShape,
+} from "@/lib/japan-svg";
+import { pickRandom } from "@/lib/random";
+import type { MapUnit, PreviewPhoto } from "@/types";
 
 type Props = {
-  regions: JapanMapRegion[];
-  areas: Area[];
-  prefectures: Prefecture[];
+  units: MapUnit[];
+  /** all: 日本全体 / units: 渡した描画単位が収まる範囲に拡大 */
+  fit?: "all" | "units";
+  ariaLabel: string;
+  hint?: string;
 };
 
-type ShapeElement = { tag: "path" | "polygon"; attr: string; value: string };
-type PrefectureShape = {
-  prefectureId: string;
-  transform: string;
-  elements: ShapeElement[];
-};
-type MapShapes = {
-  viewBox: string;
-  /** 都道府県グループの祖先に掛かっている transform（外側から順） */
-  outerTransform: string;
-  shapes: PrefectureShape[];
-};
 type LoadState =
   | { status: "loading" }
   | { status: "error" }
   | { status: "ready"; map: MapShapes };
 
-const SVG_URL = "/maps/japan-regions.svg";
-const PREFECTURE_ID_PREFIX = "pref-";
+const PREVIEW_PHOTO_COUNT = 4;
 
-function collectElements(group: Element): ShapeElement[] {
-  const elements: ShapeElement[] = [];
-  group.querySelectorAll("path, polygon").forEach((node) => {
-    const tag = node.tagName.toLowerCase();
-    if (tag === "path") {
-      const value = node.getAttribute("d");
-      if (value) elements.push({ tag, attr: "d", value });
-    } else if (tag === "polygon") {
-      const value = node.getAttribute("points");
-      if (value) elements.push({ tag: "polygon", attr: "points", value });
-    }
+type Tone = "base" | "hover" | "selected";
+
+const TONE_STYLE: Record<Tone, { fill: string; stroke: string; width: number }> = {
+  base: { fill: "var(--map-fill)", stroke: "var(--map-stroke)", width: 1 },
+  hover: { fill: "var(--map-hover)", stroke: "var(--map-hover-stroke)", width: 2 },
+  selected: {
+    fill: "var(--map-selected)",
+    stroke: "var(--map-hover-stroke)",
+    width: 2,
+  },
+};
+
+function unitShapes(unit: MapUnit, map: MapShapes): PrefectureShape[] {
+  return unit.prefectureIds.flatMap((id) => {
+    const shape = map.shapes.find((s) => s.prefectureId === id);
+    return shape ? [shape] : [];
   });
-  return elements;
 }
 
-/** 都道府県単位（id="pref-<prefectureId>"）のグループを読み取る */
-function parseSvg(text: string): MapShapes | null {
-  const doc = new DOMParser().parseFromString(text, "image/svg+xml");
-  const root = doc.documentElement;
-  if (root.nodeName !== "svg" || doc.querySelector("parsererror")) return null;
+type Offsets = Record<string, [number, number]>;
 
-  const shapes: PrefectureShape[] = [];
-  let outerTransform = "";
-  doc.querySelectorAll(`[id^="${PREFECTURE_ID_PREFIX}"]`).forEach((node) => {
-    const id = node.getAttribute("id") ?? "";
-    const elements = collectElements(node);
-    if (elements.length === 0) return;
-    if (shapes.length === 0) {
-      const transforms: string[] = [];
-      for (let p = node.parentElement; p && p !== root; p = p.parentElement) {
-        const t = p.getAttribute("transform");
-        if (t) transforms.unshift(t);
-      }
-      outerTransform = transforms.join(" ");
-    }
-    shapes.push({
-      prefectureId: id.slice(PREFECTURE_ID_PREFIX.length),
-      transform: node.getAttribute("transform") ?? "",
-      elements,
-    });
-  });
-
-  const viewBox = root.getAttribute("viewBox");
-  if (!viewBox || shapes.length === 0) return null;
-  return { viewBox, outerTransform, shapes };
+function UnitShapes({
+  unit,
+  map,
+  offsets,
+}: {
+  unit: MapUnit;
+  map: MapShapes;
+  offsets: Offsets;
+}) {
+  return (
+    <>
+      {unitShapes(unit, map).map((shape) => {
+        const offset = offsets[shape.prefectureId];
+        const transform = offset
+          ? `translate(${offset[0]} ${offset[1]}) ${shape.transform}`
+          : shape.transform;
+        return (
+          <g
+            key={shape.prefectureId}
+            data-prefecture={shape.prefectureId}
+            transform={transform || undefined}
+            clipPath={
+              unit.clip ? `url(#clip-${unit.id}-${shape.prefectureId})` : undefined
+            }
+          >
+            {shape.elements.map((el, i) =>
+              el.tag === "path" ? (
+                <path key={i} d={el.value} />
+              ) : (
+                <polygon key={i} points={el.value} />
+              ),
+            )}
+          </g>
+        );
+      })}
+    </>
+  );
 }
 
-export default function JapanMap({ regions, areas, prefectures }: Props) {
+function Overlay({
+  unit,
+  map,
+  offsets,
+  tone,
+}: {
+  unit: MapUnit;
+  map: MapShapes;
+  offsets: Offsets;
+  tone: Tone;
+}) {
+  const s = TONE_STYLE[tone];
+  return (
+    <g
+      className="map-unit"
+      pointerEvents="none"
+      style={{ fill: s.fill, stroke: s.stroke, strokeWidth: s.width }}
+    >
+      <UnitShapes unit={unit} map={map} offsets={offsets} />
+    </g>
+  );
+}
+
+export default function JapanMap({
+  units,
+  fit = "all",
+  ariaLabel,
+  hint = "地図の地域にカーソルを合わせる（スマホはタップ）と、写真のプレビューが表示されます。",
+}: Props) {
   const router = useRouter();
   const [load, setLoad] = useState<LoadState>({ status: "loading" });
-  const [hoveredAreaId, setHoveredAreaId] = useState<string | null>(null);
-  const [selectedAreaId, setSelectedAreaId] = useState<string | null>(null);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [shown, setShown] = useState<{ id: string; photos: PreviewPhoto[] } | null>(
+    null,
+  );
   const pointerType = useRef<string>("mouse");
 
   useEffect(() => {
     let cancelled = false;
-    fetch(withBasePath(SVG_URL))
-      .then((res) => (res.ok ? res.text() : Promise.reject(new Error("fetch"))))
-      .then((text) => {
-        const map = parseSvg(text);
-        if (cancelled) return;
-        setLoad(map ? { status: "ready", map } : { status: "error" });
-      })
-      .catch(() => {
-        if (!cancelled) setLoad({ status: "error" });
-      });
+    loadJapanSvg().then((map) => {
+      if (!cancelled) setLoad(map ? { status: "ready", map } : { status: "error" });
+    });
     return () => {
       cancelled = true;
     };
   }, []);
 
-  // 都道府県ID -> 地域ID
-  const areaByPrefecture = useMemo(() => {
-    const result: Record<string, string> = {};
-    for (const region of regions) {
-      for (const prefectureId of region.prefectureIds) {
-        result[prefectureId] = region.id;
-      }
-    }
-    return result;
-  }, [regions]);
+  const offsets = useMemo(() => {
+    if (load.status !== "ready" || fit !== "units") return {};
+    return computeOffsets(load.map, units.flatMap((u) => u.prefectureIds));
+  }, [load, fit, units]);
 
-  const prefectureNames = useMemo(() => {
-    const result: Record<string, string> = {};
-    for (const prefecture of prefectures) result[prefecture.id] = prefecture.name;
-    return result;
-  }, [prefectures]);
+  const viewBox = useMemo(() => {
+    if (load.status !== "ready") return "";
+    return fit === "units"
+      ? fitViewBox(load.map, units, offsets)
+      : load.map.viewBox;
+  }, [load, fit, units, offsets]);
 
-  const tooltipData = useMemo(() => {
-    const result: Record<string, AreaTooltipData> = {};
-    for (const region of regions) {
-      result[region.id] = {
-        areaId: region.id,
-        prefectures: region.prefectureIds.map((id) => prefectureNames[id] ?? id),
-      };
-    }
-    return result;
-  }, [regions, prefectureNames]);
+  const activeId = hoveredId ?? selectedId;
+  const activeUnit = units.find((u) => u.id === activeId);
 
-  const activeAreaId = hoveredAreaId ?? selectedAreaId;
-  const activeArea = areas.find((a) => a.id === activeAreaId);
-  const activeTooltip = activeAreaId ? tooltipData[activeAreaId] : undefined;
+  const reveal = (id: string | null) => {
+    const unit = units.find((u) => u.id === id);
+    setShown(
+      unit
+        ? { id: unit.id, photos: pickRandom(unit.preview.photos, PREVIEW_PHOTO_COUNT) }
+        : null,
+    );
+  };
 
-  const goToArea = (areaId: string) => router.push(`/area/${areaId}`);
-
-  const handleClick = (areaId: string) => {
+  const handleClick = (unit: MapUnit) => {
     if (pointerType.current === "mouse") {
-      goToArea(areaId);
+      router.push(unit.href);
       return;
     }
-    // タッチ操作: 1回目で地域情報表示、2回目で遷移
-    if (selectedAreaId === areaId) {
-      goToArea(areaId);
+    // タッチ操作: 1回目でプレビュー表示、2回目で遷移
+    if (selectedId === unit.id) {
+      router.push(unit.href);
     } else {
-      setSelectedAreaId(areaId);
+      setSelectedId(unit.id);
+      reveal(unit.id);
     }
   };
+
+  const selectedUnit = units.find((u) => u.id === selectedId);
 
   return (
     <div className="grid gap-6 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
@@ -163,60 +191,87 @@ export default function JapanMap({ regions, areas, prefectures }: Props) {
         ) : null}
         {load.status === "ready" ? (
           <svg
-            viewBox={load.map.viewBox}
+            viewBox={viewBox}
             role="group"
-            aria-label="日本地図"
-            className="mx-auto h-auto w-full max-w-xl"
+            aria-label={ariaLabel}
+            className="mx-auto h-auto max-h-[70vh] w-full max-w-xl"
             onPointerDown={(e) => {
               pointerType.current = e.pointerType;
             }}
           >
+            <defs>
+              {units.flatMap((unit) =>
+                unit.clip
+                  ? unitShapes(unit, load.map).map((shape) => (
+                      <clipPath
+                        key={`${unit.id}-${shape.prefectureId}`}
+                        id={`clip-${unit.id}-${shape.prefectureId}`}
+                      >
+                        <polygon points={clipPoints(shape, unit.clip ?? [])} />
+                      </clipPath>
+                    ))
+                  : [],
+              )}
+            </defs>
             <g transform={load.map.outerTransform || undefined}>
-              {load.map.shapes.map((shape) => {
-                const areaId = areaByPrefecture[shape.prefectureId];
-                if (!areaId) return null;
-                const name = prefectureNames[shape.prefectureId] ?? shape.prefectureId;
-                const areaName = areas.find((a) => a.id === areaId)?.name ?? "";
-                const isActive = areaId === activeAreaId;
+              {units.map((unit) => {
+                const s = TONE_STYLE.base;
                 return (
                   <g
-                    key={shape.prefectureId}
-                    id={`${PREFECTURE_ID_PREFIX}${shape.prefectureId}`}
-                    transform={shape.transform || undefined}
+                    key={unit.id}
+                    id={`unit-${unit.id}`}
+                    className="map-unit"
                     role="link"
                     tabIndex={0}
-                    aria-label={`${name}（${areaName}）`}
+                    aria-label={unit.name}
                     style={{
-                      fill: isActive ? "var(--map-active)" : "var(--map-fill)",
-                      stroke: "var(--map-stroke)",
-                      strokeWidth: 1.5,
-                      strokeLinejoin: "round",
+                      fill: s.fill,
+                      stroke: s.stroke,
+                      strokeWidth: s.width,
                       cursor: "pointer",
-                      transition: "fill 120ms",
+                      opacity: activeId && activeId !== unit.id ? 0.75 : 1,
+                      transition: "opacity 120ms",
                     }}
                     onPointerEnter={(e) => {
-                      if (e.pointerType === "mouse") setHoveredAreaId(areaId);
+                      if (e.pointerType !== "mouse") return;
+                      setHoveredId(unit.id);
+                      reveal(unit.id);
                     }}
                     onPointerLeave={(e) => {
-                      if (e.pointerType === "mouse") setHoveredAreaId(null);
+                      if (e.pointerType !== "mouse") return;
+                      setHoveredId(null);
+                      reveal(selectedId);
                     }}
-                    onFocus={() => setSelectedAreaId(areaId)}
-                    onClick={() => handleClick(areaId)}
+                    onFocus={() => {
+                      setSelectedId(unit.id);
+                      reveal(unit.id);
+                    }}
+                    onClick={() => handleClick(unit)}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter") goToArea(areaId);
+                      if (e.key === "Enter") router.push(unit.href);
                     }}
                   >
-                    <title>{name}</title>
-                    {shape.elements.map((el, i) =>
-                      el.tag === "path" ? (
-                        <path key={i} d={el.value} />
-                      ) : (
-                        <polygon key={i} points={el.value} />
-                      ),
-                    )}
+                    <title>{unit.name}</title>
+                    <UnitShapes unit={unit} map={load.map} offsets={offsets} />
                   </g>
                 );
               })}
+              {selectedUnit ? (
+                <Overlay
+                  unit={selectedUnit}
+                  map={load.map}
+                  offsets={offsets}
+                  tone="selected"
+                />
+              ) : null}
+              {hoveredId && activeUnit && hoveredId !== selectedId ? (
+                <Overlay
+                  unit={activeUnit}
+                  map={load.map}
+                  offsets={offsets}
+                  tone="hover"
+                />
+              ) : null}
             </g>
           </svg>
         ) : null}
@@ -226,31 +281,30 @@ export default function JapanMap({ regions, areas, prefectures }: Props) {
         aria-live="polite"
         className="rounded-lg border border-border bg-card p-4"
       >
-        <h2 className="text-sm text-muted">選択地域</h2>
-        {activeArea && activeTooltip ? (
-          <div className="mt-2">
-            <p className="text-xl font-bold">{activeArea.name}</p>
-            <ul className="mt-3 flex flex-wrap gap-2 text-sm">
-              {activeTooltip.prefectures.map((name) => (
-                <li
-                  key={name}
-                  className="rounded border border-border px-2 py-0.5"
-                >
-                  {name}
-                </li>
-              ))}
-            </ul>
+        {activeUnit && shown && shown.id === activeUnit.id ? (
+          <div>
+            <PreviewCard preview={activeUnit.preview} photos={shown.photos} />
+            {activeUnit.members.length > 0 ? (
+              <ul className="mt-3 flex flex-wrap gap-2 text-sm">
+                {activeUnit.members.map((name) => (
+                  <li
+                    key={name}
+                    className="rounded border border-border px-2 py-0.5"
+                  >
+                    {name}
+                  </li>
+                ))}
+              </ul>
+            ) : null}
             <Link
-              href={`/area/${activeArea.id}`}
+              href={activeUnit.href}
               className="mt-4 inline-block text-accent underline"
             >
-              {activeArea.name}の地域ページへ
+              {activeUnit.name}のページへ
             </Link>
           </div>
         ) : (
-          <p className="mt-2 text-muted">
-            地図の地域にカーソルを合わせる（スマホはタップ）と、都道府県が表示されます。
-          </p>
+          <p className="text-muted">{hint}</p>
         )}
       </aside>
     </div>

@@ -1,7 +1,7 @@
 import JapanMap from "@/components/JapanMap";
 import RecentPhotos from "@/components/RecentPhotos";
 import StatsPanel from "@/components/StatsPanel";
-import { areas, japanMapRegions, prefectures } from "@/lib/data";
+import { getAreaUnits } from "@/lib/mapUnits";
 import { getRecentPhotos, getStatistics } from "@/lib/photos";
 
 export default function HomePage() {
@@ -20,11 +20,7 @@ export default function HomePage() {
       </section>
 
       <section aria-label="日本地図">
-        <JapanMap
-          regions={japanMapRegions}
-          areas={areas}
-          prefectures={prefectures}
-        />
+        <JapanMap units={getAreaUnits()} ariaLabel="日本地図" />
       </section>
 
       <section aria-label="最近追加した写真">

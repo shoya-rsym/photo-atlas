@@ -111,6 +111,9 @@ type Location = {
 
   prefectureId: string;
 
+  /** 都道府県内の細分地域（例: 北海道の道央）。任意 */
+  subregionId?: string;
+
   address?: string;
 
   lat?: number;
@@ -131,6 +134,44 @@ type Location = {
   "lng": 139.622
 }
 ```
+
+---
+
+# Subregion
+
+都道府県内の細分地域を表す（任意データ）。
+
+現在は北海道（道央・道南・道北・道東）のみ。
+他の都道府県も subregions.json へ追記するだけで分割できる。
+
+```typescript
+type Subregion = {
+  id: string;
+
+  name: string;
+
+  prefectureId: string;
+
+  /** 都道府県の外接矩形を 0〜1 に正規化した地図上の描画範囲（多角形の頂点列） */
+  mapClip?: [number, number][];
+};
+```
+
+例
+
+```json
+{
+  "id": "hokkaido_doo",
+  "name": "道央",
+  "prefectureId": "hokkaido",
+  "mapClip": [[0, 0.45], [0.45, 0.45], [0.5, 0.6], [0.5, 1], [0.28, 1], [0.28, 0.6], [0, 0.6]]
+}
+```
+
+注意
+
+- Photo中心設計は変更しない。Subregion は Location の任意の分類である。
+- mapClip は既存の都道府県SVGを切り抜く近似であり、実際の行政境界ではない。
 
 ---
 
@@ -397,6 +438,7 @@ type LocationStatistics = {
 ```text
 Photo
  ├ Location
+ │   ├ Subregion（任意）
  │   └ Prefecture
  │       └ Area
  │
@@ -422,6 +464,7 @@ photos.json
 tags.json
 characters.json
 japan-map-regions.json
+subregions.json
 ```
 
 ---

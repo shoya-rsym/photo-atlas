@@ -11,6 +11,7 @@ const tags = read("tags");
 const characters = read("characters");
 const photos = read("photos");
 const regions = read("japan-map-regions");
+const subregions = read("subregions");
 const svg = readFileSync(new URL("../public/maps/japan-regions.svg", import.meta.url), "utf8");
 
 const errors = [];
@@ -39,6 +40,24 @@ for (const p of prefectures) {
 }
 for (const l of locations) {
   if (!prefectureIds.has(l.prefectureId)) errors.push(`locations: prefectureId不正 ${l.id}`);
+  if (l.subregionId) {
+    const sub = subregions.find((s) => s.id === l.subregionId);
+    if (!sub) errors.push(`locations: subregionId不正 ${l.id}`);
+    else if (sub.prefectureId !== l.prefectureId) {
+      errors.push(`locations: subregionが別の都道府県に属する ${l.id}`);
+    }
+  }
+}
+checkIds("subregions", subregions);
+for (const s of subregions) {
+  if (!prefectureIds.has(s.prefectureId)) errors.push(`subregions: prefectureId不正 ${s.id}`);
+  const clip = s.mapClip;
+  const okClip =
+    clip === undefined ||
+    (Array.isArray(clip) &&
+      clip.length >= 3 &&
+      clip.every((p) => Array.isArray(p) && p.length === 2 && p.every((v) => v >= 0 && v <= 1)));
+  if (!okClip) errors.push(`subregions: mapClip不正 ${s.id}`);
 }
 
 const usedLocations = new Set();

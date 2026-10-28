@@ -14,5 +14,23 @@
     "address": "神奈川県横浜市中区山下町279",
     "lat": 35.443,
     "lng": 139.649
+  },
+  {
+    "id": "sapporo_station",
+    "name": "札幌駅",
+    "prefectureId": "hokkaido",
+    "subregionId": "hokkaido_doo",
+    "address": "北海道札幌市北区北6条西4丁目",
+    "lat": 43.0687,
+    "lng": 141.3508
+  },
+  {
+    "id": "hakodate_station",
+    "name": "函館駅",
+    "prefectureId": "hokkaido",
+    "subregionId": "hokkaido_donan",
+    "address": "北海道函館市若松町12",
+    "lat": 41.7736,
+    "lng": 140.7267
   }
 ]

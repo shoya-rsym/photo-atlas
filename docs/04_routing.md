@@ -62,6 +62,14 @@ URL
 /prefecture/kanagawa
 ```
 
+アンカー
+
+Subregionがある都道府県は、区分ごとのセクションに `#<subregion.id>` で直接遷移できる。
+
+```text
+/prefecture/hokkaido#hokkaido_doo
+```
+
 ---
 
 # 撮影地点ページ

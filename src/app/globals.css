@@ -10,9 +10,11 @@
   --foreground: #fafafa;
   --muted: #a1a1aa;
   --accent: #38bdf8;
-  --map-fill: #27272a;
-  --map-stroke: #09090b;
-  --map-active: #0ea5e9;
+  --map-fill: #52525b;
+  --map-stroke: #d4d4d8;
+  --map-hover: #0ea5e9;
+  --map-hover-stroke: #ffffff;
+  --map-selected: #f59e0b;
 }
 
 @media (prefers-color-scheme: light) {
@@ -24,10 +26,41 @@
     --foreground: #09090b;
     --muted: #52525b;
     --accent: #0369a1;
-    --map-fill: #d4d4d8;
-    --map-stroke: #fafafa;
-    --map-active: #0284c7;
+    --map-fill: #cbd5e1;
+    --map-stroke: #475569;
+    --map-hover: #0284c7;
+    --map-hover-stroke: #0f172a;
+    --map-selected: #d97706;
   }
+}
+
+.map-unit path,
+.map-unit polygon {
+  vector-effect: non-scaling-stroke;
+  stroke-linejoin: round;
+}
+
+.map-unit:focus {
+  outline: none;
+}
+
+.map-unit:focus-visible {
+  filter: drop-shadow(0 0 3px var(--map-selected));
+}
+
+.leaflet-tooltip.photo-preview-tooltip {
+  width: 15rem;
+  padding: 0.75rem;
+  white-space: normal;
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.4);
+}
+
+.leaflet-tooltip.photo-preview-tooltip::before {
+  display: none;
 }
 
 body {

@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { Component, type ReactNode } from "react";
-import type { Location } from "@/types";
+import type { LocationPreview } from "@/components/LeafletMap";
 
 const LeafletMap = dynamic(() => import("@/components/LeafletMap"), {
   ssr: false,
@@ -34,13 +34,13 @@ class MapErrorBoundary extends Component<{ children: ReactNode }, BoundaryState>
   }
 }
 
-type Props = { locations: Location[] };
+type Props = { items: LocationPreview[] };
 
-export default function PrefectureMap({ locations }: Props) {
+export default function PrefectureMap({ items }: Props) {
   return (
     <div className="mt-6 h-64 overflow-hidden rounded-lg border border-border bg-card sm:h-96">
       <MapErrorBoundary>
-        <LeafletMap locations={locations} />
+        <LeafletMap items={items} />
       </MapErrorBoundary>
     </div>
   );

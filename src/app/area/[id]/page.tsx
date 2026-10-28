@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumb";
+import JapanMap from "@/components/JapanMap";
 import LinkCard from "@/components/LinkCard";
-import { areas } from "@/lib/data";
+import { areas, subregions } from "@/lib/data";
+import { getPrefectureUnits } from "@/lib/mapUnits";
 import { findArea, getPrefecturesByArea } from "@/lib/queries";
 
 type Props = { params: Promise<{ id: string }> };
@@ -28,6 +30,7 @@ export default async function AreaPage({ params }: Props) {
   if (!area) notFound();
 
   const prefectures = getPrefecturesByArea(area.id);
+  const units = getPrefectureUnits(area.id);
 
   return (
     <>
@@ -37,16 +40,29 @@ export default async function AreaPage({ params }: Props) {
         <p className="mt-2 text-muted">{area.description}</p>
       ) : null}
 
+      <section aria-label="地域地図" className="mt-8">
+        <JapanMap
+          units={units}
+          fit="units"
+          ariaLabel={`${area.name}の地図`}
+          hint="地図の都道府県にカーソルを合わせる（スマホはタップ）と、写真のプレビューが表示されます。"
+        />
+      </section>
+
       <h2 className="mb-4 mt-10 text-xl font-bold">都道府県一覧</h2>
       <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {prefectures.map((prefecture) => (
-          <li key={prefecture.id}>
-            <LinkCard
-              href={`/prefecture/${prefecture.id}`}
-              title={prefecture.name}
-            />
-          </li>
-        ))}
+        {prefectures.map((prefecture) => {
+          const subs = subregions.filter((s) => s.prefectureId === prefecture.id);
+          return (
+            <li key={prefecture.id}>
+              <LinkCard
+                href={`/prefecture/${prefecture.id}`}
+                title={prefecture.name}
+                lines={subs.length > 0 ? [subs.map((s) => s.name).join("・")] : undefined}
+              />
+            </li>
+          );
+        })}
       </ul>
     </>
   );

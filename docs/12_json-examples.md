@@ -16,6 +16,7 @@ photos.json
 tags.json
 characters.json
 japan-map-regions.json
+subregions.json
 ```
 
 ---
@@ -77,6 +78,50 @@ japan-map-regions.json
     "address": "神奈川県横浜市中区山下町279",
     "lat": 35.443,
     "lng": 139.649
+  },
+  {
+    "id": "sapporo_station",
+    "name": "札幌駅",
+    "prefectureId": "hokkaido",
+    "subregionId": "hokkaido_doo",
+    "address": "北海道札幌市北区北6条西4丁目",
+    "lat": 43.0687,
+    "lng": 141.3508
+  }
+]
+```
+
+subregionId は任意。
+
+---
+
+# subregions.json
+
+```json
+[
+  {
+    "id": "hokkaido_doo",
+    "name": "道央",
+    "prefectureId": "hokkaido",
+    "mapClip": [[0, 0.45], [0.45, 0.45], [0.5, 0.6], [0.5, 1], [0.28, 1], [0.28, 0.6], [0, 0.6]]
+  },
+  {
+    "id": "hokkaido_donan",
+    "name": "道南",
+    "prefectureId": "hokkaido",
+    "mapClip": [[0, 0.6], [0.28, 0.6], [0.28, 1], [0, 1]]
+  },
+  {
+    "id": "hokkaido_dohoku",
+    "name": "道北",
+    "prefectureId": "hokkaido",
+    "mapClip": [[0, 0], [0.62, 0], [0.62, 0.3], [0.45, 0.45], [0, 0.45]]
+  },
+  {
+    "id": "hokkaido_doto",
+    "name": "道東",
+    "prefectureId": "hokkaido",
+    "mapClip": [[0.62, 0], [1, 0], [1, 1], [0.5, 1], [0.5, 0.6], [0.45, 0.45], [0.62, 0.3]]
   }
 ]
 ```

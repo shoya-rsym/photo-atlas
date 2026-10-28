@@ -1,22 +1,44 @@
 "use client";
 
 import "leaflet/dist/leaflet.css";
+import type { LeafletMouseEvent } from "leaflet";
 import { useRouter } from "next/navigation";
+import { useRef, useState } from "react";
 import { CircleMarker, MapContainer, TileLayer, Tooltip } from "react-leaflet";
-import type { Location } from "@/types";
+import PreviewCard from "@/components/PreviewCard";
+import { pickRandom } from "@/lib/random";
+import type { Location, PreviewInfo, PreviewPhoto } from "@/types";
 
-type Props = { locations: Location[] };
+export type LocationPreview = { location: Location; preview: PreviewInfo };
 
-type Positioned = Location & { lat: number; lng: number };
+type Props = { items: LocationPreview[] };
 
-function hasPosition(location: Location): location is Positioned {
-  return typeof location.lat === "number" && typeof location.lng === "number";
+type Positioned = LocationPreview & {
+  location: Location & { lat: number; lng: number };
+};
+
+const PREVIEW_PHOTO_COUNT = 4;
+
+function hasPosition(item: LocationPreview): item is Positioned {
+  return (
+    typeof item.location.lat === "number" && typeof item.location.lng === "number"
+  );
 }
 
-export default function LeafletMap({ locations }: Props) {
+export default function LeafletMap({ items }: Props) {
   const router = useRouter();
+  const [shown, setShown] = useState<Record<string, PreviewPhoto[]>>(() =>
+    Object.fromEntries(
+      items.map((i) => [
+        i.location.id,
+        pickRandom(i.preview.photos, PREVIEW_PHOTO_COUNT),
+      ]),
+    ),
+  );
+  const tappedId = useRef<string | null>(null);
+
   // GPS未設定の地点は地図に表示しない（一覧には表示される）
-  const positioned = locations.filter(hasPosition);
+  const positioned = items.filter(hasPosition);
 
   if (positioned.length === 0) {
     return (
@@ -26,12 +48,31 @@ export default function LeafletMap({ locations }: Props) {
     );
   }
 
-  const lats = positioned.map((l) => l.lat);
-  const lngs = positioned.map((l) => l.lng);
+  const lats = positioned.map((i) => i.location.lat);
+  const lngs = positioned.map((i) => i.location.lng);
   const bounds: [[number, number], [number, number]] = [
     [Math.min(...lats), Math.min(...lngs)],
     [Math.max(...lats), Math.max(...lngs)],
   ];
+
+  const reshuffle = (item: LocationPreview) =>
+    setShown((prev) => ({
+      ...prev,
+      [item.location.id]: pickRandom(item.preview.photos, PREVIEW_PHOTO_COUNT),
+    }));
+
+  const handleClick = (item: LocationPreview, e: LeafletMouseEvent) => {
+    const href = `/location/${item.location.id}`;
+    const isTouch = window.matchMedia("(hover: none)").matches;
+    // タッチ操作: 1回目でプレビュー表示、2回目で遷移
+    if (isTouch && tappedId.current !== item.location.id) {
+      tappedId.current = item.location.id;
+      reshuffle(item);
+      e.target.openTooltip();
+      return;
+    }
+    router.push(href);
+  };
 
   return (
     <MapContainer
@@ -44,17 +85,24 @@ export default function LeafletMap({ locations }: Props) {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {positioned.map((location) => (
+      {positioned.map((item) => (
         <CircleMarker
-          key={location.id}
-          center={[location.lat, location.lng]}
+          key={item.location.id}
+          center={[item.location.lat, item.location.lng]}
           radius={10}
-          pathOptions={{ color: "#0ea5e9", fillColor: "#0ea5e9", fillOpacity: 0.8 }}
+          pathOptions={{ color: "#ffffff", weight: 2, fillColor: "#0ea5e9", fillOpacity: 0.9 }}
           eventHandlers={{
-            click: () => router.push(`/location/${location.id}`),
+            mouseover: () => reshuffle(item),
+            click: (e) => handleClick(item, e),
           }}
         >
-          <Tooltip>{location.name}</Tooltip>
+          <Tooltip className="photo-preview-tooltip" direction="top" offset={[0, -8]}>
+            <PreviewCard
+              preview={item.preview}
+              photos={shown[item.location.id] ?? []}
+              showLocationCount={false}
+            />
+          </Tooltip>
         </CircleMarker>
       ))}
     </MapContainer>

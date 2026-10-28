@@ -68,6 +68,17 @@ prefectures.json に存在すること。
 
 ---
 
+subregionId
+
+任意
+
+指定する場合
+
+- subregions.json に存在すること
+- そのSubregionの prefectureId が Location.prefectureId と一致すること
+
+---
+
 address
 
 任意
@@ -83,6 +94,43 @@ lat
 lng
 
 任意
+
+---
+
+# Subregion
+
+subregions.json
+
+---
+
+id
+
+- 必須
+- 一意
+- 英小文字・数字・アンダースコア
+
+---
+
+name
+
+- 必須
+
+---
+
+prefectureId
+
+prefectures.json に存在すること。
+
+---
+
+mapClip
+
+任意
+
+指定する場合
+
+- 3点以上の [x, y] 座標であること
+- 各値が 0 以上 1 以下であること
 
 ---
 
