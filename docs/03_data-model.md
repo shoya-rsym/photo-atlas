@@ -255,8 +255,24 @@ type Photo = {
   characterId?: string;
 
   comment?: string;
+
+  isCover?: boolean;
 };
 ```
+
+---
+
+## isCover
+
+撮影地点の代表写真。
+
+任意。
+
+trueの場合のみ設定する（falseは設定しない）。
+
+同一locationIdで true は最大1枚とする。
+
+Photo Import Toolが書き込む。MVPのUIでは未使用。
 
 ---
 

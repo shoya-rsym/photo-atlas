@@ -13,4 +13,6 @@ export type Photo = {
   /** Character.id */
   characterId?: string;
   comment?: string;
+  /** 撮影地点の代表写真。地点ごとに1枚を想定 */
+  isCover?: boolean;
 };

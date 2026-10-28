@@ -61,6 +61,7 @@ for (const s of subregions) {
 }
 
 const usedLocations = new Set();
+const coverLocations = new Set();
 for (const p of photos) {
   for (const key of ["title", "image", "thumbnail", "createdAt"]) {
     if (!p[key]) errors.push(`photos: ${key}未設定 ${p.id}`);
@@ -74,6 +75,11 @@ for (const p of photos) {
     errors.push(`photos: characterId不正 ${p.id}`);
   }
   if (p.date && !/^\d{4}-\d{2}-\d{2}$/.test(p.date)) errors.push(`photos: date形式不正 ${p.id}`);
+  if (p.isCover !== undefined && p.isCover !== true) errors.push(`photos: isCoverはtrueのみ ${p.id}`);
+  if (p.isCover) {
+    if (coverLocations.has(p.locationId)) errors.push(`photos: 代表写真が複数 ${p.locationId}`);
+    coverLocations.add(p.locationId);
+  }
   if (Number.isNaN(Date.parse(p.createdAt))) errors.push(`photos: createdAt形式不正 ${p.id}`);
 }
 for (const l of locations) {

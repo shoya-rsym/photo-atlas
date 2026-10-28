@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Photo Import Tool</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header class="top">
+      <h1>Photo Import Tool</h1>
+      <span class="muted" id="totals"></span>
+    </header>
+
+    <main class="layout">
+      <section class="panel form">
+        <div id="recentBox" hidden>
+          <h2>最近使った設定</h2>
+          <div id="recent" class="chips"></div>
+        </div>
+
+        <h2>撮影場所</h2>
+        <input id="locationInput" type="text" autocomplete="off" placeholder="例: 横浜駅（Enterで先頭の候補を選択）" />
+        <ul id="locationSuggest" class="suggest" hidden></ul>
+        <div id="locationInfo" class="info"></div>
+        <details id="newLocationBox" hidden>
+          <summary>新しい撮影地点として登録する</summary>
+          <div class="grid2">
+            <label>名前<input id="nlName" type="text" /></label>
+            <label>都道府県<select id="nlPrefecture"></select></label>
+            <label>住所（任意）<input id="nlAddress" type="text" /></label>
+            <label>ID（任意・英数字_）<input id="nlId" type="text" /></label>
+            <label>緯度（任意）<input id="nlLat" type="text" inputmode="decimal" /></label>
+            <label>経度（任意）<input id="nlLng" type="text" inputmode="decimal" /></label>
+          </div>
+          <button type="button" id="nlApply">この内容で使用</button>
+        </details>
+
+        <h2>撮影日</h2>
+        <input id="dateInput" type="text" autocomplete="off" placeholder="202604 / 20260415 / 2026-04-15（空欄=撮影日不明）" />
+        <div id="dateInfo" class="info"></div>
+
+        <h2>タグ</h2>
+        <input id="tagFilter" type="text" autocomplete="off" placeholder="絞り込み / 新規タグ名" />
+        <div id="tagChips" class="chips"></div>
+        <div id="tagAdd" class="addrow" hidden>
+          <button type="button" id="tagAddBtn"></button>
+          <input id="tagAddId" type="text" placeholder="ID（任意）" />
+        </div>
+
+        <h2>キャラクター</h2>
+        <input id="charFilter" type="text" autocomplete="off" placeholder="絞り込み / 新規キャラクター名" />
+        <div id="charChips" class="chips"></div>
+        <div id="charAdd" class="addrow" hidden>
+          <button type="button" id="charAddBtn"></button>
+          <input id="charAddId" type="text" placeholder="ID（任意）" />
+        </div>
+
+        <h2>タイトル・コメント</h2>
+        <input id="titleInput" type="text" placeholder="タイトル（空欄=撮影地名。複数枚は連番を付与）" />
+        <textarea id="commentInput" rows="2" placeholder="コメント（任意）"></textarea>
+      </section>
+
+      <section class="panel images">
+        <div id="drop" class="drop" tabindex="0">
+          <p><strong>画像またはフォルダをここへドラッグ＆ドロップ</strong></p>
+          <p class="muted">jpg / png / webp ・ フォルダは中の画像をすべて取り込みます</p>
+          <div class="row">
+            <button type="button" id="pickFiles">画像を選択</button>
+            <button type="button" id="pickFolder">フォルダを選択</button>
+          </div>
+          <input id="fileInput" type="file" accept="image/*" multiple hidden />
+          <input id="folderInput" type="file" webkitdirectory hidden />
+        </div>
+
+        <div class="bar">
+          <span id="summary"></span>
+          <span class="row">
+            <button type="button" id="selectAll">すべて選択</button>
+            <button type="button" id="selectNone">すべて外す</button>
+            <button type="button" id="clearAll">クリア</button>
+          </span>
+        </div>
+        <div id="progress" class="progress" hidden><div id="progressBar"></div></div>
+        <div id="grid" class="gallery"></div>
+
+        <div class="bar sticky">
+          <span id="readiness" class="muted"></span>
+          <button type="button" id="reviewBtn" class="primary" disabled>登録前確認へ</button>
+        </div>
+        <div id="result" class="result" hidden></div>
+      </section>
+    </main>
+
+    <dialog id="confirm">
+      <h2>登録前確認</h2>
+      <dl id="confirmBody" class="confirm"></dl>
+      <p id="confirmError" class="error" hidden></p>
+      <div class="row end">
+        <button type="button" id="confirmCancel">戻る</button>
+        <button type="button" id="confirmOk" class="primary">登録実行</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

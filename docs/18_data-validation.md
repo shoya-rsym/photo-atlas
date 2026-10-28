@@ -241,6 +241,15 @@ characters.json に存在すること。
 
 ---
 
+isCover
+
+任意
+
+- 設定する場合は true のみ
+- 同一locationIdで true は最大1枚
+
+---
+
 date
 
 任意

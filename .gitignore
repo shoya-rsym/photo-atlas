@@ -1,5 +1,6 @@
 node_modules/
 .next/
+tools/photo-import/.local/
 out/
 *.tsbuildinfo
 next-env.d.ts
