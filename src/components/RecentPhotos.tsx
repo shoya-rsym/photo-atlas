@@ -8,15 +8,17 @@ import {
 } from "@/lib/photos";
 import type { Photo } from "@/types";
 
-type Props = { photos: Photo[] };
+type Props = { photos: Photo[]; compact?: boolean };
 
-export default function RecentPhotos({ photos }: Props) {
+export default function RecentPhotos({ photos, compact = false }: Props) {
   if (photos.length === 0) {
     return <p className="text-muted">写真が登録されていません</p>;
   }
 
   return (
-    <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+    <ul
+      className={`grid grid-cols-2 gap-3 ${compact ? "" : "sm:grid-cols-3 lg:grid-cols-5"}`}
+    >
       {photos.map((photo) => (
         <li
           key={photo.id}

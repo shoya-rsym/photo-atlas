@@ -21,6 +21,7 @@ type Props = {
   fit?: "all" | "units";
   ariaLabel: string;
   hint?: string;
+  variant?: "default" | "home";
 };
 
 type LoadState =
@@ -118,6 +119,7 @@ export default function JapanMap({
   fit = "all",
   ariaLabel,
   hint = "地図の地域にカーソルを合わせる（スマホはタップ）と、写真のプレビューが表示されます。",
+  variant = "default",
 }: Props) {
   const router = useRouter();
   const [load, setLoad] = useState<LoadState>({ status: "loading" });
@@ -179,7 +181,9 @@ export default function JapanMap({
   const selectedUnit = units.find((u) => u.id === selectedId);
 
   return (
-    <div className="grid gap-6 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+    <div
+      className={`grid gap-4 ${variant === "home" ? "md:grid-cols-[minmax(0,1.45fr)_minmax(230px,0.9fr)]" : "md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]"}`}
+    >
       <div className="rounded-lg border border-border bg-card p-2 sm:p-4">
         {load.status === "loading" ? (
           <p className="py-16 text-center text-muted">読み込み中...</p>
@@ -194,7 +198,7 @@ export default function JapanMap({
             viewBox={viewBox}
             role="group"
             aria-label={ariaLabel}
-            className="mx-auto h-auto max-h-[70vh] w-full max-w-xl"
+            className={`mx-auto h-auto w-full ${variant === "home" ? "max-h-[34rem] max-w-3xl" : "max-h-[70vh] max-w-xl"}`}
             onPointerDown={(e) => {
               pointerType.current = e.pointerType;
             }}
@@ -279,13 +283,17 @@ export default function JapanMap({
 
       <aside
         aria-live="polite"
-        className="rounded-lg border border-border bg-card p-4"
+        className={`rounded-lg border border-border bg-card p-4 ${variant === "home" ? "min-h-64 md:p-5" : ""}`}
       >
         {activeUnit && shown && shown.id === activeUnit.id ? (
           <div>
-            <PreviewCard preview={activeUnit.preview} photos={shown.photos} />
+            <PreviewCard
+              preview={activeUnit.preview}
+              photos={shown.photos}
+              className={variant === "home" ? "space-y-1" : undefined}
+            />
             {activeUnit.members.length > 0 ? (
-              <ul className="mt-3 flex flex-wrap gap-2 text-sm">
+              <ul className={`mt-3 flex flex-wrap gap-2 text-sm ${variant === "home" ? "text-xs" : ""}`}>
                 {activeUnit.members.map((name) => (
                   <li
                     key={name}
@@ -298,13 +306,26 @@ export default function JapanMap({
             ) : null}
             <Link
               href={activeUnit.href}
-              className="mt-4 inline-block text-accent underline"
+              className="mt-4 inline-block font-semibold text-accent underline underline-offset-4"
             >
               {activeUnit.name}のページへ
             </Link>
           </div>
         ) : (
-          <p className="text-muted">{hint}</p>
+          <div className="flex h-full flex-col justify-center">
+            {variant === "home" ? (
+              <>
+                <p className="text-lg font-bold">地図から写真を探す</p>
+                <p className="mt-2 text-sm leading-6 text-muted">
+                  気になる地域にカーソルを合わせると、その場所の写真が見られます。
+                  地域を選んで、まだ知らない景色を探してみましょう。
+                </p>
+                <p className="mt-4 text-xs text-muted">{hint}</p>
+              </>
+            ) : (
+              <p className="text-muted">{hint}</p>
+            )}
+          </div>
         )}
       </aside>
     </div>

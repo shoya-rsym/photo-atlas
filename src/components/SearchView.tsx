@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import PhotoGrid from "@/components/PhotoGrid";
 import {
   EMPTY_FILTERS,
@@ -20,6 +20,13 @@ const fieldClass =
 
 export default function SearchView({ photos }: Props) {
   const [filters, setFilters] = useState<SearchFilters>(EMPTY_FILTERS);
+
+  useEffect(() => {
+    const tagId = new URLSearchParams(window.location.search).get("tag");
+    if (tagId && getTagOptions().some((tag) => tag.id === tagId)) {
+      setFilters((current) => ({ ...current, tagId }));
+    }
+  }, []);
 
   const sorted = useMemo(() => sortPhotosByDate(photos), [photos]);
   const results = useMemo(() => searchPhotos(sorted, filters), [sorted, filters]);

@@ -6,15 +6,17 @@ type Props = {
   /** 表示する写真（呼び出し側でランダム抽出済み） */
   photos: PreviewPhoto[];
   showLocationCount?: boolean;
+  className?: string;
 };
 
 export default function PreviewCard({
   preview,
   photos,
   showLocationCount = true,
+  className,
 }: Props) {
   return (
-    <div>
+    <div className={className}>
       <p className="text-lg font-bold">{preview.name}</p>
       <p className="mt-1 text-sm text-muted">
         写真 {preview.photoCount} 枚

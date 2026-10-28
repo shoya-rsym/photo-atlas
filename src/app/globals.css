@@ -10,11 +10,11 @@
   --foreground: #fafafa;
   --muted: #a1a1aa;
   --accent: #38bdf8;
-  --map-fill: #52525b;
-  --map-stroke: #d4d4d8;
-  --map-hover: #0ea5e9;
+  --map-fill: #71717a;
+  --map-stroke: #e4e4e7;
+  --map-hover: #3b82f6;
   --map-hover-stroke: #ffffff;
-  --map-selected: #f59e0b;
+  --map-selected: #1d4ed8;
 }
 
 @media (prefers-color-scheme: light) {
@@ -26,11 +26,11 @@
     --foreground: #09090b;
     --muted: #52525b;
     --accent: #0369a1;
-    --map-fill: #cbd5e1;
-    --map-stroke: #475569;
-    --map-hover: #0284c7;
+    --map-fill: #d4d4d8;
+    --map-stroke: #52525b;
+    --map-hover: #3b82f6;
     --map-hover-stroke: #0f172a;
-    --map-selected: #d97706;
+    --map-selected: #1d4ed8;
   }
 }
 
@@ -67,4 +67,25 @@ body {
   background: var(--background);
   color: var(--foreground);
   overflow-x: hidden;
+}
+
+@keyframes home-card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.home-card-enter {
+  animation: home-card-enter 450ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-card-enter {
+    animation: none;
+  }
 }
