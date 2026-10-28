@@ -25,7 +25,7 @@ export default function RootLayout({
     <html lang="ja">
       <body className="flex min-h-screen flex-col antialiased">
         <Header />
-        <main className="mx-auto w-full max-w-site flex-1 px-4 py-8">
+        <main className="mx-auto w-full max-w-site flex-1 px-4 py-6 sm:py-8">
           {children}
         </main>
         <Footer />

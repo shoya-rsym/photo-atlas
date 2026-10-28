@@ -40,11 +40,11 @@ export default function SearchView({ photos }: Props) {
   return (
     <div className="space-y-8">
       <form
-        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+        className="grid gap-4 rounded-2xl border border-border bg-card p-4 sm:grid-cols-2 sm:p-6 lg:grid-cols-4"
         onSubmit={(e) => e.preventDefault()}
       >
         <label className="block sm:col-span-2 lg:col-span-4">
-          <span className="mb-1 block text-sm text-muted">キーワード</span>
+          <span className="mb-1 block text-sm font-medium text-muted">キーワード</span>
           <input
             type="search"
             value={filters.keyword}
@@ -110,7 +110,12 @@ export default function SearchView({ photos }: Props) {
       </form>
 
       <section aria-live="polite">
-        <h2 className="mb-4 text-xl font-bold">検索結果 {results.length}件</h2>
+        <div className="mb-4">
+          <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
+            Photo collection
+          </p>
+          <h2 className="mt-1 text-2xl font-bold">検索結果 {results.length} 件</h2>
+        </div>
         {results.length === 0 ? (
           <p className="text-muted">該当する写真がありません</p>
         ) : (

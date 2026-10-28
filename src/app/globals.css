@@ -11,6 +11,7 @@
   --muted: #a1a1aa;
   --accent: #38bdf8;
   --map-fill: #71717a;
+  --map-fill-photos: #2563eb;
   --map-stroke: #e4e4e7;
   --map-hover: #3b82f6;
   --map-hover-stroke: #ffffff;
@@ -27,6 +28,7 @@
     --muted: #52525b;
     --accent: #0369a1;
     --map-fill: #d4d4d8;
+    --map-fill-photos: #2563eb;
     --map-stroke: #52525b;
     --map-hover: #3b82f6;
     --map-hover-stroke: #0f172a;
@@ -67,6 +69,14 @@ body {
   background: var(--background);
   color: var(--foreground);
   overflow-x: hidden;
+}
+
+.map-legend-swatch {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 0.2rem;
+  vertical-align: -0.05rem;
 }
 
 @keyframes home-card-enter {

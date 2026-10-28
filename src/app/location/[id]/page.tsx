@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Breadcrumb from "@/components/Breadcrumb";
 import PhotoGrid from "@/components/PhotoGrid";
 import PhotoTags from "@/components/PhotoTags";
+import SummaryCards from "@/components/SummaryCards";
+import VisualHero from "@/components/VisualHero";
 import { locations } from "@/lib/data";
-import { UNKNOWN_DATE_LABEL } from "@/lib/photos";
+import { getRepresentativePhoto, UNKNOWN_DATE_LABEL } from "@/lib/photos";
 import {
   findLocation,
   getLocationStatistics,
@@ -39,11 +40,16 @@ export default async function LocationPage({ params }: Props) {
   const photos = getPhotosByLocation(location.id);
   const stats = getLocationStatistics(location.id);
   const tagIds = getTagIdsByLocation(location.id);
+  const representative = getRepresentativePhoto(photos);
 
   return (
-    <>
-      <Breadcrumb
-        items={[
+    <div className="space-y-8 sm:space-y-10">
+      <VisualHero
+        eyebrow={[area?.name, prefecture?.name].filter(Boolean).join(" · ")}
+        title={location.name}
+        description={`${location.address ?? "住所未登録"}。この場所で出会った写真を見てみましょう。`}
+        photo={representative}
+        breadcrumbs={[
           ...(area ? [{ label: area.name, href: `/area/${area.id}` }] : []),
           ...(prefecture
             ? [{ label: prefecture.name, href: `/prefecture/${prefecture.id}` }]
@@ -51,38 +57,45 @@ export default async function LocationPage({ params }: Props) {
           { label: location.name },
         ]}
       />
-      <h1 className="text-3xl font-bold">{location.name}</h1>
+      <SummaryCards
+        items={[
+          { label: "総写真数", value: `${stats.photoCount} 枚` },
+          { label: "初回撮影日", value: stats.firstPhotoDate ?? UNKNOWN_DATE_LABEL },
+          { label: "最新撮影日", value: stats.latestPhotoDate ?? UNKNOWN_DATE_LABEL },
+          { label: "関連タグ", value: `${tagIds.length} 種類` },
+        ]}
+      />
 
-      {photos.length === 0 ? (
-        <p className="mt-6 text-muted">写真が登録されていません</p>
-      ) : (
-        <>
-          <dl className="mt-6 grid gap-4 sm:grid-cols-2">
-            <div>
-              <dt className="text-sm text-muted">住所</dt>
-              <dd>{location.address ?? "住所未登録"}</dd>
-            </div>
-            <div>
-              <dt className="text-sm text-muted">総写真数</dt>
-              <dd>{stats.photoCount}枚</dd>
-            </div>
-            <div>
-              <dt className="text-sm text-muted">初回撮影日</dt>
-              <dd>{stats.firstPhotoDate ?? UNKNOWN_DATE_LABEL}</dd>
-            </div>
-            <div>
-              <dt className="text-sm text-muted">最新撮影日</dt>
-              <dd>{stats.latestPhotoDate ?? UNKNOWN_DATE_LABEL}</dd>
-            </div>
-          </dl>
+      <section
+        aria-labelledby="location-tags-title"
+        className="rounded-2xl border border-border bg-card p-5"
+      >
+        <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
+          Location collection
+        </p>
+        <h2 id="location-tags-title" className="mb-3 mt-1 text-xl font-bold">
+          この場所のタグ
+        </h2>
+        <PhotoTags tagIds={tagIds} />
+      </section>
 
-          <h2 className="mb-3 mt-10 text-xl font-bold">タグ</h2>
-          <PhotoTags tagIds={tagIds} />
-
-          <h2 className="mb-4 mt-10 text-xl font-bold">写真一覧</h2>
+      <section aria-labelledby="location-photos-title">
+        <div className="mb-4">
+          <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
+            Photos from this place
+          </p>
+          <h2 id="location-photos-title" className="mt-1 text-2xl font-bold">
+            撮影された写真
+          </h2>
+        </div>
+        {photos.length === 0 ? (
+          <p className="rounded-xl border border-border bg-card p-6 text-muted">
+            写真が登録されていません
+          </p>
+        ) : (
           <PhotoGrid photos={photos} />
-        </>
-      )}
-    </>
+        )}
+      </section>
+    </div>
   );
 }

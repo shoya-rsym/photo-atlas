@@ -30,6 +30,15 @@ export function getRecentPhotos(limit: number = RECENT_PHOTO_COUNT): Photo[] {
     .slice(0, limit);
 }
 
+/** 代表写真があれば優先し、なければ登録日時が新しい写真を返す */
+export function getRepresentativePhoto(list: Photo[]): Photo | undefined {
+  return [...list].sort(
+    (a, b) =>
+      Number(Boolean(b.isCover)) - Number(Boolean(a.isCover)) ||
+      Date.parse(b.createdAt) - Date.parse(a.createdAt),
+  )[0];
+}
+
 export function getStatistics(): Statistics {
   const locationIds = new Set(allPhotos.map((photo) => photo.locationId));
   const prefectureIds = new Set<string>();

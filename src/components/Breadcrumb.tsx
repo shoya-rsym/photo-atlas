@@ -2,19 +2,25 @@ import Link from "next/link";
 
 export type BreadcrumbItem = { label: string; href?: string };
 
-type Props = { items: BreadcrumbItem[] };
+type Props = { items: BreadcrumbItem[]; inverse?: boolean };
 
-export default function Breadcrumb({ items }: Props) {
+export default function Breadcrumb({ items, inverse = false }: Props) {
   const all: BreadcrumbItem[] = [{ label: "TOP", href: "/" }, ...items];
   return (
-    <nav aria-label="パンくず" className="mb-6 text-sm text-muted">
+    <nav
+      aria-label="パンくず"
+      className={`mb-6 text-sm ${inverse ? "text-white/65" : "text-muted"}`}
+    >
       <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
         {all.map((item, index) => {
           const isLast = index === all.length - 1;
           return (
             <li key={`${item.label}-${index}`} className="flex items-center gap-2">
               {item.href && !isLast ? (
-                <Link href={item.href} className="text-accent hover:underline">
+                <Link
+                  href={item.href}
+                  className={inverse ? "text-white hover:underline" : "text-accent hover:underline"}
+                >
                   {item.label}
                 </Link>
               ) : (

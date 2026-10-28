@@ -37,18 +37,22 @@ export default function PhotoGrid({ photos, showLocation = false }: Props) {
         {photos.map((photo, index) => (
           <li
             key={photo.id}
-            className="overflow-hidden rounded-lg border border-border bg-card"
+            className="group overflow-hidden rounded-xl border border-border bg-card transition hover:-translate-y-0.5 hover:border-accent hover:shadow-lg hover:shadow-black/20"
           >
             <button
               type="button"
               aria-label={`${photo.title}を拡大表示`}
-              className="block aspect-[4/3] w-full"
+              className="block aspect-[4/3] w-full overflow-hidden bg-background"
               onClick={() => setOpenIndex(index)}
             >
-              <PhotoThumbnail src={photo.thumbnail} alt={photo.title} />
+              <PhotoThumbnail
+                src={photo.thumbnail}
+                alt={photo.title}
+                className="transition duration-500 group-hover:scale-105"
+              />
             </button>
-            <Link href={`/photo/${photo.id}`} className="block space-y-1 p-2 text-sm">
-              <p className="truncate font-medium">{photo.title}</p>
+            <Link href={`/photo/${photo.id}`} className="block space-y-1.5 p-3 text-sm">
+              <p className="truncate font-semibold">{photo.title}</p>
               <p className="truncate text-xs text-muted">
                 {showLocation
                   ? `${getLocationName(photo.locationId) ?? ""} / `

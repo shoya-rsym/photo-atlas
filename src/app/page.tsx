@@ -7,29 +7,25 @@ import RecommendationSpot from "@/components/RecommendationSpot";
 import StatsPanel from "@/components/StatsPanel";
 import { areas, characters, japanMapRegions, locations, photos, tags } from "@/lib/data";
 import { getAreaUnits } from "@/lib/mapUnits";
-import { getRecentPhotos, getStatistics } from "@/lib/photos";
-import type { Photo } from "@/types";
-
-function newestFirst(left: Photo, right: Photo): number {
-  return Date.parse(right.createdAt) - Date.parse(left.createdAt);
-}
+import {
+  getRecentPhotos,
+  getRepresentativePhoto,
+  getStatistics,
+} from "@/lib/photos";
 
 export default function HomePage() {
   const statistics = getStatistics();
   const recentPhotos = getRecentPhotos(6);
-  const heroPhoto =
-    [...photos].sort(
-      (a, b) => Number(Boolean(b.isCover)) - Number(Boolean(a.isCover)) || newestFirst(a, b),
-    )[0];
+  const heroPhoto = getRepresentativePhoto(photos);
   const heroLocation = locations.find((location) => location.id === heroPhoto?.locationId);
 
   const recommendationSpots = locations.flatMap((location) => {
     const locationPhotos = photos
       .filter((photo) => photo.locationId === location.id)
-      .sort(newestFirst);
+      .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
     if (locationPhotos.length === 0) return [];
-    const photo =
-      locationPhotos.find((item) => item.isCover) ?? locationPhotos[0];
+    const photo = getRepresentativePhoto(locationPhotos);
+    if (!photo) return [];
     const characterName = photo.characterId
       ? characters.find((character) => character.id === photo.characterId)?.name
       : undefined;
@@ -56,9 +52,8 @@ export default function HomePage() {
     );
     const areaPhotos = photos
       .filter((photo) => locationIds.has(photo.locationId))
-      .sort(newestFirst);
-    const photo =
-      areaPhotos.find((item) => item.isCover) ?? areaPhotos[0];
+      .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
+    const photo = getRepresentativePhoto(areaPhotos);
     return {
       id: area.id,
       name: area.name,

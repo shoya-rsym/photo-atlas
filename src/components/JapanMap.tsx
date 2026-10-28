@@ -229,7 +229,10 @@ export default function JapanMap({
                     tabIndex={0}
                     aria-label={unit.name}
                     style={{
-                      fill: s.fill,
+                      fill:
+                        unit.preview.photoCount > 0
+                          ? "var(--map-fill-photos)"
+                          : s.fill,
                       stroke: s.stroke,
                       strokeWidth: s.width,
                       cursor: "pointer",
@@ -278,6 +281,25 @@ export default function JapanMap({
               ) : null}
             </g>
           </svg>
+        ) : null}
+        {variant === "home" && load.status === "ready" ? (
+          <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 px-2 text-xs text-muted">
+            <span>
+              <span
+                className="map-legend-swatch mr-2"
+                style={{ backgroundColor: "var(--map-fill-photos)" }}
+              />
+              写真あり
+            </span>
+            <span>
+              <span
+                className="map-legend-swatch mr-2"
+                style={{ backgroundColor: "var(--map-fill)" }}
+              />
+              写真未登録
+            </span>
+            <span className="text-accent">Hoverで写真をプレビュー</span>
+          </div>
         ) : null}
       </div>
 
