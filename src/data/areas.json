@@ -1,0 +1,10 @@
+[
+  { "id": "hokkaido", "name": "北海道", "description": "日本最北の地域" },
+  { "id": "tohoku", "name": "東北", "description": "本州北部の地域" },
+  { "id": "kanto", "name": "関東", "description": "首都圏を中心とした地域" },
+  { "id": "chubu", "name": "中部", "description": "本州中央部の地域" },
+  { "id": "kinki", "name": "近畿", "description": "関西地方を中心とした地域" },
+  { "id": "chugoku", "name": "中国", "description": "本州西部の地域" },
+  { "id": "shikoku", "name": "四国", "description": "四国4県の地域" },
+  { "id": "kyushu", "name": "九州", "description": "九州・沖縄の地域" }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "id": "yokohama_station",
+    "name": "横浜駅",
+    "prefectureId": "kanagawa",
+    "address": "神奈川県横浜市西区高島2丁目16",
+    "lat": 35.465,
+    "lng": 139.622
+  },
+  {
+    "id": "yamashita_park",
+    "name": "山下公園",
+    "prefectureId": "kanagawa",
+    "address": "神奈川県横浜市中区山下町279",
+    "lat": 35.443,
+    "lng": 139.649
+  }
+]

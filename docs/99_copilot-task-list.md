@@ -1,4 +1,4 @@
-# Copilot Agent Task List
+﻿# Copilot Agent Task List
 
 実装前に AGENTS.md と docs/ を必ず読むこと。
 

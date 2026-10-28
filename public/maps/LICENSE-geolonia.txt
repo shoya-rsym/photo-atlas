@@ -1,0 +1,10 @@
+This map is based on:
+
+geolonia/japanese-prefectures
+https://github.com/geolonia/japanese-prefectures
+
+Original source:
+Wikipedia 日本地図.svg
+
+License:
+GNU Free Documentation License (GFDL)

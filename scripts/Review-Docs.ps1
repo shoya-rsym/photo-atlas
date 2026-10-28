@@ -1,3 +1,7 @@
+﻿[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$OutputEncoding = [System.Text.Encoding]::UTF8
+$PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
+
 $Docs = @(
     "README.md",
     "AGENTS.md",
@@ -20,9 +24,9 @@ $Docs = @(
     "docs/17_content-guidelines.md",
     "docs/18_data-validation.md",
     "docs/19_mvp-scope.md",
-    "docs/20_copilot-task-list.md",
-    "docs/21_image-management.md",
-    "docs/22_statistics-rules.md"
+    "docs/20_image-management.md",
+    "docs/22_statistics-rules.md",
+    "docs/99_copilot-task-list.md"
 )
 
 Write-Output ""

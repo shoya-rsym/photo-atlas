@@ -1,4 +1,4 @@
-# AGENTS.md
+﻿# AGENTS.md
 
 本ファイルは GitHub Copilot Agent 向け開発指示書である。
 

@@ -1,4 +1,4 @@
-[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+﻿[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $OutputEncoding = [System.Text.Encoding]::UTF8
 
 Write-Output ""
@@ -14,3 +14,4 @@ Write-Output ""
 Write-Output "============================="
 Write-Output "Review Complete"
 Write-Output "============================="
+

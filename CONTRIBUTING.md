@@ -1,4 +1,4 @@
-# Contributing Guide
+﻿# Contributing Guide
 
 ARフォト図鑑への開発参加ルール。
 

@@ -142,3 +142,14 @@ public/thumbnails
 19_mvp-scope.md
 20_copilot-task-list.md
 ```
+
+# 地図素材
+
+日本地図SVGは以下を利用しています。
+
+geolonia/japanese-prefectures
+
+https://github.com/geolonia/japanese-prefectures
+
+License:
+GFDL

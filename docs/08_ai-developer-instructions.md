@@ -1,4 +1,4 @@
-# AI Developer Instructions
+﻿# AI Developer Instructions
 
 本ドキュメントはAI開発支援ツール向けの補足指示である。
 

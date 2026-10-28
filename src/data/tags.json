@@ -1,0 +1,5 @@
+[
+  { "id": "ar_photo", "name": "ARフォト", "category": "photo_type", "color": "#9333EA" },
+  { "id": "night_view", "name": "夜景", "category": "scene", "color": "#1D4ED8" },
+  { "id": "event", "name": "イベント", "category": "event", "color": "#EA580C" }
+]
