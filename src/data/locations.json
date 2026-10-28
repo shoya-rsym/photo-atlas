@@ -70,5 +70,20 @@
     "address": "埼玉県飯能市小久保",
     "lat": 35.8719763,
     "lng": 139.3258264
+  },
+  {
+    "id": "location_002",
+    "name": "沖縄",
+    "prefectureId": "okinawa"
+  },
+  {
+    "id": "location_003",
+    "name": "伊豆",
+    "prefectureId": "shizuoka"
+  },
+  {
+    "id": "location_004",
+    "name": "長崎",
+    "prefectureId": "nagasaki"
   }
 ]
