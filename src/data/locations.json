@@ -32,5 +32,43 @@
     "address": "北海道函館市若松町12",
     "lat": 41.7736,
     "lng": 140.7267
+  },
+  {
+    "id": "location_001",
+    "name": "ひたちなか海浜公園",
+    "prefectureId": "ibaraki",
+    "address": "茨城県ひたちなか市馬渡 字大沼605-4"
+  },
+  {
+    "id": "osm_way_554592146",
+    "name": "ラグーナテンボス",
+    "prefectureId": "aichi",
+    "address": "愛知県蒲郡市三谷町海陽町二丁目",
+    "lat": 34.8071581,
+    "lng": 137.2673672
+  },
+  {
+    "id": "osm_way_430014971",
+    "name": "伊豆テディベア・ミュージアム",
+    "prefectureId": "shizuoka",
+    "address": "静岡県伊東市八幡野1064-2",
+    "lat": 34.8778215,
+    "lng": 139.1115402
+  },
+  {
+    "id": "osm_way_378128429",
+    "name": "沖縄美ら海水族館",
+    "prefectureId": "okinawa",
+    "address": "沖縄県国頭郡本部町石川",
+    "lat": 26.6943689,
+    "lng": 127.878038
+  },
+  {
+    "id": "osm_way_754175469",
+    "name": "ムーミンバレーパーク",
+    "prefectureId": "saitama",
+    "address": "埼玉県飯能市小久保",
+    "lat": 35.8719763,
+    "lng": 139.3258264
   }
 ]

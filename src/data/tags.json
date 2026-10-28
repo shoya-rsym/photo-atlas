@@ -1,5 +1,12 @@
 [
   { "id": "ar_photo", "name": "ARフォト", "category": "photo_type", "color": "#9333EA" },
   { "id": "night_view", "name": "夜景", "category": "scene", "color": "#1D4ED8" },
-  { "id": "event", "name": "イベント", "category": "event", "color": "#EA580C" }
+  { "id": "event", "name": "イベント", "category": "event", "color": "#EA580C" },
+  { "id": "tag_001", "name": "秋" },
+  { "id": "tag_002", "name": "イルミネーション" },
+  { "id": "tag_003", "name": "テーマパーク" },
+  { "id": "tag_004", "name": "通年" },
+  { "id": "tag_005", "name": "ミュージアム" },
+  { "id": "tag_006", "name": "水族館" },
+  { "id": "tag_007", "name": "夏" }
 ]

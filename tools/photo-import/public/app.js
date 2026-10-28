@@ -1,4 +1,6 @@
 import { parseDateInput } from "/lib/date.mjs";
+import { formatJapaneseAddress } from "/lib/address.mjs";
+import { locationIdFromResult, prefectureIdFromResult } from "/lib/location.mjs";
 import { findExactName, searchByName } from "/lib/search.mjs";
 import { parseFolderName } from "/lib/folder-name.mjs";
 
@@ -94,6 +96,53 @@ function renderLocationInfo() {
     `${prefName(loc.prefectureId)} / ${loc.address || "住所なし"} / ${coords}`,
     loc.isNew ? "" : ` / 登録済み ${count} 枚`,
   );
+}
+
+async function searchLocation() {
+  const query = $("locationInput").value.trim();
+  const button = $("searchLocation");
+  const status = $("locationLookupStatus");
+  if (!query) {
+    status.replaceChildren(h("span", { class: "err" }, "撮影場所を入力してください"));
+    return;
+  }
+
+  button.disabled = true;
+  status.textContent = "検索中…";
+  try {
+    const results = await api(`/api/location-search?q=${encodeURIComponent(query)}`);
+    if ($("locationInput").value.trim() !== query) {
+      status.replaceChildren(h("span", { class: "warn" }, "検索中に入力が変更されました。もう一度検索してください"));
+      return;
+    }
+    const result = results[0];
+    if (!result) {
+      status.replaceChildren(h("span", { class: "warn" }, "撮影場所が見つかりませんでした"));
+      return;
+    }
+
+    $("nlName").value = result.name || result.displayName.split(",")[0].trim();
+    const prefectureId = prefectureIdFromResult(result, state.master.prefectures);
+    const prefectureName = state.master.prefectures.find((prefecture) => prefecture.id === prefectureId)?.name;
+    $("nlAddress").value = formatJapaneseAddress(result.address, prefectureName);
+    $("nlId").value = locationIdFromResult(result, state.master.locations);
+    $("nlLat").value = String(result.lat);
+    $("nlLng").value = String(result.lon);
+    $("nlPrefecture").value = prefectureId ?? "";
+    status.replaceChildren(
+      h(
+        "span",
+        { class: prefectureId ? "ok" : "warn" },
+        prefectureId
+          ? `検索結果を入力しました: ${result.name || result.displayName.split(",")[0].trim()}`
+          : `検索結果を入力しました。都道府県を選択してください: ${result.name || result.displayName.split(",")[0].trim()}`,
+      ),
+    );
+  } catch (error) {
+    status.replaceChildren(h("span", { class: "err" }, `検索に失敗しました: ${error.message}`));
+  } finally {
+    button.disabled = false;
+  }
 }
 
 // ---------- 撮影日 ----------
@@ -514,6 +563,7 @@ async function loadMaster() {
   state.master = await api("/api/master");
   $("totals").textContent = `登録済み ${state.master.photoTotal} 枚 / 撮影地点 ${state.master.locations.length} 件`;
   $("nlPrefecture").replaceChildren(
+    h("option", { value: "" }, "都道府県を選択"),
     ...state.master.prefectures.map((p) => h("option", { value: p.id }, p.name)),
   );
 }
@@ -534,6 +584,7 @@ function bind() {
     state.location = null;
     state.newLocation = null;
     state.suggestIndex = 0;
+    $("locationLookupStatus").replaceChildren();
     renderLocationSuggest();
     renderLocationInfo();
     renderReadiness();
@@ -553,6 +604,8 @@ function bind() {
   });
   input.addEventListener("blur", () => setTimeout(() => ($("locationSuggest").hidden = true), 150));
 
+  $("searchLocation").addEventListener("click", searchLocation);
+
   $("nlApply").addEventListener("click", () => {
     const num = (id) => {
       const v = $(id).value.trim();
@@ -560,6 +613,11 @@ function bind() {
     };
     const name = $("nlName").value.trim();
     if (!name) return;
+    if (!$("nlPrefecture").value) {
+      $("locationLookupStatus").replaceChildren(h("span", { class: "err" }, "都道府県を選択してください"));
+      $("nlPrefecture").focus();
+      return;
+    }
     state.location = null;
     state.newLocation = {
       name,

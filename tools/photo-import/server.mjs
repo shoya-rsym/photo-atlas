@@ -20,19 +20,25 @@ import {
   pruneLocations,
   readImageFile,
   updatePhoto,
+  updateLocation,
 } from "./lib/manager.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT ?? 4321);
 const HOST = "127.0.0.1";
 const MAX_UPLOAD_BYTES = 80 * 1024 * 1024;
+const NOMINATIM_USER_AGENT = "PhotoAtlasPhotoImport/1.0 (https://github.com/shoya-rsym/photo-atlas)";
+let lastNominatimRequestAt = 0;
+let nominatimQueue = Promise.resolve();
 
 /** ブラウザへ配信してよいファイルのみ（ホワイトリスト） */
 const STATIC = {
   "/": ["public/index.html", "text/html; charset=utf-8"],
   "/app.js": ["public/app.js", "text/javascript; charset=utf-8"],
   "/style.css": ["public/style.css", "text/css; charset=utf-8"],
+  "/lib/address.mjs": ["lib/address.mjs", "text/javascript; charset=utf-8"],
   "/lib/date.mjs": ["lib/date.mjs", "text/javascript; charset=utf-8"],
+  "/lib/location.mjs": ["lib/location.mjs", "text/javascript; charset=utf-8"],
   "/lib/search.mjs": ["lib/search.mjs", "text/javascript; charset=utf-8"],
   "/lib/folder-name.mjs": ["lib/folder-name.mjs", "text/javascript; charset=utf-8"],
   "/manage": ["public/manage.html", "text/html; charset=utf-8"],
@@ -44,6 +50,65 @@ const IMAGE_TYPES = { jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", w
 function send(res, status, body, type = "application/json; charset=utf-8") {
   res.writeHead(status, { "content-type": type, "cache-control": "no-store" });
   res.end(typeof body === "string" || Buffer.isBuffer(body) ? body : JSON.stringify(body));
+}
+
+async function searchLocations(query) {
+  const request = nominatimQueue.then(async () => {
+    const wait = Math.max(0, 1000 - (Date.now() - lastNominatimRequestAt));
+    if (wait > 0) await new Promise((resolve) => setTimeout(resolve, wait));
+    lastNominatimRequestAt = Date.now();
+
+    const url = new URL("https://nominatim.openstreetmap.org/search");
+    url.search = new URLSearchParams({
+      q: query,
+      format: "jsonv2",
+      addressdetails: "1",
+      limit: "5",
+      countrycodes: "jp",
+      "accept-language": "ja",
+    }).toString();
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
+    try {
+      const response = await fetch(url, {
+        headers: { "user-agent": NOMINATIM_USER_AGENT, accept: "application/json" },
+        signal: controller.signal,
+      });
+      if (!response.ok) throw new Error(`OpenStreetMap が HTTP ${response.status} を返しました`);
+      const results = await response.json();
+      if (!Array.isArray(results)) throw new Error("OpenStreetMap から不正な応答が返されました");
+      return results
+        .filter(
+          (place) =>
+            place &&
+            typeof place.display_name === "string" &&
+            Number.isFinite(Number(place.lat)) &&
+            Number.isFinite(Number(place.lon)),
+        )
+        .map((place) => ({
+          osmType: typeof place.osm_type === "string" ? place.osm_type : "",
+          osmId: place.osm_id == null ? "" : String(place.osm_id),
+          name: typeof place.name === "string" ? place.name : "",
+          displayName: place.display_name,
+          lat: Number(place.lat),
+          lon: Number(place.lon),
+          address:
+            place.address && typeof place.address === "object" && !Array.isArray(place.address)
+              ? place.address
+              : {},
+        }));
+    } catch (error) {
+      if (controller.signal.aborted) throw new Error("OpenStreetMap の検索がタイムアウトしました");
+      throw error;
+    } finally {
+      clearTimeout(timeout);
+    }
+  });
+  nominatimQueue = request.then(
+    () => undefined,
+    () => undefined,
+  );
+  return request;
 }
 
 async function readBody(req, limit) {
@@ -76,6 +141,18 @@ const server = createServer(async (req, res) => {
       }
       if (path === "/api/master") {
         return send(res, 200, { ...(await loadMaster()), recent: await loadRecent() });
+      }
+      if (path === "/api/location-search") {
+        const query = url.searchParams.get("q")?.trim() ?? "";
+        if (!query || query.length > 200) {
+          return send(res, 400, { error: "撮影場所は1〜200文字で入力してください" });
+        }
+        try {
+          return send(res, 200, await searchLocations(query));
+        } catch (error) {
+          const message = error instanceof Error ? error.message : String(error);
+          return send(res, 502, { error: `地図検索に失敗しました: ${message}` });
+        }
       }
       if (path === "/api/photos") return send(res, 200, await loadPhotos());
       const image = /^\/(photos|thumbnails)\/([A-Za-z0-9_.-]+)$/.exec(path);
@@ -115,6 +192,10 @@ const server = createServer(async (req, res) => {
       if (path === "/api/photos/update") {
         const body = await json();
         return send(res, 200, await updatePhoto(String(body.id), body.patch ?? {}));
+      }
+      if (path === "/api/locations/update") {
+        const body = await json();
+        return send(res, 200, await updateLocation(String(body.id), body.patch ?? {}));
       }
       if (path === "/api/photos/bulk") return send(res, 200, await bulkUpdate(await json()));
       if (path === "/api/photos/delete") return send(res, 200, await deletePhotos((await json()).ids));

@@ -10,6 +10,7 @@
     <header class="top">
       <h1>Photo Management Tool</h1>
       <a href="/">→ 写真登録</a>
+      <button id="manageLocations" type="button">撮影地点情報を編集</button>
       <span class="muted" id="totals"></span>
     </header>
 
@@ -38,7 +39,7 @@
           <button id="bulkCharacterBtn" type="button">キャラクターを変更</button>
 
           <h2>撮影日変更</h2>
-          <input id="bulkDate" type="text" placeholder="202604 / 20260415 / 空欄=不明" />
+          <input id="bulkDate" type="text" placeholder="202604 / 20260415 / 2026年4月15日 / 空欄=不明" />
           <div id="bulkDateInfo" class="info"></div>
           <button id="bulkDateBtn" type="button">撮影日を変更</button>
 
@@ -89,7 +90,7 @@
           <h2>タイトル</h2>
           <input id="edTitle" type="text" />
           <h2>撮影日</h2>
-          <input id="edDate" type="text" placeholder="空欄=撮影日不明" />
+          <input id="edDate" type="text" placeholder="202604 / 20260415 / 2026-04-15 / 2026年4月15日（空欄=撮影日不明）" />
           <div id="edDateInfo" class="info"></div>
           <h2>地点</h2>
           <input id="edLocation" type="text" list="edLocationList" autocomplete="off" />
@@ -109,6 +110,29 @@
         <span class="grow"></span>
         <button id="edCancel" type="button">キャンセル</button>
         <button id="edSave" type="button" class="primary">保存</button>
+      </div>
+    </dialog>
+
+    <dialog id="locationEditor" class="editor">
+      <h2>撮影地点情報の編集</h2>
+      <label>撮影地点<select id="locationSelect"></select></label>
+      <div class="grid2">
+        <label>名前<input id="locationName" type="text" /></label>
+        <label>都道府県<select id="locationPrefecture"></select></label>
+        <label>住所<input id="locationAddress" type="text" /></label>
+        <label>ID（写真参照のため変更不可）<input id="locationId" type="text" readonly /></label>
+        <label>緯度<input id="locationLat" type="number" min="-90" max="90" step="any" /></label>
+        <label>経度<input id="locationLng" type="number" min="-180" max="180" step="any" /></label>
+      </div>
+      <div class="row">
+        <button id="locationSearch" type="button">OpenStreetMap で検索して自動入力</button>
+        <span id="locationSearchStatus" class="info" role="status" aria-live="polite"></span>
+      </div>
+      <p class="muted">地図情報: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">© OpenStreetMap contributors</a></p>
+      <p id="locationError" class="error" hidden></p>
+      <div class="row end">
+        <button id="locationCancel" type="button">キャンセル</button>
+        <button id="locationSave" type="button" class="primary">保存</button>
       </div>
     </dialog>
 

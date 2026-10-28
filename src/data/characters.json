@@ -1,4 +1,5 @@
 [
   { "id": "hatsune_miku", "name": "初音ミク", "series": "VOCALOID" },
-  { "id": "kagamine_rin", "name": "鏡音リン", "series": "VOCALOID" }
+  { "id": "kagamine_rin", "name": "鏡音リン", "series": "VOCALOID" },
+  { "id": "character_001", "name": "水本ゆかり" }
 ]

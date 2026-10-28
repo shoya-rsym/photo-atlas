@@ -15,6 +15,7 @@ import {
   saveHashes,
   writeAtomic,
 } from "./store.mjs";
+import { findExactName } from "./search.mjs";
 
 const TRASH_DIR = join(LOCAL_DIR, "trash");
 
@@ -82,6 +83,20 @@ function parseDate(input) {
   return result.value;
 }
 
+function optionalCoordinate(value, minimum, maximum, label) {
+  if (value === null || value === undefined || (typeof value === "string" && value.trim() === "")) {
+    return undefined;
+  }
+  if (typeof value !== "string" && typeof value !== "number") {
+    throw new Error(`${label}が不正です`);
+  }
+  const coordinate = Number(value);
+  if (!Number.isFinite(coordinate) || coordinate < minimum || coordinate > maximum) {
+    throw new Error(`${label}は${minimum}〜${maximum}の範囲で入力してください`);
+  }
+  return coordinate;
+}
+
 function requireIds(ids) {
   if (!Array.isArray(ids) || ids.length === 0) throw new Error("対象の写真が選択されていません");
   return new Set(ids);
@@ -125,6 +140,44 @@ export function updatePhoto(id, patch) {
     const final = normalizeCovers(updated, new Set([id]));
     await savePhotos(final);
     return finish(final, locations, { photo: final.find((p) => p.id === id) });
+  });
+}
+
+/** 既存の撮影地点情報を更新する（ID は写真参照を保つため変更しない） */
+export function updateLocation(id, patch) {
+  return exclusive(async () => {
+    const { photos, locations } = await loadAll();
+    const current = locations.find((location) => location.id === id);
+    if (!current) throw new Error(`撮影地点が見つかりません: ${id}`);
+
+    const name = String(patch.name ?? "").trim();
+    if (!name) throw new Error("撮影地点の名前は必須です");
+    const duplicate = findExactName(
+      locations.filter((location) => location.id !== id),
+      name,
+    );
+    if (duplicate) throw new Error(`撮影地点「${name}」は既に存在します`);
+
+    const prefectureId = String(patch.prefectureId ?? "");
+    const prefectures = await readJson(dataFile("prefectures"), []);
+    if (!prefectures.some((prefecture) => prefecture.id === prefectureId)) {
+      throw new Error("撮影地点の都道府県が不正です");
+    }
+
+    const updatedLocation = {
+      ...current,
+      name,
+      prefectureId,
+      subregionId: current.prefectureId === prefectureId ? current.subregionId : undefined,
+      address: String(patch.address ?? "").trim() || undefined,
+      lat: optionalCoordinate(patch.lat, -90, 90, "緯度"),
+      lng: optionalCoordinate(patch.lng, -180, 180, "経度"),
+    };
+    const updatedLocations = locations.map((location) =>
+      location.id === id ? updatedLocation : location,
+    );
+    await writeAtomic(dataFile("locations"), formatJsonList(updatedLocations, "expanded"));
+    return finish(photos, updatedLocations, { location: updatedLocation });
   });
 }
 

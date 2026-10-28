@@ -34,11 +34,16 @@
             <label>緯度（任意）<input id="nlLat" type="text" inputmode="decimal" /></label>
             <label>経度（任意）<input id="nlLng" type="text" inputmode="decimal" /></label>
           </div>
+          <div class="row">
+            <button type="button" id="searchLocation">OpenStreetMap で検索して自動入力</button>
+            <span id="locationLookupStatus" class="info" role="status" aria-live="polite"></span>
+          </div>
+          <p class="muted">地図情報: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">© OpenStreetMap contributors</a></p>
           <button type="button" id="nlApply">この内容で使用</button>
         </details>
 
         <h2>撮影日</h2>
-        <input id="dateInput" type="text" autocomplete="off" placeholder="202604 / 20260415 / 2026-04-15（空欄=撮影日不明）" />
+        <input id="dateInput" type="text" autocomplete="off" placeholder="202604 / 20260415 / 2026-04-15 / 2026年4月15日（空欄=撮影日不明）" />
         <div id="dateInfo" class="info"></div>
 
         <h2>タグ</h2>

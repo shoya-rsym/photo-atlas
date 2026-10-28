@@ -1,4 +1,6 @@
 import { parseDateInput } from "/lib/date.mjs";
+import { formatJapaneseAddress } from "/lib/address.mjs";
+import { prefectureIdFromResult } from "/lib/location.mjs";
 import { findExactName, normalize, searchByName } from "/lib/search.mjs";
 
 const $ = (id) => document.getElementById(id);
@@ -266,6 +268,114 @@ function fillCharacterSelects() {
   $("bulkCharacter").replaceChildren(...options(h("option", { value: "" }, "（キャラクターなしにする）")));
   $("edCharacter").replaceChildren(...options(h("option", { value: "" }, "（なし）")));
   $("edLocationList").replaceChildren(...state.master.locations.map((l) => h("option", { value: l.name })));
+  const selectedLocationId = $("locationSelect").value;
+  $("locationSelect").replaceChildren(
+    ...state.master.locations.map((location) => h("option", { value: location.id }, location.name)),
+  );
+  if (state.master.locations.some((location) => location.id === selectedLocationId)) {
+    $("locationSelect").value = selectedLocationId;
+  }
+  $("manageLocations").disabled = state.master.locations.length === 0;
+  $("locationPrefecture").replaceChildren(
+    h("option", { value: "" }, "都道府県を選択"),
+    ...state.master.prefectures.map((prefecture) => h("option", { value: prefecture.id }, prefecture.name)),
+  );
+}
+
+function fillLocationEditor(location) {
+  $("locationName").value = location.name;
+  $("locationPrefecture").value = location.prefectureId;
+  $("locationAddress").value = location.address ?? "";
+  $("locationId").value = location.id;
+  $("locationLat").value = location.lat ?? "";
+  $("locationLng").value = location.lng ?? "";
+  $("locationSearchStatus").replaceChildren();
+  $("locationError").hidden = true;
+}
+
+function openLocationEditor() {
+  const location = state.master.locations.find((item) => item.id === $("locationSelect").value);
+  if (!location) return;
+  fillLocationEditor(location);
+  $("locationEditor").showModal();
+}
+
+async function searchManageLocation() {
+  const query = $("locationName").value.trim();
+  const button = $("locationSearch");
+  const status = $("locationSearchStatus");
+  if (!query) {
+    status.replaceChildren(h("span", { class: "err" }, "撮影地点名を入力してください"));
+    return;
+  }
+  button.disabled = true;
+  status.textContent = "検索中…";
+  try {
+    const results = await api(`/api/location-search?q=${encodeURIComponent(query)}`);
+    if ($("locationName").value.trim() !== query) {
+      status.replaceChildren(h("span", { class: "warn" }, "検索中に入力が変更されました。もう一度検索してください"));
+      return;
+    }
+    const result = results[0];
+    if (!result) {
+      status.replaceChildren(h("span", { class: "warn" }, "撮影場所が見つかりませんでした"));
+      return;
+    }
+    const prefectureId = prefectureIdFromResult(result, state.master.prefectures);
+    const prefectureName = state.master.prefectures.find((prefecture) => prefecture.id === prefectureId)?.name;
+    $("locationName").value = result.name || result.displayName.split(",")[0].trim();
+    $("locationPrefecture").value = prefectureId ?? "";
+    $("locationAddress").value = formatJapaneseAddress(result.address, prefectureName);
+    $("locationLat").value = String(result.lat);
+    $("locationLng").value = String(result.lon);
+    status.replaceChildren(
+      h(
+        "span",
+        { class: prefectureId ? "ok" : "warn" },
+        prefectureId
+          ? "検索結果を入力しました"
+          : "検索結果を入力しました。都道府県を選択してください",
+      ),
+    );
+  } catch (error) {
+    status.replaceChildren(h("span", { class: "err" }, `検索に失敗しました: ${error.message}`));
+  } finally {
+    button.disabled = false;
+  }
+}
+
+async function saveLocationEditor() {
+  const locationId = $("locationSelect").value;
+  const coordinate = (id) => {
+    const value = $(id).value.trim();
+    if (value === "") return null;
+    const number = Number(value);
+    if (!Number.isFinite(number)) throw new Error("緯度・経度は数値で入力してください");
+    return number;
+  };
+  const button = $("locationSave");
+  button.disabled = true;
+  $("locationError").hidden = true;
+  try {
+    const res = await api("/api/locations/update", {
+      id: locationId,
+      patch: {
+        name: $("locationName").value,
+        prefectureId: $("locationPrefecture").value,
+        address: $("locationAddress").value,
+        lat: coordinate("locationLat"),
+        lng: coordinate("locationLng"),
+      },
+    });
+    $("locationEditor").close();
+    await reload();
+    showResult(`${res.location.name} の地点情報を更新しました`, res);
+  } catch (error) {
+    $("locationError").textContent = error.message;
+    $("locationError").hidden = false;
+  } finally {
+    button.disabled = false;
+  }
 }
 
 const selectedIds = () => [...state.selected];
@@ -380,6 +490,16 @@ function bind() {
     state.selected.clear();
     renderList();
   });
+
+  $("manageLocations").addEventListener("click", openLocationEditor);
+  $("locationSelect").addEventListener("change", () => {
+    const location = state.master.locations.find((item) => item.id === $("locationSelect").value);
+    if (location) fillLocationEditor(location);
+  });
+  $("locationName").addEventListener("input", () => $("locationSearchStatus").replaceChildren());
+  $("locationSearch").addEventListener("click", searchManageLocation);
+  $("locationSave").addEventListener("click", saveLocationEditor);
+  $("locationCancel").addEventListener("click", () => $("locationEditor").close());
 
   $("addTagFilter").addEventListener("input", renderBulk);
   $("addTagBtn").addEventListener("click", async () => {
