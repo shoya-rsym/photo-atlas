@@ -85,5 +85,35 @@
     "id": "location_004",
     "name": "長崎",
     "prefectureId": "nagasaki"
+  },
+  {
+    "id": "location_005",
+    "name": "一時登録",
+    "prefectureId": "aomori"
+  },
+  {
+    "id": "location_006",
+    "name": "栃木県",
+    "prefectureId": "tochigi"
+  },
+  {
+    "id": "location_007",
+    "name": "千葉県",
+    "prefectureId": "chiba"
+  },
+  {
+    "id": "location_008",
+    "name": "神奈川県",
+    "prefectureId": "kanagawa"
+  },
+  {
+    "id": "location_009",
+    "name": "埼玉県",
+    "prefectureId": "saitama"
+  },
+  {
+    "id": "location_010",
+    "name": "群馬県",
+    "prefectureId": "gunma"
   }
 ]
