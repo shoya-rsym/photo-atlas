@@ -13,6 +13,14 @@ import {
   stageImage,
 } from "./lib/importer.mjs";
 import { loadRecent } from "./lib/store.mjs";
+import {
+  bulkUpdate,
+  deletePhotos,
+  loadPhotos,
+  pruneLocations,
+  readImageFile,
+  updatePhoto,
+} from "./lib/manager.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT ?? 4321);
@@ -27,7 +35,11 @@ const STATIC = {
   "/lib/date.mjs": ["lib/date.mjs", "text/javascript; charset=utf-8"],
   "/lib/search.mjs": ["lib/search.mjs", "text/javascript; charset=utf-8"],
   "/lib/folder-name.mjs": ["lib/folder-name.mjs", "text/javascript; charset=utf-8"],
+  "/manage": ["public/manage.html", "text/html; charset=utf-8"],
+  "/manage.js": ["public/manage.js", "text/javascript; charset=utf-8"],
 };
+
+const IMAGE_TYPES = { jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp" };
 
 function send(res, status, body, type = "application/json; charset=utf-8") {
   res.writeHead(status, { "content-type": type, "cache-control": "no-store" });
@@ -65,6 +77,15 @@ const server = createServer(async (req, res) => {
       if (path === "/api/master") {
         return send(res, 200, { ...(await loadMaster()), recent: await loadRecent() });
       }
+      if (path === "/api/photos") return send(res, 200, await loadPhotos());
+      const image = /^\/(photos|thumbnails)\/([A-Za-z0-9_.-]+)$/.exec(path);
+      if (image) {
+        const data = await readImageFile(image[1], image[2]);
+        const type = IMAGE_TYPES[image[2].split(".").pop()?.toLowerCase() ?? ""];
+        if (!data || !type) return send(res, 404, { error: "not found" });
+        res.writeHead(200, { "content-type": type, "cache-control": "max-age=30" });
+        return res.end(data);
+      }
       const preview = /^\/api\/preview\/([0-9a-f]+)$/.exec(path);
       if (preview) {
         const data = await readPreview(preview[1]);
@@ -90,6 +111,14 @@ const server = createServer(async (req, res) => {
         const body = JSON.parse((await readBody(req, 5 * 1024 * 1024)).toString("utf8"));
         return send(res, 200, await commitImport(body));
       }
+      const json = async () => JSON.parse((await readBody(req, 5 * 1024 * 1024)).toString("utf8"));
+      if (path === "/api/photos/update") {
+        const body = await json();
+        return send(res, 200, await updatePhoto(String(body.id), body.patch ?? {}));
+      }
+      if (path === "/api/photos/bulk") return send(res, 200, await bulkUpdate(await json()));
+      if (path === "/api/photos/delete") return send(res, 200, await deletePhotos((await json()).ids));
+      if (path === "/api/locations/prune") return send(res, 200, await pruneLocations());
     }
     return send(res, 404, { error: "not found" });
   } catch (error) {

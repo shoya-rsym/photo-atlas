@@ -71,3 +71,25 @@ dialog::backdrop { background: rgba(0, 0, 0, 0.6); }
 .confirm dd { margin: 0; word-break: break-all; }
 
 [hidden] { display: none !important; }
+
+.layout.manage { grid-template-columns: minmax(280px, 340px) 1fr; }
+.bulk { position: sticky; top: 8px; max-height: calc(100vh - 16px); overflow: auto; }
+.bulk button { margin-top: 6px; }
+.toolbar > input { flex: 1 1 280px; width: auto; }
+.toolbar > select { width: auto; }
+.gallery.big { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+.card { cursor: pointer; }
+.card.sel { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+.card .meta { padding: 0 6px 4px; font-size: 11px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card .title { padding: 3px 6px 0; font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card .edit { position: absolute; bottom: 4px; right: 4px; padding: 0 6px; font-size: 12px; background: rgba(0, 0, 0, 0.65); }
+.card .cover { position: absolute; top: 4px; right: 4px; color: #facc15; text-shadow: 0 0 3px #000; }
+button.danger { color: var(--err); border-color: #7f1d1d; }
+.grow { flex: 1; }
+.top a { color: var(--accent); }
+dialog.editor { width: min(900px, 94vw); }
+.editor-body { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.editor-body img { width: 100%; max-height: 60vh; object-fit: contain; background: #000; border-radius: 6px; }
+.check { display: flex; gap: 6px; align-items: center; margin-top: 10px; }
+.check input { width: auto; }
+@media (max-width: 800px) { .layout.manage { grid-template-columns: 1fr; } .editor-body { grid-template-columns: 1fr; } .bulk { position: static; max-height: none; } }

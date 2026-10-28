@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Photo Management Tool</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header class="top">
+      <h1>Photo Management Tool</h1>
+      <a href="/">→ 写真登録</a>
+      <span class="muted" id="totals"></span>
+    </header>
+
+    <main class="layout manage">
+      <aside class="panel bulk" id="bulk">
+        <h2>一括編集 <span id="selCount" class="muted"></span></h2>
+        <p class="muted" id="bulkHint">写真をクリックで選択（Shift+クリックで範囲選択）</p>
+        <div id="bulkBody" hidden>
+          <h2>タグ追加</h2>
+          <input id="addTagFilter" type="text" placeholder="絞り込み" />
+          <div id="addTagChips" class="chips"></div>
+          <button id="addTagBtn" type="button">選択した写真にタグを追加</button>
+
+          <h2>タグ削除（選択中の写真に付いているタグ）</h2>
+          <div id="removeTagChips" class="chips"></div>
+          <button id="removeTagBtn" type="button">選択したタグを外す</button>
+
+          <h2>地点変更</h2>
+          <input id="bulkLocation" type="text" autocomplete="off" placeholder="撮影地点名" />
+          <ul id="bulkLocationSuggest" class="suggest" hidden></ul>
+          <div id="bulkLocationInfo" class="info"></div>
+          <button id="bulkLocationBtn" type="button">地点を変更</button>
+
+          <h2>キャラクター変更</h2>
+          <select id="bulkCharacter"></select>
+          <button id="bulkCharacterBtn" type="button">キャラクターを変更</button>
+
+          <h2>撮影日変更</h2>
+          <input id="bulkDate" type="text" placeholder="202604 / 20260415 / 空欄=不明" />
+          <div id="bulkDateInfo" class="info"></div>
+          <button id="bulkDateBtn" type="button">撮影日を変更</button>
+
+          <h2>削除</h2>
+          <button id="bulkDeleteBtn" type="button" class="danger">選択した写真を削除</button>
+        </div>
+      </aside>
+
+      <section class="panel">
+        <div class="row toolbar">
+          <input id="search" type="search" placeholder="検索: タイトル・タグ・キャラクター・地点名・コメント（スペース区切りでAND）" />
+          <select id="filter">
+            <option value="">すべて</option>
+            <option value="nodate">撮影日不明</option>
+            <option value="notag">タグなし</option>
+            <option value="nochar">キャラクターなし</option>
+            <option value="cover">代表写真</option>
+          </select>
+          <select id="sort">
+            <option value="created">登録順（新しい順）</option>
+            <option value="createdAsc">登録順（古い順）</option>
+            <option value="date">撮影日（新しい順）</option>
+            <option value="location">地点名</option>
+          </select>
+        </div>
+        <div class="bar">
+          <span id="summary"></span>
+          <span class="row">
+            <button id="selectPage" type="button">このページを選択</button>
+            <button id="selectAllResults" type="button">検索結果をすべて選択</button>
+            <button id="selectNone" type="button">選択解除</button>
+          </span>
+        </div>
+        <div id="result" class="result" hidden></div>
+        <div id="grid" class="gallery big"></div>
+        <div class="bar">
+          <button id="prev" type="button">← 前へ</button>
+          <span id="pageInfo" class="muted"></span>
+          <button id="next" type="button">次へ →</button>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="editor" class="editor">
+      <div class="editor-body">
+        <img id="edImage" alt="" />
+        <div>
+          <h2>タイトル</h2>
+          <input id="edTitle" type="text" />
+          <h2>撮影日</h2>
+          <input id="edDate" type="text" placeholder="空欄=撮影日不明" />
+          <div id="edDateInfo" class="info"></div>
+          <h2>地点</h2>
+          <input id="edLocation" type="text" list="edLocationList" autocomplete="off" />
+          <datalist id="edLocationList"></datalist>
+          <h2>キャラクター</h2>
+          <select id="edCharacter"></select>
+          <h2>タグ</h2>
+          <div id="edTags" class="chips"></div>
+          <h2>コメント</h2>
+          <textarea id="edComment" rows="3"></textarea>
+          <label class="check"><input id="edCover" type="checkbox" /> この地点の代表写真にする（他の代表は解除）</label>
+        </div>
+      </div>
+      <div id="edError" class="error" hidden></div>
+      <div class="row end">
+        <button id="edDelete" type="button" class="danger">削除</button>
+        <span class="grow"></span>
+        <button id="edCancel" type="button">キャンセル</button>
+        <button id="edSave" type="button" class="primary">保存</button>
+      </div>
+    </dialog>
+
+    <script type="module" src="/manage.js"></script>
+  </body>
+</html>
