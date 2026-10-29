@@ -21,6 +21,11 @@ const state = {
   editTags: new Set(),
   editCharacters: new Set(),
   locationMode: "update",
+  similarPairs: [],
+  similarPage: 0,
+  similarSelected: new Set(),
+  similarAnalyzedCount: 0,
+  similarSkipped: [],
 };
 
 function h(tag, props = {}, ...children) {
@@ -260,6 +265,142 @@ function suggestLocations(input, list, onPick) {
   return results;
 }
 
+function renderSimilarPhoto(photo) {
+  const selected = state.similarSelected.has(photo.id);
+  return h(
+    "div",
+    { class: "similar-photo" },
+    h("img", { src: photo.thumbnail, alt: photo.title, loading: "lazy" }),
+    h("div", { class: "title", title: photo.title }, photo.title),
+    h("div", { class: "meta" }, locName(photo.locationId)),
+    h("div", { class: "meta" }, photo.date ?? "撮影日不明"),
+    h(
+      "label",
+      { class: "check" },
+      h("input", {
+        type: "checkbox",
+        checked: selected,
+        onchange: (event) => {
+          if (event.currentTarget.checked) state.similarSelected.add(photo.id);
+          else state.similarSelected.delete(photo.id);
+          renderSimilarCandidates();
+        },
+      }),
+      "削除対象にする",
+    ),
+    h("button", { type: "button", onclick: () => openEditor(photo.id) }, "詳細確認"),
+  );
+}
+
+function renderSimilarCandidates() {
+  const availableIds = new Set(state.photos.map((photo) => photo.id));
+  state.similarPairs = state.similarPairs.filter(
+    (pair) => availableIds.has(pair.first.id) && availableIds.has(pair.second.id),
+  );
+  for (const id of [...state.similarSelected]) {
+    if (!availableIds.has(id)) state.similarSelected.delete(id);
+  }
+  const pageCount = Math.max(1, Math.ceil(state.similarPairs.length / 20));
+  state.similarPage = Math.min(state.similarPage, pageCount - 1);
+  const pagePairs = state.similarPairs.slice(state.similarPage * 20, (state.similarPage + 1) * 20);
+  $("similarSummary").textContent =
+    state.similarPairs.length > 0
+      ? `${state.similarPairs.length}組の候補（${state.similarAnalyzedCount}枚を解析。距離が小さいほど似ています）`
+      : `${state.similarAnalyzedCount}枚を解析しました。類似候補はありません`;
+  $("similarSkipped").replaceChildren(
+    ...(state.similarSkipped.length
+      ? [
+          h(
+            "details",
+            {},
+            h("summary", {}, `解析できなかった写真 ${state.similarSkipped.length} 枚`),
+            h(
+              "ul",
+              {},
+              ...state.similarSkipped.map((item) => h("li", {}, `${item.id} (${item.title}): ${item.reason}`)),
+            ),
+          ),
+        ]
+      : []),
+  );
+  $("similarPairs").replaceChildren(
+    ...pagePairs.flatMap((pair) => {
+      const first = state.photos.find((photo) => photo.id === pair.first.id);
+      const second = state.photos.find((photo) => photo.id === pair.second.id);
+      if (!first || !second) return [];
+      return [
+        h(
+          "article",
+          { class: "similar-pair" },
+          h("div", { class: "similar-distance" }, `画像差分 ${pair.distance}/64`),
+          renderSimilarPhoto(first),
+          renderSimilarPhoto(second),
+        ),
+      ];
+    }),
+  );
+  $("similarPageInfo").textContent = state.similarPairs.length ? `${state.similarPage + 1} / ${pageCount}` : "";
+  $("similarPrevious").disabled = state.similarPage === 0;
+  $("similarNext").disabled = state.similarPage >= pageCount - 1;
+  $("deleteSimilar").disabled = state.similarSelected.size === 0;
+  $("deleteSimilar").textContent = `選択した候補写真を削除 (${state.similarSelected.size})`;
+}
+
+async function searchSimilarPhotos() {
+  const button = $("searchSimilar");
+  $("similarPanel").hidden = false;
+  $("similarSummary").textContent = "画像を解析しています…";
+  $("similarSkipped").replaceChildren();
+  $("similarPairs").replaceChildren();
+  button.disabled = true;
+  try {
+    const result = await api("/api/photos/similar");
+    state.similarPairs = result.pairs;
+    state.similarPage = 0;
+    state.similarSelected.clear();
+    state.similarAnalyzedCount = result.analyzedCount;
+    state.similarSkipped = result.skipped;
+    renderSimilarCandidates();
+  } catch (error) {
+    $("similarSummary").replaceChildren(h("span", { class: "err" }, error.message));
+  } finally {
+    button.disabled = false;
+  }
+}
+
+async function deleteSimilarPhotos() {
+  const photos = state.photos.filter((photo) => state.similarSelected.has(photo.id));
+  const ids = photos.map((photo) => photo.id);
+  if (ids.length === 0) return;
+  const names = photos.slice(0, 10).map((photo) => `・${photo.title} (${photo.id})`).join("\n");
+  const remainder = photos.length > 10 ? `\nほか ${photos.length - 10} 枚` : "";
+  if (
+    !confirm(
+      `${photos.length} 枚を削除します。実体はPhoto-Manageのゴミ箱へ退避されます。\n${names}${remainder}`,
+    )
+  ) {
+    return;
+  }
+
+  const button = $("deleteSimilar");
+  button.disabled = true;
+  try {
+    const result = await api("/api/photos/delete", { ids });
+    const deletedIds = new Set(ids);
+    state.similarSelected.clear();
+    state.similarPairs = state.similarPairs.filter(
+      (pair) => !deletedIds.has(pair.first.id) && !deletedIds.has(pair.second.id),
+    );
+    await reload();
+    renderSimilarCandidates();
+    showResult(`${ids.length} 枚の候補写真を削除しました`, result);
+  } catch (error) {
+    showResult(`類似候補の削除に失敗しました: ${error.message}`, null, true);
+  } finally {
+    button.disabled = false;
+  }
+}
+
 // ---------- 操作の実行 ----------
 
 async function run(label, path, body) {
@@ -357,6 +498,7 @@ async function reload() {
   applyFilter();
   state.page = keepPage;
   renderList();
+  if (!$("similarPanel").hidden && state.similarPairs.length) renderSimilarCandidates();
 }
 
 function fillCharacterSelects() {
@@ -783,6 +925,17 @@ function bind() {
   });
   $("filter").addEventListener("change", applyFilter);
   $("sort").addEventListener("change", applyFilter);
+  $("searchSimilar").addEventListener("click", searchSimilarPhotos);
+  $("closeSimilar").addEventListener("click", () => ($("similarPanel").hidden = true));
+  $("similarPrevious").addEventListener("click", () => {
+    state.similarPage -= 1;
+    renderSimilarCandidates();
+  });
+  $("similarNext").addEventListener("click", () => {
+    state.similarPage += 1;
+    renderSimilarCandidates();
+  });
+  $("deleteSimilar").addEventListener("click", deleteSimilarPhotos);
   for (const control of document.querySelectorAll("[data-page-control]")) {
     control.addEventListener("click", (event) => {
       const button = event.target.closest("[data-page-action]");

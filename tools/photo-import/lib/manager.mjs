@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 import { parseDateInput } from "./date.mjs";
+import sharp from "sharp";
 import {
   LOCAL_DIR,
   PHOTOS_DIR,
@@ -22,6 +23,15 @@ import { findExactName } from "./search.mjs";
 const TRASH_DIR = join(LOCAL_DIR, "trash");
 const UNDO_FILE = join(LOCAL_DIR, "manage-undo.json");
 const UNDO_DATA_FILES = ["photos", "locations", "tags", "characters"];
+const SIMILARITY_THRESHOLD = 8;
+const PERCEPTUAL_SIZE = 32;
+const PERCEPTUAL_FREQUENCIES = 8;
+const IMAGE_HASH_CONCURRENCY = 4;
+const PERCEPTUAL_COSINES = Array.from({ length: PERCEPTUAL_FREQUENCIES }, (_, frequency) =>
+  Array.from({ length: PERCEPTUAL_SIZE }, (_, position) =>
+    Math.cos(((2 * position + 1) * frequency * Math.PI) / (2 * PERCEPTUAL_SIZE)),
+  ),
+);
 
 /** 書き込み系操作を直列化する（同時実行による JSON の上書き事故を防ぐ） */
 let queue = Promise.resolve();
@@ -137,6 +147,126 @@ async function loadAll() {
     ["photos", "locations", "tags", "characters"].map((n) => readJson(dataFile(n), [])),
   );
   return { photos, locations, tags, characters };
+}
+
+function perceptualHash(pixels) {
+  let sum = 0;
+  for (const pixel of pixels) sum += pixel;
+  const mean = sum / pixels.length;
+  let variance = 0;
+  for (const pixel of pixels) variance += (pixel - mean) ** 2;
+  if (variance / pixels.length < 16) return null;
+
+  const coefficients = new Float64Array(PERCEPTUAL_FREQUENCIES ** 2);
+  for (let vertical = 0; vertical < PERCEPTUAL_FREQUENCIES; vertical += 1) {
+    for (let horizontal = 0; horizontal < PERCEPTUAL_FREQUENCIES; horizontal += 1) {
+      let coefficient = 0;
+      for (let y = 0; y < PERCEPTUAL_SIZE; y += 1) {
+        const verticalCosine = PERCEPTUAL_COSINES[vertical][y];
+        for (let x = 0; x < PERCEPTUAL_SIZE; x += 1) {
+          coefficient +=
+            pixels[y * PERCEPTUAL_SIZE + x] *
+            PERCEPTUAL_COSINES[horizontal][x] *
+            verticalCosine;
+        }
+      }
+      coefficients[vertical * PERCEPTUAL_FREQUENCIES + horizontal] = coefficient;
+    }
+  }
+
+  const lowFrequencies = [...coefficients.slice(1)].sort((a, b) => a - b);
+  const median = lowFrequencies[Math.floor(lowFrequencies.length / 2)];
+  let hash = 0n;
+  for (let index = 0; index < coefficients.length; index += 1) {
+    if (coefficients[index] > median) hash |= 1n << BigInt(index);
+  }
+  return hash;
+}
+
+function hammingDistance(first, second) {
+  let bits = first ^ second;
+  let distance = 0;
+  while (bits > 0n) {
+    distance += Number(bits & 1n);
+    bits >>= 1n;
+  }
+  return distance;
+}
+
+async function hashPhoto(photo) {
+  const filename = basename(String(photo.image ?? ""));
+  if (!filename || filename === ".") {
+    return { photo, hash: null, error: "画像ファイル名がありません" };
+  }
+  try {
+    const { data } = await sharp(join(PHOTOS_DIR, filename))
+      .rotate()
+      .flatten({ background: "#ffffff" })
+      .resize(PERCEPTUAL_SIZE, PERCEPTUAL_SIZE, { fit: "fill" })
+      .greyscale()
+      .raw()
+      .toBuffer({ resolveWithObject: true });
+    const hash = perceptualHash(data);
+    return hash === null
+      ? { photo, hash: null, error: "画像の特徴が少なく判定できません" }
+      : { photo, hash, error: null };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return { photo, hash: null, error: `画像を解析できません: ${message}` };
+  }
+}
+
+function candidatePhoto(photo) {
+  return {
+    id: photo.id,
+    title: photo.title,
+    thumbnail: photo.thumbnail,
+    locationId: photo.locationId,
+    date: photo.date ?? null,
+  };
+}
+
+export function findSimilarPhotos() {
+  return exclusive(
+    async () => {
+      const photos = await readJson(dataFile("photos"), []);
+      const hashes = [];
+      for (let index = 0; index < photos.length; index += IMAGE_HASH_CONCURRENCY) {
+        const batch = photos.slice(index, index + IMAGE_HASH_CONCURRENCY);
+        hashes.push(...(await Promise.all(batch.map(hashPhoto))));
+      }
+
+      const comparable = hashes.filter((item) => item.hash !== null);
+      const pairs = [];
+      for (let first = 0; first < comparable.length; first += 1) {
+        for (let second = first + 1; second < comparable.length; second += 1) {
+          const distance = hammingDistance(comparable[first].hash, comparable[second].hash);
+          if (distance <= SIMILARITY_THRESHOLD) {
+            pairs.push({
+              distance,
+              first: candidatePhoto(comparable[first].photo),
+              second: candidatePhoto(comparable[second].photo),
+            });
+          }
+        }
+      }
+      pairs.sort(
+        (a, b) =>
+          a.distance - b.distance ||
+          a.first.id.localeCompare(b.first.id) ||
+          a.second.id.localeCompare(b.second.id),
+      );
+      return {
+        pairs,
+        threshold: SIMILARITY_THRESHOLD,
+        analyzedCount: comparable.length,
+        skipped: hashes
+          .filter((item) => item.error)
+          .map(({ photo, error }) => ({ id: photo.id, title: photo.title, reason: error })),
+      };
+    },
+    { trackUndo: false },
+  );
 }
 
 /** 代表写真は地点ごとに最大1枚。重複時は preferred（今回操作した写真）を優先する */

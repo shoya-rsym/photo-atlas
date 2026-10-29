@@ -20,6 +20,7 @@ import {
   createTagAndApply,
   deletePhotos,
   deleteCharacter,
+  findSimilarPhotos,
   getUndoStatus,
   loadPhotos,
   pruneLocations,
@@ -159,6 +160,14 @@ const server = createServer(async (req, res) => {
         } catch (error) {
           const message = error instanceof Error ? error.message : String(error);
           return send(res, 502, { error: `地図検索に失敗しました: ${message}` });
+        }
+      }
+      if (path === "/api/photos/similar") {
+        try {
+          return send(res, 200, await findSimilarPhotos());
+        } catch (error) {
+          const message = error instanceof Error ? error.message : String(error);
+          return send(res, 500, { error: `類似写真の検索に失敗しました: ${message}` });
         }
       }
       if (path === "/api/photos") return send(res, 200, await loadPhotos());

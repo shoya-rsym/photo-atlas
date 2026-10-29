@@ -1,39 +1,5 @@
 [
   {
-    "id": "yokohama_station",
-    "name": "横浜駅",
-    "prefectureId": "kanagawa",
-    "address": "神奈川県横浜市西区高島2丁目16",
-    "lat": 35.465,
-    "lng": 139.622
-  },
-  {
-    "id": "yamashita_park",
-    "name": "山下公園",
-    "prefectureId": "kanagawa",
-    "address": "神奈川県横浜市中区山下町279",
-    "lat": 35.443,
-    "lng": 139.649
-  },
-  {
-    "id": "sapporo_station",
-    "name": "札幌駅",
-    "prefectureId": "hokkaido",
-    "subregionId": "hokkaido_doo",
-    "address": "北海道札幌市北区北6条西4丁目",
-    "lat": 43.0687,
-    "lng": 141.3508
-  },
-  {
-    "id": "hakodate_station",
-    "name": "函館駅",
-    "prefectureId": "hokkaido",
-    "subregionId": "hokkaido_donan",
-    "address": "北海道函館市若松町12",
-    "lat": 41.7736,
-    "lng": 140.7267
-  },
-  {
     "id": "location_001",
     "name": "ひたちなか海浜公園",
     "prefectureId": "ibaraki",
@@ -75,11 +41,6 @@
     "id": "location_002",
     "name": "沖縄",
     "prefectureId": "okinawa"
-  },
-  {
-    "id": "location_003",
-    "name": "伊豆",
-    "prefectureId": "shizuoka"
   },
   {
     "id": "location_004",
@@ -363,14 +324,6 @@
     "lng": 139.517731
   },
   {
-    "id": "location_042",
-    "name": "ひたちなか海浜公園 コキアの時期",
-    "prefectureId": "ibaraki",
-    "address": "茨城県ひたちなか市馬渡 字大沼605-4",
-    "lat": 36.398067,
-    "lng": 140.572067
-  },
-  {
     "id": "location_043",
     "name": "初島観光",
     "prefectureId": "shizuoka",
@@ -649,5 +602,157 @@
     "address": "三重県志摩市磯部町坂崎字下山９５２−４",
     "lat": 34.356754,
     "lng": 136.842804
+  },
+  {
+    "id": "location_079",
+    "name": "海ほたるPA",
+    "prefectureId": "chiba",
+    "address": "千葉県木更津市中島地先海ほたる",
+    "lat": 35.4629911,
+    "lng": 139.8764182
+  },
+  {
+    "id": "location_080",
+    "name": "塩船観音寺",
+    "prefectureId": "tokyo",
+    "address": "東京都青梅市小曾木二丁目",
+    "lat": 35.8046573,
+    "lng": 139.2804666
+  },
+  {
+    "id": "location_081",
+    "name": "堀川ダム",
+    "prefectureId": "fukushima",
+    "address": "福島県西白河郡西郷村",
+    "lat": 37.1548524,
+    "lng": 140.0752672
+  },
+  {
+    "id": "location_082",
+    "name": "雪割橋",
+    "prefectureId": "fukushima",
+    "address": "福島県西白河郡西郷村雪割橋",
+    "lat": 37.1705163,
+    "lng": 140.0795607
+  },
+  {
+    "id": "location_083",
+    "name": "城山公園",
+    "prefectureId": "ehime",
+    "address": "愛媛県松山市",
+    "lat": 33.8420321,
+    "lng": 132.7612
+  },
+  {
+    "id": "location_084",
+    "name": "翠楽園",
+    "prefectureId": "fukushima",
+    "address": "福島県白河市五郎窪北",
+    "lat": 37.1122354,
+    "lng": 140.2177831
+  },
+  {
+    "id": "location_085",
+    "name": "南湖公園",
+    "prefectureId": "fukushima",
+    "address": "福島県白河市東武塚",
+    "lat": 37.1111882,
+    "lng": 140.2181069
+  },
+  {
+    "id": "location_086",
+    "name": "花の都公園",
+    "prefectureId": "yamanashi",
+    "address": "山梨県南都留郡山中湖村",
+    "lat": 35.4395538,
+    "lng": 138.8528547
+  },
+  {
+    "id": "location_087",
+    "name": "明野ひまわり畑",
+    "prefectureId": "yamanashi",
+    "address": "山梨県北杜市明野町浅尾",
+    "lat": 35.7854781,
+    "lng": 138.4631395
+  },
+  {
+    "id": "location_088",
+    "name": "御前埼灯台",
+    "prefectureId": "shizuoka",
+    "address": "静岡県御前崎市広沢",
+    "lat": 34.5958265,
+    "lng": 138.2257124
+  },
+  {
+    "id": "location_089",
+    "name": "青森ベイ・プロムナード",
+    "prefectureId": "aomori",
+    "address": "青森県青森市青森ベイ・プロムナード",
+    "lat": 40.8360265,
+    "lng": 140.7441958
+  },
+  {
+    "id": "location_090",
+    "name": "青森ラブリッジ",
+    "prefectureId": "aomori",
+    "address": "青森県青森市安方一丁目",
+    "lat": 40.8303513,
+    "lng": 140.7370847
+  },
+  {
+    "id": "location_091",
+    "name": "青森市",
+    "prefectureId": "aomori",
+    "address": "青森県青森市",
+    "lat": 40.8222833,
+    "lng": 140.7472027
+  },
+  {
+    "id": "location_092",
+    "name": "藤田記念庭園",
+    "prefectureId": "aomori",
+    "address": "青森県弘前市大字馬屋町",
+    "lat": 40.6040352,
+    "lng": 140.460367
+  },
+  {
+    "id": "location_093",
+    "name": "弘前公園",
+    "prefectureId": "aomori",
+    "address": "青森県弘前市馬屋町",
+    "lat": 40.6079516,
+    "lng": 140.4637166
+  },
+  {
+    "id": "location_094",
+    "name": "ねぶたの家 ワ・ラッセ",
+    "prefectureId": "aomori",
+    "address": "青森県青森市柳川二丁目",
+    "lat": 40.8295723,
+    "lng": 140.735946
+  },
+  {
+    "id": "location_095",
+    "name": "青森駅",
+    "prefectureId": "aomori",
+    "address": "青森県青森市新町一丁目",
+    "lat": 40.8288673,
+    "lng": 140.7335699
+  },
+  {
+    "id": "location_096",
+    "name": "ハイジの村",
+    "prefectureId": "yamanashi",
+    "address": "山梨県北杜市",
+    "lat": 35.7794015,
+    "lng": 138.4641474
+  },
+  {
+    "id": "location_097",
+    "name": "富士本栖湖リゾート",
+    "prefectureId": "yamanashi",
+    "address": "山梨県南都留郡富士河口湖町",
+    "lat": 35.4643056,
+    "lng": 138.585505
   }
 ]

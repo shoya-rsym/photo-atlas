@@ -75,6 +75,7 @@
             <option value="date">撮影日（新しい順）</option>
             <option value="location">地点名</option>
           </select>
+          <button id="searchSimilar" type="button">類似写真を検索</button>
         </div>
         <div id="undoBar" class="bar undo-bar" hidden>
           <span id="undoDescription" role="status" aria-live="polite"></span>
@@ -98,6 +99,23 @@
           <button type="button" data-page-action="last">最後</button>
         </div>
         <div id="result" class="result" hidden></div>
+        <div id="similarPanel" class="panel similar-panel" hidden>
+          <div class="bar">
+            <h2>見た目が似ている写真の候補</h2>
+            <button id="closeSimilar" type="button">閉じる</button>
+          </div>
+          <p id="similarSummary" class="info" role="status" aria-live="polite"></p>
+          <div id="similarSkipped" class="muted"></div>
+          <div id="similarPairs" class="similar-pairs"></div>
+          <div class="bar">
+            <span id="similarPageInfo" class="muted"></span>
+            <span class="row">
+              <button id="similarPrevious" type="button">前へ</button>
+              <button id="similarNext" type="button">次へ</button>
+              <button id="deleteSimilar" type="button" class="danger" disabled>選択した候補写真を削除</button>
+            </span>
+          </div>
+        </div>
         <div id="grid" class="gallery big"></div>
         <div class="bar pagination" data-page-control>
           <button type="button" data-page-action="first">最初</button>

@@ -109,3 +109,13 @@ dialog.editor { width: min(900px, 94vw); }
   body.manage-page { padding-bottom: calc(140px + env(safe-area-inset-bottom, 0px)); }
   .bar.sticky.selection-controls { right: 12px; left: 12px; }
 }
+.similar-panel { margin: 12px 0; }
+.similar-panel h2 { margin: 0; }
+.similar-pairs { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 8px; }
+.similar-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 8px; border: 1px solid var(--border); border-radius: 6px; }
+.similar-distance { grid-column: 1 / -1; color: var(--warn); font-size: 12px; }
+.similar-photo { min-width: 0; padding: 6px; border: 1px solid var(--border); border-radius: 6px; }
+.similar-photo img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: #27272a; }
+.similar-photo .title { padding: 4px 0; font-size: 12px; font-weight: 600; overflow-wrap: anywhere; }
+.similar-photo .meta { font-size: 11px; color: var(--muted); overflow-wrap: anywhere; }
+.similar-photo .check { font-size: 12px; }
