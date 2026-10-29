@@ -15,10 +15,13 @@ import {
 import { loadRecent } from "./lib/store.mjs";
 import {
   bulkUpdate,
+  createLocation,
+  createTagAndApply,
   deletePhotos,
   loadPhotos,
   pruneLocations,
   readImageFile,
+  renumberPhotoTitles,
   updatePhoto,
   updateLocation,
 } from "./lib/manager.mjs";
@@ -193,9 +196,19 @@ const server = createServer(async (req, res) => {
         const body = await json();
         return send(res, 200, await updatePhoto(String(body.id), body.patch ?? {}));
       }
+      if (path === "/api/photos/renumber") {
+        return send(res, 200, await renumberPhotoTitles((await json()).ids));
+      }
       if (path === "/api/locations/update") {
         const body = await json();
         return send(res, 200, await updateLocation(String(body.id), body.patch ?? {}));
+      }
+      if (path === "/api/locations/create") {
+        return send(res, 200, await createLocation(await json()));
+      }
+      if (path === "/api/tags/create") {
+        const body = await json();
+        return send(res, 200, await createTagAndApply(body.name, body.photoIds));
       }
       if (path === "/api/photos/bulk") return send(res, 200, await bulkUpdate(await json()));
       if (path === "/api/photos/delete") return send(res, 200, await deletePhotos((await json()).ids));

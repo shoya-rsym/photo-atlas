@@ -9,6 +9,7 @@ import {
   ROOT,
   THUMBNAILS_DIR,
   dataFile,
+  allocateId,
   formatJsonList,
   loadHashes,
   readJson,
@@ -62,6 +63,40 @@ function cleanPhoto(photo) {
   for (const key of Object.keys(out)) if (out[key] === undefined) delete out[key];
   if (out.isCover !== true) delete out.isCover;
   return out;
+}
+
+function generatedTitleSuffix(title, locations) {
+  for (const location of locations) {
+    if (title === location.name) return "";
+    const prefix = `${location.name} `;
+    if (!title.startsWith(prefix)) continue;
+    const suffix = title.slice(prefix.length);
+    if (/^\d+$/.test(suffix)) return suffix;
+  }
+  return undefined;
+}
+
+function updateGeneratedTitles(photos, locations, photoIds, location) {
+  let titleUpdatedCount = 0;
+  const updatedPhotos = photos.map((photo) => {
+    if (!photoIds.has(photo.id)) return photo;
+    const suffix = generatedTitleSuffix(photo.title, locations);
+    if (suffix === undefined) return photo;
+    const title = suffix ? `${location.name} ${suffix}` : location.name;
+    if (title === photo.title) return photo;
+    titleUpdatedCount += 1;
+    return { ...photo, title };
+  });
+  return { photos: updatedPhotos, titleUpdatedCount };
+}
+
+function numberedTitleSuffix(title, locationName) {
+  const prefix = `${locationName} `;
+  if (!title.startsWith(prefix)) return undefined;
+  const suffix = title.slice(prefix.length);
+  if (!/^\d+$/.test(suffix)) return undefined;
+  const number = Number(suffix);
+  return Number.isSafeInteger(number) && number > 0 ? suffix : undefined;
 }
 
 function orphanLocationIds(photos, locations) {
@@ -136,10 +171,30 @@ export function updatePhoto(id, patch) {
     if ("comment" in patch) next.comment = String(patch.comment ?? "").trim() || undefined;
     if ("isCover" in patch) next.isCover = patch.isCover === true;
 
-    const updated = photos.map((p) => (p.id === id ? cleanPhoto(next) : p));
+    let updated = photos.map((p) => (p.id === id ? cleanPhoto(next) : p));
+    let titleUpdatedCount = 0;
+    const locationChanged = next.locationId !== target.locationId;
+    const titleUnchanged =
+      !("title" in patch) || String(patch.title ?? "").trim() === target.title;
+    if (locationChanged && titleUnchanged) {
+      const location = locations.find((item) => item.id === next.locationId);
+      if (location) {
+        const titleResult = updateGeneratedTitles(
+          updated,
+          locations,
+          new Set([id]),
+          location,
+        );
+        updated = titleResult.photos;
+        titleUpdatedCount = titleResult.titleUpdatedCount;
+      }
+    }
     const final = normalizeCovers(updated, new Set([id]));
     await savePhotos(final);
-    return finish(final, locations, { photo: final.find((p) => p.id === id) });
+    return finish(final, locations, {
+      photo: final.find((p) => p.id === id),
+      titleUpdatedCount,
+    });
   });
 }
 
@@ -176,8 +231,95 @@ export function updateLocation(id, patch) {
     const updatedLocations = locations.map((location) =>
       location.id === id ? updatedLocation : location,
     );
+    const locationPhotoIds = new Set(
+      photos
+        .filter((photo) => photo.locationId === id)
+        .map((photo) => photo.id),
+    );
+    const titleResult =
+      name !== current.name
+        ? updateGeneratedTitles(photos, locations, locationPhotoIds, updatedLocation)
+        : { photos, titleUpdatedCount: 0 };
     await writeAtomic(dataFile("locations"), formatJsonList(updatedLocations, "expanded"));
-    return finish(photos, updatedLocations, { location: updatedLocation });
+    try {
+      if (titleResult.titleUpdatedCount > 0) await savePhotos(titleResult.photos);
+    } catch (error) {
+      await writeAtomic(dataFile("locations"), formatJsonList(locations, "expanded"));
+      throw error;
+    }
+    return finish(titleResult.photos, updatedLocations, {
+      location: updatedLocation,
+      affectedPhotos: locationPhotoIds.size,
+      titleUpdatedCount: titleResult.titleUpdatedCount,
+    });
+  });
+}
+
+/** 新しい地点を作成し、選択した写真へ一括で割り当てる */
+export function createLocation(payload) {
+  return exclusive(async () => {
+    const photoIds = requireIds(payload.photoIds);
+    const { photos, locations } = await loadAll();
+    const targets = photos.filter((photo) => photoIds.has(photo.id));
+    if (targets.length !== photoIds.size) {
+      throw new Error("選択した写真に見つからない項目があります。再読み込みしてください");
+    }
+
+    const name = String(payload.name ?? "").trim();
+    if (!name) throw new Error("撮影地点の名前は必須です");
+    if (findExactName(locations, name)) {
+      throw new Error(`撮影地点「${name}」は既に存在します`);
+    }
+
+    const prefectureId = String(payload.prefectureId ?? "");
+    const prefectures = await readJson(dataFile("prefectures"), []);
+    if (!prefectures.some((prefecture) => prefecture.id === prefectureId)) {
+      throw new Error("撮影地点の都道府県が不正です");
+    }
+
+    const location = {
+      id: allocateId(
+        "location",
+        String(payload.id ?? "").trim() || undefined,
+        new Set(locations.map((item) => item.id)),
+      ),
+      name,
+      prefectureId,
+      address: String(payload.address ?? "").trim() || undefined,
+      lat: optionalCoordinate(payload.lat, -90, 90, "緯度"),
+      lng: optionalCoordinate(payload.lng, -180, 180, "経度"),
+    };
+    const updatedLocations = [...locations, location];
+    const updatedPhotos = normalizeCovers(
+      photos.map((photo) =>
+        photoIds.has(photo.id) ? { ...photo, locationId: location.id } : photo,
+      ),
+      photoIds,
+    );
+    const titleResult = updateGeneratedTitles(
+      updatedPhotos,
+      locations,
+      photoIds,
+      location,
+    );
+
+    await writeAtomic(
+      dataFile("locations"),
+      formatJsonList(updatedLocations, "expanded"),
+    );
+    try {
+      await savePhotos(titleResult.photos);
+    } catch (error) {
+      await writeAtomic(dataFile("locations"), formatJsonList(locations, "expanded"));
+      throw error;
+    }
+
+    return finish(titleResult.photos, updatedLocations, {
+      location,
+      changed: targets.length,
+      affectedPhotos: targets.length,
+      titleUpdatedCount: titleResult.titleUpdatedCount,
+    });
   });
 }
 
@@ -211,9 +353,134 @@ export function bulkUpdate(op) {
       return cleanPhoto(next);
     });
     if (changed === 0) throw new Error("対象の写真が見つかりません");
-    const final = normalizeCovers(updated, new Set());
+    let withUpdatedTitles = updated;
+    let titleUpdatedCount = 0;
+    if (op.locationId) {
+      const location = locations.find((item) => item.id === op.locationId);
+      const movingIds = new Set(
+        photos
+          .filter((photo) => ids.has(photo.id) && photo.locationId !== op.locationId)
+          .map((photo) => photo.id),
+      );
+      if (location && movingIds.size > 0) {
+        const titleResult = updateGeneratedTitles(
+          withUpdatedTitles,
+          locations,
+          movingIds,
+          location,
+        );
+        withUpdatedTitles = titleResult.photos;
+        titleUpdatedCount = titleResult.titleUpdatedCount;
+      }
+    }
+    const final = normalizeCovers(withUpdatedTitles, new Set());
     await savePhotos(final);
-    return finish(final, locations, { changed });
+    return finish(final, locations, { changed, titleUpdatedCount });
+  });
+}
+
+/** 新しいタグを作成し、指定写真に追加する */
+export function createTagAndApply(rawName, rawIds) {
+  return exclusive(async () => {
+    const ids = requireIds(rawIds);
+    const { photos, locations, tags } = await loadAll();
+    const name = String(rawName ?? "").trim();
+    if (!name) throw new Error("タグ名を入力してください");
+    if (findExactName(tags, name)) throw new Error(`同じ名前のタグが既にあります: ${name}`);
+
+    const targets = photos.filter((photo) => ids.has(photo.id));
+    if (targets.length !== ids.size) {
+      throw new Error("選択した写真に見つからない項目があります。再読み込みしてください");
+    }
+
+    const usedTagIds = new Set(tags.map((tag) => tag.id));
+    const tag = { id: allocateId("tag", undefined, usedTagIds), name };
+    const updatedTags = [...tags, tag];
+    const updatedPhotos = photos.map((photo) =>
+      ids.has(photo.id)
+        ? cleanPhoto({ ...photo, tags: [...new Set([...(photo.tags ?? []), tag.id])] })
+        : photo,
+    );
+
+    await writeAtomic(dataFile("tags"), formatJsonList(updatedTags, "inline"));
+    try {
+      await savePhotos(updatedPhotos);
+    } catch (error) {
+      await writeAtomic(dataFile("tags"), formatJsonList(tags, "inline"));
+      throw error;
+    }
+
+    return finish(updatedPhotos, locations, { tag, changed: targets.length });
+  });
+}
+
+/** 選択写真のタイトルを、地点ごとに空いている最小番号から再採番する */
+export function renumberPhotoTitles(rawIds) {
+  return exclusive(async () => {
+    const ids = requireIds(rawIds);
+    const { photos, locations } = await loadAll();
+    const targets = photos.filter((photo) => ids.has(photo.id));
+    if (targets.length !== ids.size) {
+      throw new Error("選択した写真に見つからない項目があります。再読み込みしてください");
+    }
+
+    const groups = new Map();
+    for (const photo of targets) {
+      const location = locations.find((item) => item.id === photo.locationId);
+      if (!location) {
+        throw new Error(`撮影地点が見つかりません: ${photo.locationId}`);
+      }
+      const group = groups.get(location.id) ?? { location, photos: [] };
+      group.photos.push(photo);
+      groups.set(location.id, group);
+    }
+
+    const titles = new Map();
+    for (const { location, photos: selectedAtLocation } of groups.values()) {
+      const selectedAtLocationIds = new Set(
+        selectedAtLocation.map((photo) => photo.id),
+      );
+      const usedNumbers = new Set();
+      let width = String(selectedAtLocation.length).length;
+      for (const photo of photos) {
+        if (
+          photo.locationId !== location.id ||
+          selectedAtLocationIds.has(photo.id)
+        ) {
+          continue;
+        }
+        const suffix = numberedTitleSuffix(photo.title, location.name);
+        if (suffix === undefined) continue;
+        const number = Number(suffix);
+        usedNumbers.add(number);
+        width = Math.max(width, suffix.length);
+      }
+
+      let candidate = 1;
+      for (const photo of selectedAtLocation) {
+        while (usedNumbers.has(candidate)) candidate += 1;
+        titles.set(
+          photo.id,
+          `${location.name} ${String(candidate).padStart(width, "0")}`,
+        );
+        usedNumbers.add(candidate);
+        candidate += 1;
+      }
+    }
+
+    let titleUpdatedCount = 0;
+    const updated = photos.map((photo) => {
+      const title = titles.get(photo.id);
+      if (title === undefined || title === photo.title) return photo;
+      titleUpdatedCount += 1;
+      return { ...photo, title };
+    });
+    await savePhotos(updated);
+    return finish(updated, locations, {
+      renumbered: true,
+      renumberedCount: targets.length,
+      titleUpdatedCount,
+    });
   });
 }
 

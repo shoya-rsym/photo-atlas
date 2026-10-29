@@ -18,6 +18,7 @@ const state = {
   bulkLocation: null,
   editing: null,
   editTags: new Set(),
+  locationMode: "update",
 };
 
 function h(tag, props = {}, ...children) {
@@ -146,6 +147,7 @@ function renderBulk() {
   $("selCount").textContent = count ? `${count} 枚選択中` : "";
   $("bulkBody").hidden = count === 0;
   $("bulkHint").hidden = count > 0;
+  $("createLocation").disabled = count === 0;
   if (count === 0) return;
 
   const query = $("addTagFilter").value;
@@ -194,6 +196,8 @@ function renderBulk() {
   );
   $("removeTagBtn").disabled = state.removeTags.size === 0;
   $("bulkLocationBtn").disabled = !state.bulkLocation;
+  $("createLocation").disabled = count === 0;
+  $("createTagBtn").disabled = count === 0 || !$("newTagName").value.trim();
   const date = parseDateInput($("bulkDate").value);
   $("bulkDateInfo").textContent = !date.ok ? date.error : date.value ? `→ ${date.value}` : "撮影日不明にします";
   $("bulkDateBtn").disabled = !date.ok;
@@ -227,6 +231,14 @@ function showResult(label, res, bad = false) {
   box.replaceChildren();
   const lines = [label];
   if (res) lines.push(`データ検証: ${res.validation.ok ? "OK" : "NG"} ${res.validation.output}`);
+  if (res?.renumbered) {
+    lines.push(
+      `地点ごとに ${res.renumberedCount} 枚を再採番し、タイトル ${res.titleUpdatedCount} 件を更新しました`,
+    );
+  }
+  if (res?.titleUpdatedCount > 0) {
+    lines.push(`地点名に合わせて写真タイトルを ${res.titleUpdatedCount} 件更新しました`);
+  }
   box.append(...lines.map((l) => h("div", {}, l)));
   if (res?.orphanLocations?.length) {
     const names = res.orphanLocations.map(locName).join("、");
@@ -283,6 +295,11 @@ function fillCharacterSelects() {
 }
 
 function fillLocationEditor(location) {
+  state.locationMode = "update";
+  $("locationSave").textContent = "保存";
+  $("locationEditorTitle").textContent = "撮影地点情報の編集";
+  $("locationSelectRow").hidden = false;
+  $("locationIdRow").hidden = false;
   $("locationName").value = location.name;
   $("locationPrefecture").value = location.prefectureId;
   $("locationAddress").value = location.address ?? "";
@@ -291,12 +308,39 @@ function fillLocationEditor(location) {
   $("locationLng").value = location.lng ?? "";
   $("locationSearchStatus").replaceChildren();
   $("locationError").hidden = true;
+  const affected = state.photos.filter((photo) => photo.locationId === location.id).length;
+  $("locationAffected").textContent =
+    `この地点の名前を変更すると、参照している写真 ${affected} 枚に反映され、地点名＋番号形式のタイトルも自動修正されます。`;
 }
 
 function openLocationEditor() {
   const location = state.master.locations.find((item) => item.id === $("locationSelect").value);
   if (!location) return;
   fillLocationEditor(location);
+  $("locationEditor").showModal();
+}
+
+function openCreateLocation() {
+  if (state.selected.size === 0) {
+    showResult("先に新しい地点へ移動する写真を選択してください", null, true);
+    return;
+  }
+  state.locationMode = "create";
+  $("locationEditorTitle").textContent = "新しい撮影地点を追加";
+  $("locationSave").textContent = "追加して写真に適用";
+  $("locationSelectRow").hidden = true;
+  $("locationIdRow").hidden = true;
+  $("locationName").value = "";
+  $("locationPrefecture").value = "";
+  $("locationAddress").value = "";
+  $("locationId").value = "";
+  $("locationLat").value = "";
+  $("locationLng").value = "";
+  $("locationSearchStatus").replaceChildren();
+  $("locationError").hidden = true;
+  $("locationAffected").textContent =
+    `選択中の写真 ${state.selected.size} 枚を、この地点へ一括で移動します。`;
+  $("locationSave").textContent = "追加して写真に適用";
   $("locationEditor").showModal();
 }
 
@@ -346,6 +390,7 @@ async function searchManageLocation() {
 
 async function saveLocationEditor() {
   const locationId = $("locationSelect").value;
+  const button = $("locationSave");
   const coordinate = (id) => {
     const value = $(id).value.trim();
     if (value === "") return null;
@@ -353,28 +398,66 @@ async function saveLocationEditor() {
     if (!Number.isFinite(number)) throw new Error("緯度・経度は数値で入力してください");
     return number;
   };
-  const button = $("locationSave");
   button.disabled = true;
   $("locationError").hidden = true;
   try {
+    const locationData = {
+      name: $("locationName").value,
+      prefectureId: $("locationPrefecture").value,
+      address: $("locationAddress").value,
+      lat: coordinate("locationLat"),
+      lng: coordinate("locationLng"),
+    };
+    if (state.locationMode === "create") {
+      const photoIds = selectedIds();
+      if (!confirm(
+        `新しい撮影地点「${locationData.name.trim()}」を追加し、選択中の写真 ${photoIds.length} 枚に適用します。よろしいですか？`,
+      )) return;
+      const res = await api("/api/locations/create", {
+        ...locationData,
+        photoIds,
+      });
+      $("locationEditor").close();
+      await reload();
+      state.bulkLocation = res.location;
+      $("bulkLocation").value = res.location.name;
+      $("bulkLocationInfo").textContent = res.location.address ?? "";
+      renderBulk();
+      showResult(
+        `撮影地点「${res.location.name}」を追加し、${res.changed} 枚に適用しました`,
+        res,
+      );
+      return;
+    }
+
+    const current = state.master.locations.find((item) => item.id === locationId);
+    const affectedPhotos = state.photos.filter((photo) => photo.locationId === locationId).length;
+    if (
+      current &&
+      current.name !== locationData.name.trim() &&
+      !confirm(
+        `地点名を「${locationData.name.trim()}」に変更します。この地点を使用している写真 ${affectedPhotos} 枚に反映し、地点名＋番号形式のタイトルも自動修正します。よろしいですか？`,
+      )
+    ) {
+      return;
+    }
     const res = await api("/api/locations/update", {
       id: locationId,
-      patch: {
-        name: $("locationName").value,
-        prefectureId: $("locationPrefecture").value,
-        address: $("locationAddress").value,
-        lat: coordinate("locationLat"),
-        lng: coordinate("locationLng"),
-      },
+      patch: locationData,
     });
     $("locationEditor").close();
     await reload();
-    showResult(`${res.location.name} の地点情報を更新しました`, res);
+    showResult(
+      `${res.location.name} の地点情報を更新しました（関連写真 ${res.affectedPhotos} 枚に反映）`,
+      res,
+    );
   } catch (error) {
     $("locationError").textContent = error.message;
     $("locationError").hidden = false;
   } finally {
     button.disabled = false;
+    button.textContent =
+      state.locationMode === "create" ? "追加して写真に適用" : "保存";
   }
 }
 
@@ -384,6 +467,22 @@ async function bulk(label, op) {
   const n = state.selected.size;
   if (!confirm(`${n} 枚に対して実行します: ${label}`)) return;
   await run(`${n} 枚: ${label}`, "/api/photos/bulk", { ids: selectedIds(), ...op });
+}
+
+async function renumberSelectedTitles() {
+  const ids = selectedIds();
+  if (
+    !confirm(
+      `選択した ${ids.length} 枚のタイトルを、地点ごとに空いている最小番号から再採番します。よろしいですか？`,
+    )
+  ) {
+    return;
+  }
+  await run(
+    `${ids.length} 枚のタイトルを地点名＋番号に再編集しました`,
+    "/api/photos/renumber",
+    { ids },
+  );
 }
 
 // ---------- 詳細編集 ----------
@@ -400,6 +499,8 @@ function openEditor(id) {
   $("edCharacter").value = p.characterId ?? "";
   $("edComment").value = p.comment ?? "";
   $("edCover").checked = Boolean(p.isCover);
+  $("edNewTagName").value = "";
+  $("edCreateTagBtn").disabled = true;
   $("edError").hidden = true;
   renderEditorTags();
   renderEditorDate();
@@ -424,6 +525,23 @@ function renderEditorTags() {
       ),
     ),
   );
+}
+
+async function createTagForEditedPhoto() {
+  const name = $("edNewTagName").value.trim();
+  if (!name || !state.editing) return;
+  try {
+    const res = await api("/api/tags/create", { name, photoIds: [state.editing.id] });
+    state.editTags.add(res.tag.id);
+    $("edNewTagName").value = "";
+    $("edCreateTagBtn").disabled = true;
+    await reload();
+    renderEditorTags();
+    showResult(`タグ「${res.tag.name}」を作成して写真に追加しました`, res);
+  } catch (error) {
+    $("edError").textContent = error.message;
+    $("edError").hidden = false;
+  }
 }
 
 function renderEditorDate() {
@@ -492,6 +610,7 @@ function bind() {
   });
 
   $("manageLocations").addEventListener("click", openLocationEditor);
+  $("createLocation").addEventListener("click", openCreateLocation);
   $("locationSelect").addEventListener("change", () => {
     const location = state.master.locations.find((item) => item.id === $("locationSelect").value);
     if (location) fillLocationEditor(location);
@@ -502,6 +621,22 @@ function bind() {
   $("locationCancel").addEventListener("click", () => $("locationEditor").close());
 
   $("addTagFilter").addEventListener("input", renderBulk);
+  $("newTagName").addEventListener("input", renderBulk);
+  $("renumberTitlesBtn").addEventListener("click", renumberSelectedTitles);
+  $("createTagBtn").addEventListener("click", async () => {
+    const name = $("newTagName").value.trim();
+    const ids = selectedIds();
+    if (!name || ids.length === 0) return;
+    const res = await run(
+      `タグ「${name}」を作成して ${ids.length} 枚に追加しました`,
+      "/api/tags/create",
+      { name, photoIds: ids },
+    );
+    if (!res) return;
+    $("newTagName").value = "";
+    state.addTags.clear();
+    renderBulk();
+  });
   $("addTagBtn").addEventListener("click", async () => {
     await bulk(`タグ追加 ${[...state.addTags].map(tagName).join("、")}`, { addTagIds: [...state.addTags] });
     state.addTags.clear();
@@ -557,6 +692,10 @@ function bind() {
   });
 
   $("edDate").addEventListener("input", renderEditorDate);
+  $("edNewTagName").addEventListener("input", () => {
+    $("edCreateTagBtn").disabled = !$("edNewTagName").value.trim();
+  });
+  $("edCreateTagBtn").addEventListener("click", createTagForEditedPhoto);
   $("edCancel").addEventListener("click", () => $("editor").close());
   $("edSave").addEventListener("click", saveEditor);
   $("edDelete").addEventListener("click", async () => {

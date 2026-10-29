@@ -115,5 +115,291 @@
     "id": "location_010",
     "name": "群馬県",
     "prefectureId": "gunma"
+  },
+  {
+    "id": "location_011",
+    "name": "赤坂迎賓館",
+    "prefectureId": "tokyo",
+    "address": "東京都港区元赤坂二丁目1番1号",
+    "lat": 35.675335,
+    "lng": 139.722519
+  },
+  {
+    "id": "location_012",
+    "name": "熱川バナナワニ園",
+    "prefectureId": "shizuoka",
+    "address": "静岡県賀茂郡東伊豆町奈良本１２５３−１０",
+    "lat": 34.816204,
+    "lng": 139.06786
+  },
+  {
+    "id": "location_013",
+    "name": "伊豆ぐらんぱる公園",
+    "prefectureId": "shizuoka",
+    "address": "東京都三宅島三宅村伊豆",
+    "lat": 34.107883,
+    "lng": 139.505798
+  },
+  {
+    "id": "location_014",
+    "name": "伊豆熱川",
+    "prefectureId": "shizuoka",
+    "address": "東京都三宅島三宅村伊豆",
+    "lat": 34.107883,
+    "lng": 139.505798
+  },
+  {
+    "id": "location_015",
+    "name": "河津町桜まつり",
+    "prefectureId": "shizuoka",
+    "address": "静岡県河津町",
+    "lat": 34.757221,
+    "lng": 138.987503
+  },
+  {
+    "id": "location_016",
+    "name": "東京駅",
+    "prefectureId": "tokyo",
+    "address": "東京都千代田区丸の内１丁目",
+    "lat": 35.681561,
+    "lng": 139.767197
+  },
+  {
+    "id": "location_017",
+    "name": "ノリタケの森",
+    "prefectureId": "aichi",
+    "address": "愛知県名古屋市西区則武新町３丁目１−３６",
+    "lat": 35.177788,
+    "lng": 136.881287
+  },
+  {
+    "id": "location_018",
+    "name": "雪降る名古屋市",
+    "prefectureId": "aichi",
+    "address": "愛知県名古屋市中村区名駅１丁目１−４",
+    "lat": 35.17075,
+    "lng": 136.883423
+  },
+  {
+    "id": "location_019",
+    "name": "天龍寺",
+    "prefectureId": "kyoto",
+    "address": "京都府京都市右京区嵯峨天龍寺芒ノ馬場町６８",
+    "lat": 35.015942,
+    "lng": 135.674225
+  },
+  {
+    "id": "location_020",
+    "name": "永観堂",
+    "prefectureId": "kyoto",
+    "address": "京都府京都市左京区永観堂町",
+    "lat": 35.013783,
+    "lng": 135.794891
+  },
+  {
+    "id": "location_021",
+    "name": "銀閣寺",
+    "prefectureId": "kyoto",
+    "address": "京都府京都市左京区銀閣寺町２",
+    "lat": 35.026985,
+    "lng": 135.798218
+  },
+  {
+    "id": "location_022",
+    "name": "金福寺",
+    "prefectureId": "kyoto",
+    "address": "京都府京都市左京区一乗寺才形町２０",
+    "lat": 35.04224,
+    "lng": 135.79512
+  },
+  {
+    "id": "location_023",
+    "name": "詩仙堂丈山寺",
+    "prefectureId": "kyoto",
+    "address": "京都府京都市左京区一乗寺門口町２７",
+    "lat": 35.043816,
+    "lng": 135.795837
+  },
+  {
+    "id": "location_024",
+    "name": "圓光寺",
+    "prefectureId": "kyoto",
+    "address": "京都府京都市左京区一乗寺小谷町１３",
+    "lat": 35.045174,
+    "lng": 135.796814
+  },
+  {
+    "id": "location_025",
+    "name": "商船三井さんふらわあ 苫小牧港",
+    "prefectureId": "hokkaido",
+    "address": "北海道苫小牧市入船町１丁目２−２−３４",
+    "lat": 42.637974,
+    "lng": 141.636612
+  },
+  {
+    "id": "location_026",
+    "name": "ノーザンホースパーク",
+    "prefectureId": "hokkaido",
+    "address": "北海道苫小牧市美沢１１４−７",
+    "lat": 42.782604,
+    "lng": 141.737442
+  },
+  {
+    "id": "location_027",
+    "name": "百合が原公園",
+    "prefectureId": "hokkaido",
+    "address": "北海道札幌市北区百合が原公園２１０",
+    "lat": 43.128929,
+    "lng": 141.365005
+  },
+  {
+    "id": "location_028",
+    "name": "小樽運河",
+    "prefectureId": "hokkaido",
+    "address": "北海道小樽市",
+    "lat": 43.190704,
+    "lng": 140.994492
+  },
+  {
+    "id": "location_029",
+    "name": "北一硝子 北一ホール",
+    "prefectureId": "hokkaido",
+    "address": "北海道小樽市堺町７−２６",
+    "lat": 43.192055,
+    "lng": 141.00737
+  },
+  {
+    "id": "location_030",
+    "name": "小樽芸術村 ステンドグラス美術館",
+    "prefectureId": "hokkaido",
+    "address": "北海道小樽市色内１丁目２−１７",
+    "lat": 43.198021,
+    "lng": 141.002213
+  },
+  {
+    "id": "location_031",
+    "name": "おたるドリームビーチ",
+    "prefectureId": "hokkaido",
+    "address": "北海道小樽市銭函３丁目70−先",
+    "lat": 43.157066,
+    "lng": 141.205475
+  },
+  {
+    "id": "location_032",
+    "name": "神威岬",
+    "prefectureId": "hokkaido",
+    "address": "北海道神岬町",
+    "lat": 43.143364,
+    "lng": 140.430801
+  },
+  {
+    "id": "location_033",
+    "name": "ふきだし公園",
+    "prefectureId": "hokkaido",
+    "address": "北海道虻田郡京極町川西４５",
+    "lat": 42.846931,
+    "lng": 140.857086
+  },
+  {
+    "id": "location_034",
+    "name": "日比谷公園",
+    "prefectureId": "tokyo",
+    "address": "東京都千代田区日比谷公園１−６",
+    "lat": 35.672764,
+    "lng": 139.754089
+  },
+  {
+    "id": "location_035",
+    "name": "千葉の砂浜沿い",
+    "prefectureId": "chiba",
+    "address": "千葉県のどこかの砂浜"
+  },
+  {
+    "id": "location_036",
+    "name": "あしかがフラワーパーク 藤のライトアップ",
+    "prefectureId": "tochigi",
+    "address": "栃木県足利市迫間町６０７",
+    "lat": 36.314274,
+    "lng": 139.52037
+  },
+  {
+    "id": "location_037",
+    "name": "京成バラ園",
+    "prefectureId": "chiba",
+    "address": "千葉県八千代市大和田新田７５５番地",
+    "lat": 35.731335,
+    "lng": 140.087509
+  },
+  {
+    "id": "location_038",
+    "name": "足立区立花畑公園",
+    "prefectureId": "tokyo",
+    "address": "東京都足立区花畑４丁目４０−１",
+    "lat": 35.806118,
+    "lng": 139.807297
+  },
+  {
+    "id": "location_039",
+    "name": "桜花亭",
+    "prefectureId": "tokyo",
+    "address": "東京都足立区花畑４丁目４０−１ 花畑記念庭園桜花亭",
+    "lat": 35.806118,
+    "lng": 139.807297
+  },
+  {
+    "id": "location_040",
+    "name": "舎人公園",
+    "prefectureId": "tokyo",
+    "address": "東京都足立区舎人公園１丁目１",
+    "lat": 35.798332,
+    "lng": 139.768463
+  },
+  {
+    "id": "location_041",
+    "name": "よみうりランド",
+    "prefectureId": "tokyo",
+    "address": "東京都稲城市矢野口４０１５−１",
+    "lat": 35.630913,
+    "lng": 139.517731
+  },
+  {
+    "id": "location_042",
+    "name": "ひたちなか海浜公園 コキアの時期",
+    "prefectureId": "ibaraki",
+    "address": "茨城県ひたちなか市馬渡 字大沼605-4",
+    "lat": 36.398067,
+    "lng": 140.572067
+  },
+  {
+    "id": "location_043",
+    "name": "初島観光",
+    "prefectureId": "shizuoka",
+    "address": "静岡県熱海市初島",
+    "lat": 35.040001,
+    "lng": 139.171539
+  },
+  {
+    "id": "location_044",
+    "name": "熱海市街地",
+    "prefectureId": "shizuoka",
+    "address": "静岡県熱海市東海岸町１５−１５地内",
+    "lat": 35.097847,
+    "lng": 139.075653
+  },
+  {
+    "id": "location_045",
+    "name": "起雲閣",
+    "prefectureId": "shizuoka",
+    "address": "静岡県熱海市昭和町４−２",
+    "lat": 35.093166,
+    "lng": 139.07103
+  },
+  {
+    "id": "location_046",
+    "name": "ACAO FOREST",
+    "prefectureId": "shizuoka",
+    "address": "静岡県熱海市上多賀１０２７−８",
+    "lat": 35.077698,
+    "lng": 139.074326
   }
 ]

@@ -6,7 +6,7 @@
     <title>Photo Management Tool</title>
     <link rel="stylesheet" href="/style.css" />
   </head>
-  <body>
+  <body class="manage-page">
     <header class="top">
       <h1>Photo Management Tool</h1>
       <a href="/">→ 写真登録</a>
@@ -19,10 +19,18 @@
         <h2>一括編集 <span id="selCount" class="muted"></span></h2>
         <p class="muted" id="bulkHint">写真をクリックで選択（Shift+クリックで範囲選択）</p>
         <div id="bulkBody" hidden>
+          <h2>タイトル再編集</h2>
+          <p class="muted">地点名＋番号に再採番します。選択写真の現在の番号は解放し、空いている最小番号から振り直します。</p>
+          <button id="renumberTitlesBtn" type="button">選択した写真のタイトルを再編集</button>
+
           <h2>タグ追加</h2>
           <input id="addTagFilter" type="text" placeholder="絞り込み" />
           <div id="addTagChips" class="chips"></div>
           <button id="addTagBtn" type="button">選択した写真にタグを追加</button>
+          <div class="addrow">
+            <input id="newTagName" type="text" placeholder="新しいタグ名" aria-label="新しいタグ名" />
+            <button id="createTagBtn" type="button">作成して選択写真に追加</button>
+          </div>
 
           <h2>タグ削除（選択中の写真に付いているタグ）</h2>
           <div id="removeTagChips" class="chips"></div>
@@ -33,6 +41,7 @@
           <ul id="bulkLocationSuggest" class="suggest" hidden></ul>
           <div id="bulkLocationInfo" class="info"></div>
           <button id="bulkLocationBtn" type="button">地点を変更</button>
+          <button id="createLocation" type="button">新しい地点を追加して選択中の写真に適用</button>
 
           <h2>キャラクター変更</h2>
           <select id="bulkCharacter"></select>
@@ -65,7 +74,7 @@
             <option value="location">地点名</option>
           </select>
         </div>
-        <div class="bar">
+        <div class="bar sticky selection-controls">
           <span id="summary"></span>
           <span class="row">
             <button id="selectPage" type="button">このページを選択</button>
@@ -99,6 +108,10 @@
           <select id="edCharacter"></select>
           <h2>タグ</h2>
           <div id="edTags" class="chips"></div>
+          <div class="addrow">
+            <input id="edNewTagName" type="text" placeholder="新しいタグ名" aria-label="新しいタグ名" />
+            <button id="edCreateTagBtn" type="button" disabled>作成してこの写真に追加</button>
+          </div>
           <h2>コメント</h2>
           <textarea id="edComment" rows="3"></textarea>
           <label class="check"><input id="edCover" type="checkbox" /> この地点の代表写真にする（他の代表は解除）</label>
@@ -114,16 +127,17 @@
     </dialog>
 
     <dialog id="locationEditor" class="editor">
-      <h2>撮影地点情報の編集</h2>
-      <label>撮影地点<select id="locationSelect"></select></label>
+      <h2 id="locationEditorTitle">撮影地点情報の編集</h2>
+      <label id="locationSelectRow">撮影地点<select id="locationSelect"></select></label>
       <div class="grid2">
         <label>名前<input id="locationName" type="text" /></label>
         <label>都道府県<select id="locationPrefecture"></select></label>
         <label>住所<input id="locationAddress" type="text" /></label>
-        <label>ID（写真参照のため変更不可）<input id="locationId" type="text" readonly /></label>
+        <label id="locationIdRow">ID（写真参照のため変更不可）<input id="locationId" type="text" readonly /></label>
         <label>緯度<input id="locationLat" type="number" min="-90" max="90" step="any" /></label>
         <label>経度<input id="locationLng" type="number" min="-180" max="180" step="any" /></label>
       </div>
+      <p id="locationAffected" class="info" role="status"></p>
       <div class="row">
         <button id="locationSearch" type="button">OpenStreetMap で検索して自動入力</button>
         <span id="locationSearchStatus" class="info" role="status" aria-live="polite"></span>
