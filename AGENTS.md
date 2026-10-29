@@ -129,7 +129,7 @@ Photo.tags は Tag.id を保持する。
 
 # Character仕様
 
-Photo.characterId は Character.id を保持する。
+Photo.characterIds は Character.id の配列を保持する。1枚の写真に複数のキャラクターを設定できる。
 
 表示時は Character.name を利用する。
 

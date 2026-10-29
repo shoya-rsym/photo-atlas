@@ -71,8 +71,21 @@ for (const p of photos) {
   for (const t of p.tags ?? []) {
     if (!tagIds.has(t)) errors.push(`photos: tag不正 ${p.id} -> ${t}`);
   }
-  if (p.characterId && !characterIds.has(p.characterId)) {
-    errors.push(`photos: characterId不正 ${p.id}`);
+  if (p.characterIds !== undefined) {
+    if (!Array.isArray(p.characterIds)) {
+      errors.push(`photos: characterIds形式不正 ${p.id}`);
+    } else {
+      const assignedCharacterIds = new Set();
+      for (const characterId of p.characterIds) {
+        if (!characterIds.has(characterId)) {
+          errors.push(`photos: characterId不正 ${p.id} -> ${characterId}`);
+        }
+        if (assignedCharacterIds.has(characterId)) {
+          errors.push(`photos: characterIds重複 ${p.id} -> ${characterId}`);
+        }
+        assignedCharacterIds.add(characterId);
+      }
+    }
   }
   if (p.date && !/^\d{4}-\d{2}-\d{2}$/.test(p.date)) errors.push(`photos: date形式不正 ${p.id}`);
   if (p.isCover !== undefined && p.isCover !== true) errors.push(`photos: isCoverはtrueのみ ${p.id}`);

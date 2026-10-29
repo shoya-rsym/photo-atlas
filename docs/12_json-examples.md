@@ -190,7 +190,7 @@ subregionId は任意。
       "ar_photo",
       "night_view"
     ],
-    "characterId": "hatsune_miku",
+    "characterIds": ["hatsune_miku", "kagamine_rin"],
     "comment": "横浜駅で撮影",
     "isCover": true
   },

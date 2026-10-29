@@ -1,5 +1,6 @@
 // 登録済み写真の編集・一括編集・削除（Photo Management Tool）
 import { execFile } from "node:child_process";
+import { createHash } from "node:crypto";
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 import { parseDateInput } from "./date.mjs";
@@ -19,11 +20,106 @@ import {
 import { findExactName } from "./search.mjs";
 
 const TRASH_DIR = join(LOCAL_DIR, "trash");
+const UNDO_FILE = join(LOCAL_DIR, "manage-undo.json");
+const UNDO_DATA_FILES = ["photos", "locations", "tags", "characters"];
 
 /** 書き込み系操作を直列化する（同時実行による JSON の上書き事故を防ぐ） */
 let queue = Promise.resolve();
-function exclusive(task) {
-  const run = queue.then(task, task);
+
+async function readUndoSnapshot() {
+  const entries = await Promise.all(
+    UNDO_DATA_FILES.map(async (name) => [name, await readFile(dataFile(name), "utf8")]),
+  );
+  return Object.fromEntries(entries);
+}
+
+function hashSnapshot(snapshot) {
+  return Object.fromEntries(
+    UNDO_DATA_FILES.map((name) => [
+      name,
+      createHash("sha256").update(snapshot[name]).digest("hex"),
+    ]),
+  );
+}
+
+function isUndoRecord(value) {
+  return (
+    value !== null &&
+    typeof value === "object" &&
+    value.version === 1 &&
+    typeof value.label === "string" &&
+    Number.isInteger(value.photoCount) &&
+    value.photoCount >= 0 &&
+    value.before !== null &&
+    typeof value.before === "object" &&
+    value.after !== null &&
+    typeof value.after === "object" &&
+    UNDO_DATA_FILES.every(
+      (name) => typeof value.before[name] === "string" && typeof value.after[name] === "string",
+    )
+  );
+}
+
+async function readUndoRecord() {
+  const record = await readJson(UNDO_FILE, null);
+  if (record === null) return null;
+  if (!isUndoRecord(record)) throw new Error("取り消し情報が読み取れません");
+  return record;
+}
+
+async function writeUndoSnapshot(snapshot) {
+  for (const name of UNDO_DATA_FILES) {
+    await writeAtomic(dataFile(name), snapshot[name]);
+  }
+}
+
+function countChangedPhotos(before, after) {
+  const previous = new Map(JSON.parse(before.photos).map((photo) => [photo.id, photo]));
+  const current = new Map(JSON.parse(after.photos).map((photo) => [photo.id, photo]));
+  const ids = new Set([...previous.keys(), ...current.keys()]);
+  let count = 0;
+  for (const id of ids) {
+    if (JSON.stringify(previous.get(id)) !== JSON.stringify(current.get(id))) count += 1;
+  }
+  return count;
+}
+
+async function clearUndoRecord() {
+  await writeAtomic(UNDO_FILE, "null\n");
+}
+
+function exclusive(task, { label = "Photo-Manage の情報変更", trackUndo = true } = {}) {
+  const run = queue.then(async () => {
+    if (!trackUndo) return task();
+
+    const before = await readUndoSnapshot();
+    const result = await task();
+    const after = await readUndoSnapshot();
+    if (UNDO_DATA_FILES.every((name) => before[name] === after[name])) return result;
+
+    const record = {
+      version: 1,
+      label,
+      photoCount: countChangedPhotos(before, after),
+      before,
+      after: hashSnapshot(after),
+    };
+    try {
+      await writeAtomic(UNDO_FILE, `${JSON.stringify(record, null, 2)}\n`);
+    } catch (error) {
+      try {
+        await writeUndoSnapshot(before);
+      } catch (rollbackError) {
+        throw new AggregateError(
+          [error, rollbackError],
+          "取り消し情報を保存できず、変更前のデータにも復元できませんでした",
+        );
+      }
+      const message = error instanceof Error ? error.message : String(error);
+      throw new Error(`取り消し情報を保存できなかったため変更を元に戻しました: ${message}`);
+    }
+    return result;
+  });
   queue = run.catch(() => undefined);
   return run;
 }
@@ -112,6 +208,68 @@ async function finish(photos, locations, extra = {}) {
   return { ...extra, orphanLocations: orphanLocationIds(photos, locations), validation: await runValidation() };
 }
 
+export function getUndoStatus() {
+  return exclusive(
+    async () => {
+      const record = await readUndoRecord();
+      if (!record) return { available: false };
+
+      const current = await readUndoSnapshot();
+      const currentHashes = hashSnapshot(current);
+      if (!UNDO_DATA_FILES.every((name) => currentHashes[name] === record.after[name])) {
+        await clearUndoRecord();
+        return { available: false };
+      }
+
+      return {
+        available: true,
+        label: record.label,
+        photoCount: record.photoCount,
+      };
+    },
+    { trackUndo: false },
+  );
+}
+
+export function undoLastChange() {
+  return exclusive(
+    async () => {
+      const record = await readUndoRecord();
+      if (!record) throw new Error("取り消せる更新がありません");
+
+      const current = await readUndoSnapshot();
+      const currentHashes = hashSnapshot(current);
+      if (!UNDO_DATA_FILES.every((name) => currentHashes[name] === record.after[name])) {
+        await clearUndoRecord();
+        throw new Error("更新後に別のデータ変更があったため、取り消せません");
+      }
+
+      try {
+        await writeUndoSnapshot(record.before);
+      } catch (error) {
+        try {
+          await writeUndoSnapshot(current);
+        } catch (rollbackError) {
+          throw new AggregateError(
+            [error, rollbackError],
+            "更新前情報の復元に失敗し、現在のデータにも戻せませんでした",
+          );
+        }
+        const message = error instanceof Error ? error.message : String(error);
+        throw new Error(`更新前情報を復元できませんでした: ${message}`);
+      }
+
+      await clearUndoRecord();
+      const { photos, locations } = await loadAll();
+      return finish(photos, locations, {
+        undone: record.label,
+        undonePhotoCount: record.photoCount,
+      });
+    },
+    { trackUndo: false },
+  );
+}
+
 function parseDate(input) {
   const result = parseDateInput(input);
   if (!result.ok) throw new Error(result.error);
@@ -141,6 +299,13 @@ function assertExist(list, id, label) {
   if (!list.some((x) => x.id === id)) throw new Error(`存在しない${label}です: ${id}`);
 }
 
+function validateCharacterIds(rawIds, characters) {
+  if (!Array.isArray(rawIds)) throw new Error("キャラクターの指定が不正です");
+  const ids = [...new Set(rawIds)];
+  for (const id of ids) assertExist(characters, id, "キャラクター");
+  return ids;
+}
+
 /** 1枚の詳細編集。patch に含まれる項目のみ更新する */
 export function updatePhoto(id, patch) {
   return exclusive(async () => {
@@ -160,9 +325,9 @@ export function updatePhoto(id, patch) {
       for (const t of tagIds) assertExist(tags, t, "タグ");
       next.tags = tagIds;
     }
-    if ("characterId" in patch) {
-      if (patch.characterId) assertExist(characters, patch.characterId, "キャラクター");
-      next.characterId = patch.characterId || undefined;
+    if ("characterIds" in patch) {
+      const characterIds = validateCharacterIds(patch.characterIds ?? [], characters);
+      next.characterIds = characterIds.length ? characterIds : undefined;
     }
     if ("locationId" in patch) {
       assertExist(locations, patch.locationId, "撮影地点");
@@ -195,7 +360,7 @@ export function updatePhoto(id, patch) {
       photo: final.find((p) => p.id === id),
       titleUpdatedCount,
     });
-  });
+  }, { label: "写真の個別編集" });
 }
 
 /** 既存の撮影地点情報を更新する（ID は写真参照を保つため変更しない） */
@@ -252,7 +417,7 @@ export function updateLocation(id, patch) {
       affectedPhotos: locationPhotoIds.size,
       titleUpdatedCount: titleResult.titleUpdatedCount,
     });
-  });
+  }, { label: "撮影地点情報の更新" });
 }
 
 /** 新しい地点を作成し、選択した写真へ一括で割り当てる */
@@ -320,13 +485,50 @@ export function createLocation(payload) {
       affectedPhotos: targets.length,
       titleUpdatedCount: titleResult.titleUpdatedCount,
     });
-  });
+  }, { label: "撮影地点の追加と一括適用" });
+}
+
+/** 新しいキャラクターを追加する */
+export function createCharacter(payload) {
+  return exclusive(async () => {
+    const { photos, locations, characters } = await loadAll();
+    const name = String(payload.name ?? "").trim();
+    if (!name) throw new Error("キャラクター名は必須です");
+    if (findExactName(characters, name)) throw new Error(`同じ名前のキャラクターが既にあります: ${name}`);
+
+    const usedIds = new Set(characters.map((character) => character.id));
+    const character = {
+      id: allocateId("character", payload.id, usedIds),
+      name,
+      series: String(payload.series ?? "").trim() || undefined,
+    };
+    const updatedCharacters = [...characters, character];
+    await writeAtomic(dataFile("characters"), formatJsonList(updatedCharacters, "inline"));
+    return finish(photos, locations, { character });
+  }, { label: "キャラクターの追加" });
+}
+
+/** 写真に設定されていないキャラクターのみ削除できる */
+export function deleteCharacter(id) {
+  return exclusive(async () => {
+    const { photos, locations, characters } = await loadAll();
+    const character = characters.find((item) => item.id === id);
+    if (!character) throw new Error(`キャラクターが見つかりません: ${id}`);
+    const usageCount = photos.filter((photo) => (photo.characterIds ?? []).includes(id)).length;
+    if (usageCount > 0) {
+      throw new Error(`写真 ${usageCount} 枚で使用中のため削除できません。先に写真側で設定を解除してください`);
+    }
+
+    const updatedCharacters = characters.filter((item) => item.id !== id);
+    await writeAtomic(dataFile("characters"), formatJsonList(updatedCharacters, "inline"));
+    return finish(photos, locations, { deletedCharacter: character });
+  }, { label: "キャラクターの削除" });
 }
 
 /**
  * 一括編集。
- * @param {object} op { ids, addTagIds, removeTagIds, locationId, characterId (null=解除), date ('' = 撮影日不明) }
- *   characterId / date は「キーが存在するときだけ」変更する
+ * @param {object} op { ids, addTagIds, removeTagIds, locationId, characterIds, date ('' = 撮影日不明) }
+ *   characterIds / date は「キーが存在するときだけ」変更する
  */
 export function bulkUpdate(op) {
   return exclusive(async () => {
@@ -336,7 +538,8 @@ export function bulkUpdate(op) {
     const remove = new Set(op.removeTagIds ?? []);
     for (const t of add) assertExist(tags, t, "タグ");
     if (op.locationId) assertExist(locations, op.locationId, "撮影地点");
-    if (op.characterId) assertExist(characters, op.characterId, "キャラクター");
+    const characterIds =
+      "characterIds" in op ? validateCharacterIds(op.characterIds ?? [], characters) : undefined;
     const date = "date" in op ? parseDate(op.date) : undefined;
 
     let changed = 0;
@@ -347,7 +550,7 @@ export function bulkUpdate(op) {
         next.tags = [...new Set([...(p.tags ?? []), ...add])].filter((t) => !remove.has(t));
       }
       if (op.locationId) next.locationId = op.locationId;
-      if ("characterId" in op) next.characterId = op.characterId || undefined;
+      if (characterIds) next.characterIds = characterIds.length ? characterIds : undefined;
       if ("date" in op) next.date = date ?? undefined;
       changed += 1;
       return cleanPhoto(next);
@@ -376,7 +579,7 @@ export function bulkUpdate(op) {
     const final = normalizeCovers(withUpdatedTitles, new Set());
     await savePhotos(final);
     return finish(final, locations, { changed, titleUpdatedCount });
-  });
+  }, { label: "写真の一括編集" });
 }
 
 /** 新しいタグを作成し、指定写真に追加する */
@@ -411,7 +614,7 @@ export function createTagAndApply(rawName, rawIds) {
     }
 
     return finish(updatedPhotos, locations, { tag, changed: targets.length });
-  });
+  }, { label: "タグ作成と写真への適用" });
 }
 
 /** 選択写真のタイトルを、地点ごとに空いている最小番号から再採番する */
@@ -481,7 +684,7 @@ export function renumberPhotoTitles(rawIds) {
       renumberedCount: targets.length,
       titleUpdatedCount,
     });
-  });
+  }, { label: "写真タイトルの再採番" });
 }
 
 /** 削除。photos.json・原寸画像・サムネイルを同時に消す（実体は .local/trash へ退避） */
@@ -528,7 +731,7 @@ export function deletePhotos(rawIds) {
       await rm(trash, { recursive: true, force: true });
       throw error;
     }
-  });
+  }, { trackUndo: false });
 }
 
 /** 写真が0枚になった撮影地点を削除する（validate-data が孤立地点をエラーにするため） */
@@ -540,7 +743,7 @@ export function pruneLocations() {
     const kept = locations.filter((l) => !orphans.has(l.id));
     await writeAtomic(dataFile("locations"), formatJsonList(kept, "expanded"));
     return finish(photos, kept, { removed: [...orphans] });
-  });
+  }, { label: "空の撮影地点の削除" });
 }
 
 export async function loadPhotos() {

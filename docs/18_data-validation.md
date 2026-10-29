@@ -233,11 +233,11 @@ tags.json に存在すること。
 
 ---
 
-characterId
+characterIds
 
-設定時のみ。
+設定時のみ。配列内でIDが重複しないこと。
 
-characters.json に存在すること。
+各IDが characters.json に存在すること。
 
 ---
 

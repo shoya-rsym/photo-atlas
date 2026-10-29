@@ -50,7 +50,7 @@ export function getStatistics(): Statistics {
     locationCount: locations.filter((l) => locationIds.has(l.id)).length,
     prefectureCount: prefectureIds.size,
     characterCount: new Set(
-      allPhotos.flatMap((photo) => (photo.characterId ? [photo.characterId] : [])),
+      allPhotos.flatMap((photo) => photo.characterIds ?? []),
     ).size,
   };
 }
@@ -68,6 +68,10 @@ export function getCharacterName(characterId: string): string {
     characters.find((c) => c.id === characterId)?.name ??
     UNKNOWN_CHARACTER_LABEL
   );
+}
+
+export function getCharacterNames(characterIds?: string[]): string[] {
+  return (characterIds ?? []).map(getCharacterName);
 }
 
 export function getLocationName(locationId: string): string | undefined {

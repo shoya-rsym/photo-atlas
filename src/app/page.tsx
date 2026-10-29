@@ -6,9 +6,10 @@ import PopularTags from "@/components/PopularTags";
 import RecentPhotos from "@/components/RecentPhotos";
 import RecommendationSpot from "@/components/RecommendationSpot";
 import StatsPanel from "@/components/StatsPanel";
-import { areas, characters, japanMapRegions, locations, photos, tags } from "@/lib/data";
+import { areas, japanMapRegions, locations, photos, tags } from "@/lib/data";
 import { getAreaUnits } from "@/lib/mapUnits";
 import {
+  getCharacterNames,
   getRecentPhotos,
   getRepresentativePhoto,
   getStatistics,
@@ -27,17 +28,15 @@ export default function HomePage() {
     if (locationPhotos.length === 0) return [];
     const photo = getRepresentativePhoto(locationPhotos);
     if (!photo) return [];
-    const characterName = photo.characterId
-      ? characters.find((character) => character.id === photo.characterId)?.name
-      : undefined;
+    const characterNames = getCharacterNames(photo.characterIds);
     return [
       {
         id: location.id,
         name: location.name,
         photoCount: locationPhotos.length,
         photo,
-        description: characterName
-          ? `${characterName}と出会った、この場所の一枚を見てみましょう。`
+        description: characterNames.length
+          ? `${characterNames.join("、")}と出会った、この場所の一枚を見てみましょう。`
           : `${photo.title} — この場所で撮影された写真を見てみましょう。`,
       },
     ];

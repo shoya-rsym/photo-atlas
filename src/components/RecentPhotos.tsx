@@ -2,7 +2,7 @@ import Link from "next/link";
 import PhotoThumbnail from "@/components/PhotoThumbnail";
 import {
   formatPhotoDate,
-  getCharacterName,
+  getCharacterNames,
   getLocationName,
   getTagName,
 } from "@/lib/photos";
@@ -34,9 +34,9 @@ export default function RecentPhotos({ photos, compact = false }: Props) {
                 {getLocationName(photo.locationId)} /{" "}
                 {formatPhotoDate(photo.date)}
               </p>
-              {photo.characterId ? (
+              {photo.characterIds?.length ? (
                 <p className="truncate text-xs text-muted">
-                  {getCharacterName(photo.characterId)}
+                  {getCharacterNames(photo.characterIds).join("、")}
                 </p>
               ) : null}
               <p className="flex flex-wrap gap-1">

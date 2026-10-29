@@ -123,11 +123,17 @@ export async function loadRecent() {
 /** 同じ組み合わせは先頭へ移動し、最大 RECENT_LIMIT 件を保持する */
 export async function pushRecent(setting) {
   const list = await loadRecent();
-  const key = JSON.stringify([setting.locationId, [...setting.tagIds].sort(), setting.characterId ?? ""]);
+  const characterIds = setting.characterIds ?? (setting.characterId ? [setting.characterId] : []);
+  const key = JSON.stringify([setting.locationId, [...setting.tagIds].sort(), [...characterIds].sort()]);
   const next = [
-    { ...setting, usedAt: new Date().toISOString() },
+    { ...setting, characterIds, characterId: undefined, usedAt: new Date().toISOString() },
     ...list.filter(
-      (s) => JSON.stringify([s.locationId, [...s.tagIds].sort(), s.characterId ?? ""]) !== key,
+      (s) =>
+        JSON.stringify([
+          s.locationId,
+          [...s.tagIds].sort(),
+          [...(s.characterIds ?? (s.characterId ? [s.characterId] : []))].sort(),
+        ]) !== key,
     ),
   ].slice(0, RECENT_LIMIT);
   await writeAtomic(RECENT_FILE, `${JSON.stringify(next, null, 2)}\n`);

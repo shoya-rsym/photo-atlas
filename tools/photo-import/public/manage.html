@@ -11,6 +11,7 @@
       <h1>Photo Management Tool</h1>
       <a href="/">→ 写真登録</a>
       <button id="manageLocations" type="button">撮影地点情報を編集</button>
+      <button id="manageCharacters" type="button">キャラクター管理</button>
       <span class="muted" id="totals"></span>
     </header>
 
@@ -43,9 +44,10 @@
           <button id="bulkLocationBtn" type="button">地点を変更</button>
           <button id="createLocation" type="button">新しい地点を追加して選択中の写真に適用</button>
 
-          <h2>キャラクター変更</h2>
-          <select id="bulkCharacter"></select>
-          <button id="bulkCharacterBtn" type="button">キャラクターを変更</button>
+          <h2>キャラクター変更（複数選択可）</h2>
+          <div id="bulkCharacterChips" class="chips"></div>
+          <button id="bulkCharacterBtn" type="button">選択したキャラクターに置き換え</button>
+          <button id="bulkCharacterClearBtn" type="button">キャラクターを解除</button>
 
           <h2>撮影日変更</h2>
           <input id="bulkDate" type="text" placeholder="202604 / 20260415 / 2026年4月15日 / 空欄=不明" />
@@ -74,6 +76,10 @@
             <option value="location">地点名</option>
           </select>
         </div>
+        <div id="undoBar" class="bar undo-bar" hidden>
+          <span id="undoDescription" role="status" aria-live="polite"></span>
+          <button id="undoLastChange" type="button" class="primary">更新前の保存情報に戻す</button>
+        </div>
         <div class="bar sticky selection-controls">
           <span id="summary"></span>
           <span class="row">
@@ -82,12 +88,25 @@
             <button id="selectNone" type="button">選択解除</button>
           </span>
         </div>
+        <div class="bar pagination" data-page-control>
+          <button type="button" data-page-action="first">最初</button>
+          <button type="button" data-page-action="previous">前へ</button>
+          <label>ページ <input type="number" min="1" step="1" data-page-number aria-label="移動先ページ" /></label>
+          <span data-page-count></span>
+          <button type="button" data-page-action="go">移動</button>
+          <button type="button" data-page-action="next">次へ</button>
+          <button type="button" data-page-action="last">最後</button>
+        </div>
         <div id="result" class="result" hidden></div>
         <div id="grid" class="gallery big"></div>
-        <div class="bar">
-          <button id="prev" type="button">← 前へ</button>
-          <span id="pageInfo" class="muted"></span>
-          <button id="next" type="button">次へ →</button>
+        <div class="bar pagination" data-page-control>
+          <button type="button" data-page-action="first">最初</button>
+          <button type="button" data-page-action="previous">前へ</button>
+          <label>ページ <input type="number" min="1" step="1" data-page-number aria-label="移動先ページ" /></label>
+          <span data-page-count></span>
+          <button type="button" data-page-action="go">移動</button>
+          <button type="button" data-page-action="next">次へ</button>
+          <button type="button" data-page-action="last">最後</button>
         </div>
       </section>
     </main>
@@ -104,8 +123,8 @@
           <h2>地点</h2>
           <input id="edLocation" type="text" list="edLocationList" autocomplete="off" />
           <datalist id="edLocationList"></datalist>
-          <h2>キャラクター</h2>
-          <select id="edCharacter"></select>
+          <h2>キャラクター（複数選択可）</h2>
+          <div id="edCharacterChips" class="chips"></div>
           <h2>タグ</h2>
           <div id="edTags" class="chips"></div>
           <div class="addrow">
@@ -147,6 +166,22 @@
       <div class="row end">
         <button id="locationCancel" type="button">キャンセル</button>
         <button id="locationSave" type="button" class="primary">保存</button>
+      </div>
+    </dialog>
+
+    <dialog id="characterEditor" class="editor">
+      <h2>キャラクター管理</h2>
+      <p class="muted">写真に設定されているキャラクターは削除できません。</p>
+      <div class="grid2">
+        <label>キャラクター名<input id="characterName" type="text" /></label>
+        <label>作品名（任意）<input id="characterSeries" type="text" /></label>
+      </div>
+      <button id="characterCreate" type="button" class="primary">キャラクターを追加</button>
+      <p id="characterError" class="error" hidden></p>
+      <p id="characterStatus" class="info" role="status"></p>
+      <div id="characterList" class="character-list"></div>
+      <div class="row end">
+        <button id="characterClose" type="button">閉じる</button>
       </div>
     </dialog>
 

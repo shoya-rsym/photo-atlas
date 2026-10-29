@@ -132,10 +132,10 @@ Tag.name
 
 # Character
 
-Photo.characterId は
+Photo.characterIds は
 
 ```text
-Character.id
+Character.id の配列
 ```
 
 を保持する。

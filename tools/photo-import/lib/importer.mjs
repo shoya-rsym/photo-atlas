@@ -199,21 +199,31 @@ export async function commitImport(payload) {
   }
 
   const newCharacters = [];
-  let characterId = payload.characterId || undefined;
-  if (payload.newCharacter) {
-    const n = payload.newCharacter;
+  const requestedCharacterIds = payload.characterIds ?? (payload.characterId ? [payload.characterId] : []);
+  if (!Array.isArray(requestedCharacterIds)) throw new Error("キャラクターの指定が不正です");
+  const selectedCharacterIds = new Set(requestedCharacterIds);
+  const requestedNewCharacters = [
+    ...(payload.newCharacters ?? []),
+    ...(payload.newCharacter ? [payload.newCharacter] : []),
+  ];
+  for (const n of requestedNewCharacters) {
     const name = requireText(n.name, "新規キャラクター名");
-    const existing = findExactName(characters, name);
-    if (existing) characterId = existing.id;
-    else {
-      const used = new Set(characters.map((c) => c.id));
-      const created = { id: allocateId("character", n.id, used), name, series: n.series?.trim() || undefined };
-      newCharacters.push(created);
-      characterId = created.id;
+    const existing = findExactName([...characters, ...newCharacters], name);
+    if (existing) {
+      selectedCharacterIds.add(existing.id);
+      continue;
     }
+    const used = new Set([...characters, ...newCharacters].map((c) => c.id));
+    const created = { id: allocateId("character", n.id, used), name, series: n.series?.trim() || undefined };
+    newCharacters.push(created);
+    selectedCharacterIds.add(created.id);
   }
-  if (characterId && ![...characters, ...newCharacters].some((c) => c.id === characterId)) {
-    throw new Error(`存在しないキャラクターです: ${characterId}`);
+  const allCharacters = [...characters, ...newCharacters];
+  const finalCharacterIds = [...selectedCharacterIds];
+  for (const id of finalCharacterIds) {
+    if (!allCharacters.some((character) => character.id === id)) {
+      throw new Error(`存在しないキャラクターです: ${id}`);
+    }
   }
 
   // 画像（重複チェック）
@@ -258,7 +268,7 @@ export async function commitImport(payload) {
         createdAt: new Date(now + index).toISOString(),
         locationId: location.id,
         tags: finalTags,
-        characterId,
+        characterIds: finalCharacterIds.length ? finalCharacterIds : undefined,
         comment,
         isCover: item.isCover ? true : undefined,
       });
@@ -295,7 +305,7 @@ export async function commitImport(payload) {
   }
 
   await saveHashes({ ...hashes, ...newHashes });
-  await pushRecent({ locationId: location.id, tagIds: finalTags, characterId });
+  await pushRecent({ locationId: location.id, tagIds: finalTags, characterIds: finalCharacterIds });
   await discardStaged(items.map((i) => i.token));
   const validation = await runValidation();
 

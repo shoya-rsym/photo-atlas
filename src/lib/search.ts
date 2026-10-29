@@ -51,7 +51,7 @@ export function searchPhotos(photos: Photo[], filters: SearchFilters): Photo[] {
   const keyword = filters.keyword.trim().toLowerCase();
   return photos.filter((photo) => {
     if (filters.tagId && !photo.tags.includes(filters.tagId)) return false;
-    if (filters.characterId && photo.characterId !== filters.characterId) {
+    if (filters.characterId && !(photo.characterIds ?? []).includes(filters.characterId)) {
       return false;
     }
     if (filters.year && photo.date?.slice(0, 4) !== filters.year) return false;
@@ -67,7 +67,7 @@ export function searchPhotos(photos: Photo[], filters: SearchFilters): Photo[] {
       photo.title,
       photo.comment ?? "",
       location?.name ?? "",
-      ...(photo.characterId ? [getCharacterName(photo.characterId)] : []),
+      ...(photo.characterIds ?? []).map(getCharacterName),
       ...photo.tags.map(getTagName),
     ]
       .join("\n")

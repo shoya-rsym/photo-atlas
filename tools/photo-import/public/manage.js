@@ -15,9 +15,11 @@ const state = {
   lastClicked: null,
   addTags: new Set(),
   removeTags: new Set(),
+  bulkCharacters: new Set(),
   bulkLocation: null,
   editing: null,
   editTags: new Set(),
+  editCharacters: new Set(),
   locationMode: "update",
 };
 
@@ -45,13 +47,14 @@ async function api(path, body) {
 
 const tagName = (id) => state.master.tags.find((t) => t.id === id)?.name ?? id;
 const charName = (id) => state.master.characters.find((c) => c.id === id)?.name ?? "";
+const charNames = (ids) => (ids ?? []).map(charName);
 const locName = (id) => state.master.locations.find((l) => l.id === id)?.name ?? id;
 
 // ---------- 検索・一覧 ----------
 
 function searchText(p) {
   return normalize(
-    [p.title, p.comment ?? "", locName(p.locationId), charName(p.characterId), ...(p.tags ?? []).map(tagName)].join(" "),
+    [p.title, p.comment ?? "", locName(p.locationId), ...charNames(p.characterIds), ...(p.tags ?? []).map(tagName)].join(" "),
   );
 }
 
@@ -61,7 +64,7 @@ function applyFilter() {
   let list = state.photos.filter((p) => {
     if (filter === "nodate" && p.date) return false;
     if (filter === "notag" && (p.tags ?? []).length > 0) return false;
-    if (filter === "nochar" && p.characterId) return false;
+    if (filter === "nochar" && (p.characterIds ?? []).length > 0) return false;
     if (filter === "cover" && !p.isCover) return false;
     if (words.length === 0) return true;
     const text = searchText(p);
@@ -87,10 +90,33 @@ function renderList() {
   state.page = Math.min(state.page, pages - 1);
   $("grid").replaceChildren(...pageItems().map(renderCard));
   $("summary").textContent = `${state.results.length} 件ヒット（全 ${state.photos.length} 枚）`;
-  $("pageInfo").textContent = `${state.page + 1} / ${pages}`;
-  $("prev").disabled = state.page === 0;
-  $("next").disabled = state.page >= pages - 1;
+  for (const control of document.querySelectorAll("[data-page-control]")) {
+    const input = control.querySelector("[data-page-number]");
+    input.value = String(state.page + 1);
+    input.max = String(pages);
+    control.querySelector("[data-page-count]").textContent = `/ ${pages}`;
+    control.querySelector('[data-page-action="first"]').disabled = state.page === 0;
+    control.querySelector('[data-page-action="previous"]').disabled = state.page === 0;
+    control.querySelector('[data-page-action="next"]').disabled = state.page >= pages - 1;
+    control.querySelector('[data-page-action="last"]').disabled = state.page >= pages - 1;
+  }
   renderBulk();
+}
+
+function setPage(page) {
+  const pages = Math.max(1, Math.ceil(state.results.length / PAGE_SIZE));
+  state.page = Math.max(0, Math.min(pages - 1, page));
+  renderList();
+}
+
+function goToPage(control) {
+  const input = control.querySelector("[data-page-number]");
+  const page = Number(input.value);
+  if (!Number.isInteger(page) || page < 1) {
+    input.value = String(state.page + 1);
+    return;
+  }
+  setPage(page - 1);
 }
 
 function renderCard(p) {
@@ -108,7 +134,7 @@ function renderCard(p) {
     h("div", { class: "title", title: p.title }, p.title),
     h("div", { class: "meta" }, locName(p.locationId)),
     h("div", { class: "meta", title: tags }, tags),
-    h("div", { class: "meta" }, `${p.date ?? "撮影日不明"}${p.characterId ? ` / ${charName(p.characterId)}` : ""}`),
+    h("div", { class: "meta" }, `${p.date ?? "撮影日不明"}${p.characterIds?.length ? ` / ${charNames(p.characterIds).join("・")}` : ""}`),
     h(
       "button",
       {
@@ -195,6 +221,28 @@ function renderBulk() {
         )),
   );
   $("removeTagBtn").disabled = state.removeTags.size === 0;
+  for (const id of [...state.bulkCharacters]) {
+    if (!state.master.characters.some((character) => character.id === id)) state.bulkCharacters.delete(id);
+  }
+  $("bulkCharacterChips").replaceChildren(
+    ...state.master.characters.map((character) =>
+      h(
+        "button",
+        {
+          type: "button",
+          class: `chip ${state.bulkCharacters.has(character.id) ? "on" : ""}`,
+          onclick: () => {
+            if (state.bulkCharacters.has(character.id)) state.bulkCharacters.delete(character.id);
+            else state.bulkCharacters.add(character.id);
+            renderBulk();
+          },
+        },
+        character.name,
+      ),
+    ),
+  );
+  $("bulkCharacterBtn").disabled = state.bulkCharacters.size === 0;
+  $("bulkCharacterClearBtn").disabled = selectedPhotos().every((photo) => !(photo.characterIds ?? []).length);
   $("bulkLocationBtn").disabled = !state.bulkLocation;
   $("createLocation").disabled = count === 0;
   $("createTagBtn").disabled = count === 0 || !$("newTagName").value.trim();
@@ -262,9 +310,45 @@ function showResult(label, res, bad = false) {
   box.hidden = false;
 }
 
+function renderUndo(status) {
+  $("undoBar").hidden = !status.available;
+  $("undoDescription").textContent = status.available
+    ? `「${status.label}」の更新前の保存情報に戻せます${status.photoCount > 0 ? `（写真 ${status.photoCount} 枚）` : ""}`
+    : "";
+}
+
+async function restoreLastChange() {
+  const status = await api("/api/photos/undo-status");
+  renderUndo(status);
+  if (!status.available) {
+    showResult("取り消せる更新がありません", null, true);
+    return;
+  }
+  if (!confirm(`「${status.label}」を取り消し、更新前の保存情報へ戻します。よろしいですか？`)) return;
+
+  const button = $("undoLastChange");
+  button.disabled = true;
+  try {
+    const res = await api("/api/photos/undo", {});
+    await reload();
+    showResult(`「${res.undone}」を取り消し、更新前の保存情報に戻しました`, res);
+  } catch (error) {
+    await reload();
+    throw error;
+  } finally {
+    button.disabled = false;
+  }
+}
+
 async function reload() {
-  state.photos = await api("/api/photos");
-  state.master = await api("/api/master");
+  const [photos, master, undo] = await Promise.all([
+    api("/api/photos"),
+    api("/api/master"),
+    api("/api/photos/undo-status"),
+  ]);
+  state.photos = photos;
+  state.master = master;
+  renderUndo(undo);
   const ids = new Set(state.photos.map((p) => p.id));
   for (const id of [...state.selected]) if (!ids.has(id)) state.selected.delete(id);
   $("totals").textContent = `登録済み ${state.photos.length} 枚 / 撮影地点 ${state.master.locations.length} 件`;
@@ -276,9 +360,6 @@ async function reload() {
 }
 
 function fillCharacterSelects() {
-  const options = (first) => [first, ...state.master.characters.map((c) => h("option", { value: c.id }, c.name))];
-  $("bulkCharacter").replaceChildren(...options(h("option", { value: "" }, "（キャラクターなしにする）")));
-  $("edCharacter").replaceChildren(...options(h("option", { value: "" }, "（なし）")));
   $("edLocationList").replaceChildren(...state.master.locations.map((l) => h("option", { value: l.name })));
   const selectedLocationId = $("locationSelect").value;
   $("locationSelect").replaceChildren(
@@ -292,6 +373,96 @@ function fillCharacterSelects() {
     h("option", { value: "" }, "都道府県を選択"),
     ...state.master.prefectures.map((prefecture) => h("option", { value: prefecture.id }, prefecture.name)),
   );
+}
+
+function renderCharacterManager() {
+  const usageCounts = new Map();
+  for (const photo of state.photos) {
+    for (const id of photo.characterIds ?? []) usageCounts.set(id, (usageCounts.get(id) ?? 0) + 1);
+  }
+  $("characterList").replaceChildren(
+    ...(state.master.characters.length
+      ? state.master.characters.map((character) => {
+          const usageCount = usageCounts.get(character.id) ?? 0;
+          return h(
+            "div",
+            { class: "character-item" },
+            h(
+              "div",
+              {},
+              h("strong", {}, character.name),
+              h("div", { class: "muted" }, [character.series, `${usageCount} 枚で使用中`].filter(Boolean).join(" / ")),
+            ),
+            h(
+              "button",
+              {
+                type: "button",
+                class: "danger",
+                disabled: usageCount > 0,
+                title: usageCount > 0 ? "使用中のキャラクターは削除できません" : "キャラクターを削除",
+                onclick: () => deleteManagedCharacter(character),
+              },
+              "削除",
+            ),
+          );
+        })
+      : [h("p", { class: "muted" }, "キャラクターが登録されていません")]),
+  );
+}
+
+function openCharacterManager() {
+  $("characterName").value = "";
+  $("characterSeries").value = "";
+  $("characterError").hidden = true;
+  $("characterStatus").textContent = "";
+  renderCharacterManager();
+  $("characterEditor").showModal();
+}
+
+async function createManagedCharacter() {
+  const name = $("characterName").value.trim();
+  if (!name) {
+    $("characterError").textContent = "キャラクター名を入力してください";
+    $("characterError").hidden = false;
+    return;
+  }
+  try {
+    await api("/api/characters/create", {
+      name,
+      series: $("characterSeries").value,
+    });
+    $("characterName").value = "";
+    $("characterSeries").value = "";
+    $("characterError").hidden = true;
+    $("characterStatus").textContent = `「${name}」を追加しました`;
+    await reload();
+    renderCharacterManager();
+  } catch (error) {
+    $("characterError").textContent = error.message;
+    $("characterError").hidden = false;
+  }
+}
+
+async function deleteManagedCharacter(character) {
+  const usageCount = state.photos.filter((photo) => (photo.characterIds ?? []).includes(character.id)).length;
+  if (usageCount > 0) {
+    $("characterError").textContent = `写真 ${usageCount} 枚で使用中のため削除できません`;
+    $("characterError").hidden = false;
+    return;
+  }
+  if (!confirm(`キャラクター「${character.name}」を削除しますか？`)) return;
+  try {
+    await api("/api/characters/delete", { id: character.id });
+    $("characterError").hidden = true;
+    $("characterStatus").textContent = `「${character.name}」を削除しました`;
+    state.bulkCharacters.delete(character.id);
+    state.editCharacters.delete(character.id);
+    await reload();
+    renderCharacterManager();
+  } catch (error) {
+    $("characterError").textContent = error.message;
+    $("characterError").hidden = false;
+  }
 }
 
 function fillLocationEditor(location) {
@@ -492,19 +663,43 @@ function openEditor(id) {
   if (!p) return;
   state.editing = p;
   state.editTags = new Set(p.tags ?? []);
+  state.editCharacters = new Set(p.characterIds ?? []);
   $("edImage").src = p.image;
   $("edTitle").value = p.title;
   $("edDate").value = p.date ?? "";
   $("edLocation").value = locName(p.locationId);
-  $("edCharacter").value = p.characterId ?? "";
   $("edComment").value = p.comment ?? "";
   $("edCover").checked = Boolean(p.isCover);
   $("edNewTagName").value = "";
   $("edCreateTagBtn").disabled = true;
   $("edError").hidden = true;
   renderEditorTags();
+  renderEditorCharacters();
   renderEditorDate();
   $("editor").showModal();
+}
+
+function renderEditorCharacters() {
+  for (const id of [...state.editCharacters]) {
+    if (!state.master.characters.some((character) => character.id === id)) state.editCharacters.delete(id);
+  }
+  $("edCharacterChips").replaceChildren(
+    ...state.master.characters.map((character) =>
+      h(
+        "button",
+        {
+          type: "button",
+          class: `chip ${state.editCharacters.has(character.id) ? "on" : ""}`,
+          onclick: () => {
+            if (state.editCharacters.has(character.id)) state.editCharacters.delete(character.id);
+            else state.editCharacters.add(character.id);
+            renderEditorCharacters();
+          },
+        },
+        character.name,
+      ),
+    ),
+  );
 }
 
 function renderEditorTags() {
@@ -563,7 +758,7 @@ async function saveEditor() {
         title: $("edTitle").value,
         date: $("edDate").value,
         locationId: location.id,
-        characterId: $("edCharacter").value || null,
+        characterIds: [...state.editCharacters],
         tagIds: [...state.editTags],
         comment: $("edComment").value,
         isCover: $("edCover").checked,
@@ -588,14 +783,33 @@ function bind() {
   });
   $("filter").addEventListener("change", applyFilter);
   $("sort").addEventListener("change", applyFilter);
-  $("prev").addEventListener("click", () => {
-    state.page -= 1;
-    renderList();
-  });
-  $("next").addEventListener("click", () => {
-    state.page += 1;
-    renderList();
-  });
+  for (const control of document.querySelectorAll("[data-page-control]")) {
+    control.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-page-action]");
+      if (!button) return;
+      const pages = Math.max(1, Math.ceil(state.results.length / PAGE_SIZE));
+      switch (button.dataset.pageAction) {
+        case "first":
+          setPage(0);
+          break;
+        case "previous":
+          setPage(state.page - 1);
+          break;
+        case "next":
+          setPage(state.page + 1);
+          break;
+        case "last":
+          setPage(pages - 1);
+          break;
+        case "go":
+          goToPage(control);
+          break;
+      }
+    });
+    control.querySelector("[data-page-number]").addEventListener("keydown", (event) => {
+      if (event.key === "Enter") goToPage(control);
+    });
+  }
   $("selectPage").addEventListener("click", () => {
     for (const p of pageItems()) state.selected.add(p.id);
     renderList();
@@ -610,6 +824,16 @@ function bind() {
   });
 
   $("manageLocations").addEventListener("click", openLocationEditor);
+  $("undoLastChange").addEventListener("click", async () => {
+    try {
+      await restoreLastChange();
+    } catch (error) {
+      showResult(`取り消しに失敗しました: ${error.message}`, null, true);
+    }
+  });
+  $("manageCharacters").addEventListener("click", openCharacterManager);
+  $("characterCreate").addEventListener("click", createManagedCharacter);
+  $("characterClose").addEventListener("click", () => $("characterEditor").close());
   $("createLocation").addEventListener("click", openCreateLocation);
   $("locationSelect").addEventListener("change", () => {
     const location = state.master.locations.find((item) => item.id === $("locationSelect").value);
@@ -673,8 +897,11 @@ function bind() {
   );
 
   $("bulkCharacterBtn").addEventListener("click", () => {
-    const id = $("bulkCharacter").value;
-    return bulk(`キャラクター変更 → ${id ? charName(id) : "なし"}`, { characterId: id || null });
+    const names = [...state.bulkCharacters].map(charName).join("、");
+    return bulk(`キャラクターを置き換え → ${names}`, { characterIds: [...state.bulkCharacters] });
+  });
+  $("bulkCharacterClearBtn").addEventListener("click", () => {
+    return bulk("キャラクター設定を解除", { characterIds: [] });
   });
 
   $("bulkDate").addEventListener("input", renderBulk);

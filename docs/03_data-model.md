@@ -252,13 +252,15 @@ type Photo = {
 
   tags: string[];
 
-  characterId?: string;
+  characterIds?: string[];
 
   comment?: string;
 
   isCover?: boolean;
 };
 ```
+
+`characterIds` は設定された Character.id の配列。1枚の写真に複数のキャラクターを設定でき、未設定の場合は省略する。
 
 ---
 

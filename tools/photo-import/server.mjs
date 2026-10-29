@@ -15,15 +15,19 @@ import {
 import { loadRecent } from "./lib/store.mjs";
 import {
   bulkUpdate,
+  createCharacter,
   createLocation,
   createTagAndApply,
   deletePhotos,
+  deleteCharacter,
+  getUndoStatus,
   loadPhotos,
   pruneLocations,
   readImageFile,
   renumberPhotoTitles,
   updatePhoto,
   updateLocation,
+  undoLastChange,
 } from "./lib/manager.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -158,6 +162,7 @@ const server = createServer(async (req, res) => {
         }
       }
       if (path === "/api/photos") return send(res, 200, await loadPhotos());
+      if (path === "/api/photos/undo-status") return send(res, 200, await getUndoStatus());
       const image = /^\/(photos|thumbnails)\/([A-Za-z0-9_.-]+)$/.exec(path);
       if (image) {
         const data = await readImageFile(image[1], image[2]);
@@ -196,6 +201,7 @@ const server = createServer(async (req, res) => {
         const body = await json();
         return send(res, 200, await updatePhoto(String(body.id), body.patch ?? {}));
       }
+      if (path === "/api/photos/undo") return send(res, 200, await undoLastChange());
       if (path === "/api/photos/renumber") {
         return send(res, 200, await renumberPhotoTitles((await json()).ids));
       }
@@ -205,6 +211,13 @@ const server = createServer(async (req, res) => {
       }
       if (path === "/api/locations/create") {
         return send(res, 200, await createLocation(await json()));
+      }
+      if (path === "/api/characters/create") {
+        return send(res, 200, await createCharacter(await json()));
+      }
+      if (path === "/api/characters/delete") {
+        const body = await json();
+        return send(res, 200, await deleteCharacter(String(body.id)));
       }
       if (path === "/api/tags/create") {
         const body = await json();

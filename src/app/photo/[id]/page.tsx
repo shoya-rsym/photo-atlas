@@ -7,7 +7,7 @@ import PhotoGrid from "@/components/PhotoGrid";
 import PhotoTags from "@/components/PhotoTags";
 import PhotoThumbnail from "@/components/PhotoThumbnail";
 import { photos } from "@/lib/data";
-import { formatPhotoDate, getCharacterName } from "@/lib/photos";
+import { formatPhotoDate, getCharacterNames } from "@/lib/photos";
 import {
   findLocation,
   findPhoto,
@@ -128,10 +128,10 @@ export default async function PhotoPage({ params }: Props) {
                   </Link>
                 </dd>
               </div>
-              {photo.characterId ? (
+              {photo.characterIds?.length ? (
                 <div>
                   <dt className="text-xs text-muted">キャラクター</dt>
-                  <dd className="mt-1 font-semibold">{getCharacterName(photo.characterId)}</dd>
+                  <dd className="mt-1 font-semibold">{getCharacterNames(photo.characterIds).join("、")}</dd>
                 </div>
               ) : null}
               <div>

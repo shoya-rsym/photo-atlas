@@ -15,8 +15,8 @@ const state = {
   newLocation: null,
   tagIds: new Set(),
   newTags: [],
-  characterId: null,
-  newCharacter: null,
+  characterIds: new Set(),
+  newCharacters: [],
   suggestIndex: 0,
   busy: 0,
 };
@@ -213,8 +213,14 @@ function removeNewTag(tag) {
 }
 
 function selectCharacter(id) {
-  state.characterId = state.characterId === id ? null : id;
-  state.newCharacter = null;
+  if (state.characterIds.has(id)) state.characterIds.delete(id);
+  else state.characterIds.add(id);
+  renderCharacters();
+  renderReadiness();
+}
+
+function removeNewCharacter(character) {
+  state.newCharacters = state.newCharacters.filter((item) => item !== character);
   renderCharacters();
   renderReadiness();
 }
@@ -222,13 +228,13 @@ function selectCharacter(id) {
 function addNewCharacter() {
   const name = $("charFilter").value.trim();
   if (!name) return;
-  const existing = findExactName(state.master.characters, name);
+  const existing = findExactName([...state.master.characters, ...state.newCharacters], name);
   if (existing) {
-    state.characterId = existing.id;
-    state.newCharacter = null;
+    if (state.master.characters.some((character) => character.id === existing.id)) {
+      state.characterIds.add(existing.id);
+    }
   } else {
-    state.newCharacter = { name, id: $("charAddId").value.trim() || undefined };
-    state.characterId = null;
+    state.newCharacters.push({ name, id: $("charAddId").value.trim() || undefined });
   }
   $("charFilter").value = "";
   $("charAddId").value = "";
@@ -240,29 +246,28 @@ function renderCharacters() {
   const query = $("charFilter").value;
   const all = state.master.characters;
   const shown = query.trim() ? searchByName(all, query, () => [], 60) : all;
+  const newShown = query.trim() ? searchByName(state.newCharacters, query, () => [], 60) : state.newCharacters;
   $("charChips").replaceChildren(
-    ...(state.newCharacter ? [h(
-          "button",
-          {
-            type: "button",
-            class: "chip on new",
-            onclick: () => {
-              state.newCharacter = null;
-              renderCharacters();
-              renderReadiness();
-            },
-          },
-          `${state.newCharacter.name}（新規）`,
-        )] : []),
+    ...newShown.map((character) =>
+      h(
+        "button",
+        {
+          type: "button",
+          class: "chip on new",
+          onclick: () => removeNewCharacter(character),
+        },
+        `${character.name}（新規）`,
+      ),
+    ),
     ...shown.map((c) =>
       h(
         "button",
-        { type: "button", class: `chip ${state.characterId === c.id ? "on" : ""}`, onclick: () => selectCharacter(c.id) },
+        { type: "button", class: `chip ${state.characterIds.has(c.id) ? "on" : ""}`, onclick: () => selectCharacter(c.id) },
         c.name,
       ),
     ),
   );
-  const exact = findExactName(all, query);
+  const exact = findExactName([...all, ...state.newCharacters], query);
   $("charAdd").hidden = !query.trim() || Boolean(exact);
   $("charAddBtn").textContent = `＋ 新規キャラクター「${query.trim()}」`;
 }
@@ -276,7 +281,8 @@ function renderRecent() {
     ...recent.map((s) => {
       const loc = state.master.locations.find((l) => l.id === s.locationId);
       if (!loc) return null;
-      const label = [loc.name, s.tagIds.map(tagName).join("・"), s.characterId ? charName(s.characterId) : ""]
+      const characterIds = s.characterIds ?? (s.characterId ? [s.characterId] : []);
+      const label = [loc.name, s.tagIds.map(tagName).join("・"), characterIds.map(charName).join("・")]
         .filter(Boolean)
         .join(" / ");
       return h("button", { type: "button", class: "chip", onclick: () => applyRecent(s, loc) }, label);
@@ -287,8 +293,9 @@ function renderRecent() {
 function applyRecent(setting, location) {
   state.tagIds = new Set(setting.tagIds.filter((id) => state.master.tags.some((t) => t.id === id)));
   state.newTags = [];
-  state.characterId = setting.characterId ?? null;
-  state.newCharacter = null;
+  const characterIds = setting.characterIds ?? (setting.characterId ? [setting.characterId] : []);
+  state.characterIds = new Set(characterIds.filter((id) => state.master.characters.some((c) => c.id === id)));
+  state.newCharacters = [];
   selectLocation(location);
   $("dateInput").focus();
 }
@@ -483,8 +490,8 @@ function buildPayload() {
     date: $("dateInput").value,
     tagIds: [...state.tagIds],
     newTags: state.newTags,
-    characterId: state.characterId ?? undefined,
-    newCharacter: state.newCharacter ?? undefined,
+    characterIds: [...state.characterIds],
+    newCharacters: state.newCharacters,
     title: $("titleInput").value,
     comment: $("commentInput").value,
   };
@@ -495,11 +502,10 @@ function openConfirm() {
   const loc = currentLocation();
   const date = parseDateInput(payload.date);
   const tags = [...[...state.tagIds].map(tagName), ...state.newTags.map((t) => `${t.name}（新規）`)];
-  const character = state.newCharacter
-    ? `${state.newCharacter.name}（新規）`
-    : state.characterId
-      ? charName(state.characterId)
-      : "なし";
+  const characters = [
+    ...[...state.characterIds].map(charName),
+    ...state.newCharacters.map((character) => `${character.name}（新規）`),
+  ];
   const dupCount = payload.items.filter((i) => i.allowDuplicate).length;
   const cover = state.files.find((f) => f.isCover && f.include);
   const rows = [
@@ -507,7 +513,7 @@ function openConfirm() {
     ["撮影地", `${loc.name}${loc.isNew ? "（新規）" : ""} / ${prefName(loc.prefectureId)} ${loc.address ?? ""}`],
     ["撮影日", date.value ?? "撮影日不明"],
     ["タグ", tags.length ? tags.join("、") : "なし"],
-    ["キャラクター", character],
+    ["キャラクター", characters.length ? characters.join("、") : "なし"],
     ["タイトル", payload.title.trim() || `${loc.name}${payload.items.length > 1 ? " 01…" : ""}`],
     ["コメント", payload.comment.trim() || "なし"],
     ["代表写真", cover ? cover.name : "指定なし"],
@@ -542,12 +548,12 @@ async function commit() {
     $("result").hidden = false;
     state.files = [];
     state.newTags = [];
-    state.newCharacter = null;
+    state.newCharacters = [];
     state.newLocation = null;
     await loadMaster();
     // 新規で追加した地点・キャラクターを既存データとして選択し直す
     if (res.newLocations[0]) selectLocation(state.master.locations.find((l) => l.id === res.newLocations[0].id));
-    if (res.newCharacters[0]) state.characterId = res.newCharacters[0].id;
+    for (const character of res.newCharacters) state.characterIds.add(character.id);
     for (const t of res.newTags) state.tagIds.add(t.id);
     renderAll();
   } catch (error) {
@@ -655,9 +661,13 @@ function bind() {
   $("charFilter").addEventListener("keydown", (e) => {
     if (e.key !== "Enter") return;
     e.preventDefault();
-    const [first] = searchByName(state.master.characters, $("charFilter").value);
+    const [first] = searchByName([...state.master.characters, ...state.newCharacters], $("charFilter").value);
     if (first && normalizeEq(first.name, $("charFilter").value)) {
-      selectCharacter(first.id);
+      if (state.master.characters.some((character) => character.id === first.id)) {
+        selectCharacter(first.id);
+      } else {
+        removeNewCharacter(first);
+      }
       $("charFilter").value = "";
       renderCharacters();
     } else addNewCharacter();

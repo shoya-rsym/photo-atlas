@@ -10,8 +10,8 @@ export type Photo = {
   locationId: string;
   /** Tag.id の配列 */
   tags: string[];
-  /** Character.id */
-  characterId?: string;
+  /** Character.id の配列。キャラクター未設定の場合は省略 */
+  characterIds?: string[];
   comment?: string;
   /** 撮影地点の代表写真。地点ごとに1枚を想定 */
   isCover?: boolean;

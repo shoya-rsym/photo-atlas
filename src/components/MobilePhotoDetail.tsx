@@ -7,7 +7,7 @@ import { useRef } from "react";
 import Breadcrumb, { type BreadcrumbItem } from "@/components/Breadcrumb";
 import PhotoTags from "@/components/PhotoTags";
 import PhotoThumbnail from "@/components/PhotoThumbnail";
-import { formatPhotoDate, getCharacterName } from "@/lib/photos";
+import { formatPhotoDate, getCharacterNames } from "@/lib/photos";
 import type { Photo } from "@/types";
 
 type Props = {
@@ -81,9 +81,9 @@ export default function MobilePhotoDetail({
           </p>
           <PhotoTags tagIds={photo.tags} />
         </div>
-        {photo.characterId ? (
+        {photo.characterIds?.length ? (
           <p className="text-sm text-muted">
-            キャラクター: {getCharacterName(photo.characterId)}
+            キャラクター: {getCharacterNames(photo.characterIds).join("、")}
           </p>
         ) : null}
         {photo.comment ? (
