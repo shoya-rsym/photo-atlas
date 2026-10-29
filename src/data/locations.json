@@ -401,5 +401,253 @@
     "address": "静岡県熱海市上多賀１０２７−８",
     "lat": 35.077698,
     "lng": 139.074326
+  },
+  {
+    "id": "location_047",
+    "name": "北海道",
+    "prefectureId": "hokkaido",
+    "address": "不明"
+  },
+  {
+    "id": "location_048",
+    "name": "かんのファーム",
+    "prefectureId": "hokkaido",
+    "address": "北海道空知郡上富良野町西１２線北３６号 沿い",
+    "lat": 43.537956,
+    "lng": 142.440079
+  },
+  {
+    "id": "location_049",
+    "name": "四季彩の丘",
+    "prefectureId": "hokkaido",
+    "address": "北海道上川郡美瑛町新星 第３",
+    "lat": 43.581181,
+    "lng": 142.524323
+  },
+  {
+    "id": "location_050",
+    "name": "上野ファーム",
+    "prefectureId": "hokkaido",
+    "address": "北海道旭川市永山町１６丁目１８６−２",
+    "lat": 43.809517,
+    "lng": 142.489227
+  },
+  {
+    "id": "location_051",
+    "name": "富田ファーム",
+    "prefectureId": "hokkaido",
+    "address": "北海道空知郡中富良野町基線北１５",
+    "lat": 43.405529,
+    "lng": 142.425034
+  },
+  {
+    "id": "location_052",
+    "name": "神代植物公園",
+    "prefectureId": "tokyo",
+    "address": "東京都調布市深大寺元町５丁目３１−１０",
+    "lat": 35.670731,
+    "lng": 139.549225
+  },
+  {
+    "id": "location_053",
+    "name": "国営昭和記念公園",
+    "prefectureId": "tokyo",
+    "address": "東京都立川市緑町３１７３",
+    "lat": 35.707981,
+    "lng": 139.397079
+  },
+  {
+    "id": "location_054",
+    "name": "羊山公園",
+    "prefectureId": "saitama",
+    "address": "埼玉県秩父市大宮６３６０",
+    "lat": 35.973343,
+    "lng": 139.085327
+  },
+  {
+    "id": "location_055",
+    "name": "新宿御園",
+    "prefectureId": "tokyo",
+    "address": "東京都新宿区内藤町１１",
+    "lat": 35.688934,
+    "lng": 139.705597
+  },
+  {
+    "id": "location_056",
+    "name": "大阪お好み焼き ゆかり",
+    "prefectureId": "osaka",
+    "address": "大阪府"
+  },
+  {
+    "id": "location_057",
+    "name": "板橋区立熱帯環境植物館",
+    "prefectureId": "tokyo",
+    "address": "東京都板橋区高島平８丁目２９−２",
+    "lat": 35.791729,
+    "lng": 139.664566
+  },
+  {
+    "id": "location_058",
+    "name": "京極八幡神社",
+    "prefectureId": "hokkaido",
+    "address": "北海道虻田郡京極町京極６２１",
+    "lat": 42.862892,
+    "lng": 140.884094
+  },
+  {
+    "id": "location_059",
+    "name": "札幌大通り",
+    "prefectureId": "hokkaido",
+    "address": "北海道札幌市中央区大通西３丁目",
+    "lat": 43.06086,
+    "lng": 141.352753
+  },
+  {
+    "id": "location_060",
+    "name": "旧古河庭園",
+    "prefectureId": "tokyo",
+    "address": "東京都北区西ケ原１丁目２７−３９",
+    "lat": 35.743099,
+    "lng": 139.746811
+  },
+  {
+    "id": "location_061",
+    "name": "ラ チッタデッラ 冬のひと時",
+    "prefectureId": "kanagawa",
+    "address": "神奈川県川崎市川崎区小川町４−１",
+    "lat": 35.528072,
+    "lng": 139.697968
+  },
+  {
+    "id": "location_062",
+    "name": "六義園",
+    "prefectureId": "tokyo",
+    "address": "東京都文京区本駒込６丁目１６−３",
+    "lat": 35.732399,
+    "lng": 139.748367
+  },
+  {
+    "id": "location_063",
+    "name": "ダーツプレイ",
+    "prefectureId": "tokyo",
+    "address": "秋葉原"
+  },
+  {
+    "id": "location_064",
+    "name": "厳島神社",
+    "prefectureId": "hiroshima",
+    "address": "広島県廿日市市宮島町１−１",
+    "lat": 34.272606,
+    "lng": 132.309982
+  },
+  {
+    "id": "location_065",
+    "name": "広島で何を思う",
+    "prefectureId": "hiroshima",
+    "address": "広島県"
+  },
+  {
+    "id": "location_066",
+    "name": "太宰府天満宮",
+    "prefectureId": "fukuoka",
+    "address": "福岡県太宰府市宰府４丁目７−１",
+    "lat": 33.521496,
+    "lng": 130.535431
+  },
+  {
+    "id": "location_067",
+    "name": "春日崎灯明台",
+    "prefectureId": "niigata",
+    "address": "新潟県佐渡市相川鹿伏",
+    "lat": 38.018642,
+    "lng": 138.233612
+  },
+  {
+    "id": "location_068",
+    "name": "矢島・経島",
+    "prefectureId": "niigata",
+    "address": "新潟県佐渡市小木",
+    "lat": 37.81522,
+    "lng": 138.256393
+  },
+  {
+    "id": "location_069",
+    "name": "長者ヶ橋",
+    "prefectureId": "niigata",
+    "address": "新潟県佐渡市深浦",
+    "lat": 37.816589,
+    "lng": 138.220306
+  },
+  {
+    "id": "location_070",
+    "name": "千畳敷",
+    "prefectureId": "niigata",
+    "address": "新潟県佐渡市下相川",
+    "lat": 38.045216,
+    "lng": 138.247833
+  },
+  {
+    "id": "location_071",
+    "name": "津神神社",
+    "prefectureId": "niigata",
+    "address": "新潟県佐渡市両津大川６１３",
+    "lat": 38.068127,
+    "lng": 138.550247
+  },
+  {
+    "id": "location_072",
+    "name": "尖閣湾揚島遊園",
+    "prefectureId": "niigata",
+    "address": "新潟県佐渡市北狄１５６１",
+    "lat": 38.087135,
+    "lng": 138.277603
+  },
+  {
+    "id": "location_073",
+    "name": "七浦海岸",
+    "prefectureId": "niigata",
+    "address": "新潟県佐渡市高瀬",
+    "lat": 37.996124,
+    "lng": 138.242981
+  },
+  {
+    "id": "location_074",
+    "name": "小木港",
+    "prefectureId": "niigata",
+    "address": "新潟県佐渡市小木町",
+    "lat": 37.819813,
+    "lng": 138.269623
+  },
+  {
+    "id": "location_075",
+    "name": "道遊の割戸",
+    "prefectureId": "niigata",
+    "address": "新潟県佐渡市相川銀山町１−１",
+    "lat": 38.046158,
+    "lng": 138.270569
+  },
+  {
+    "id": "location_076",
+    "name": "北沢浮遊選鉱場跡",
+    "prefectureId": "niigata",
+    "address": "新潟県佐渡市相川北沢町９５２ 1539",
+    "lat": 38.036716,
+    "lng": 138.241104
+  },
+  {
+    "id": "location_077",
+    "name": "三重県鳥羽市",
+    "prefectureId": "mie",
+    "address": "三重県鳥羽市鳥羽３丁目２",
+    "lat": 34.480629,
+    "lng": 136.84642
+  },
+  {
+    "id": "location_078",
+    "name": "志摩スペイン村",
+    "prefectureId": "mie",
+    "address": "三重県志摩市磯部町坂崎字下山９５２−４",
+    "lat": 34.356754,
+    "lng": 136.842804
   }
 ]
