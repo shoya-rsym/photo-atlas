@@ -101,6 +101,12 @@
     <dialog id="confirm">
       <h2>登録前確認</h2>
       <dl id="confirmBody" class="confirm"></dl>
+      <fieldset id="sessionMemoryField" class="memory-candidates" hidden>
+        <legend>Session Memory</legend>
+        <p id="sessionMemoryHint" class="muted"></p>
+        <label for="sessionMemoryCandidate">登録時に保存する候補</label>
+        <select id="sessionMemoryCandidate"></select>
+      </fieldset>
       <p id="confirmError" class="error" hidden></p>
       <div class="row end">
         <button type="button" id="confirmCancel">戻る</button>

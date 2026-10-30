@@ -13,6 +13,8 @@ export type Photo = {
   /** Character.id の配列。キャラクター未設定の場合は省略 */
   characterIds?: string[];
   comment?: string;
+  /** 写真から閲覧者の想像を広げる短い一文 */
+  photoMemory?: string;
   /** 撮影地点の代表写真。地点ごとに1枚を想定 */
   isCover?: boolean;
 };

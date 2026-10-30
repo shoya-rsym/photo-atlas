@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PhotoMemoryDisclosure } from "@/components/MemoryDisclosure";
 import PhotoThumbnail from "@/components/PhotoThumbnail";
 import type { Photo } from "@/types";
 
@@ -26,19 +27,22 @@ export default function FeaturedPhotoCard({
           {label}
         </p>
       </div>
-      <Link href={href} className="mt-3 block">
-        <div className="aspect-[16/10] w-full overflow-hidden bg-background">
-          <PhotoThumbnail src={photo.thumbnail} alt={photo.title} />
-        </div>
-        <div className="p-4">
-          {titleAsText ? (
-            <p className="text-lg font-bold">{title}</p>
-          ) : (
-            <h2 className="text-lg font-bold">{title}</h2>
-          )}
-          {detail ? <p className="mt-1 text-sm text-muted">{detail}</p> : null}
-        </div>
-      </Link>
+      <div className="relative mt-3">
+        <Link href={href} className="block">
+          <div className="aspect-[16/10] w-full overflow-hidden bg-background">
+            <PhotoThumbnail src={photo.thumbnail} alt={photo.title} />
+          </div>
+          <div className="p-4">
+            {titleAsText ? (
+              <p className="text-lg font-bold">{title}</p>
+            ) : (
+              <h2 className="text-lg font-bold">{title}</h2>
+            )}
+            {detail ? <p className="mt-1 text-sm text-muted">{detail}</p> : null}
+          </div>
+        </Link>
+        <PhotoMemoryDisclosure text={photo.photoMemory} />
+      </div>
     </section>
   );
 }

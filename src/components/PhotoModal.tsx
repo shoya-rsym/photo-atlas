@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
+import { PhotoMemoryDisclosure } from "@/components/MemoryDisclosure";
 import PhotoThumbnail from "@/components/PhotoThumbnail";
 import { formatPhotoDate } from "@/lib/photos";
 import type { Photo } from "@/types";
@@ -60,10 +61,11 @@ export default function PhotoModal({
         </button>
       </div>
       <div
-        className="mx-auto my-3 min-h-0 w-full max-w-5xl flex-1"
+        className="relative mx-auto my-3 min-h-0 w-full max-w-5xl flex-1"
         onClick={(e) => e.stopPropagation()}
       >
         <PhotoThumbnail src={photo.image} alt={photo.title} contain />
+        <PhotoMemoryDisclosure text={photo.photoMemory} />
       </div>
       <div
         className="mx-auto w-full max-w-5xl text-white"

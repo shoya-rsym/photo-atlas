@@ -20,6 +20,7 @@ import {
   createTagAndApply,
   deletePhotos,
   deleteCharacter,
+  deleteSessionMemory,
   findSimilarPhotos,
   getUndoStatus,
   loadPhotos,
@@ -28,6 +29,7 @@ import {
   renumberPhotoTitles,
   updatePhoto,
   updateLocation,
+  updateSessionMemory,
   undoLastChange,
 } from "./lib/manager.mjs";
 
@@ -49,6 +51,7 @@ const STATIC = {
   "/lib/location.mjs": ["lib/location.mjs", "text/javascript; charset=utf-8"],
   "/lib/search.mjs": ["lib/search.mjs", "text/javascript; charset=utf-8"],
   "/lib/folder-name.mjs": ["lib/folder-name.mjs", "text/javascript; charset=utf-8"],
+  "/lib/memory.mjs": ["lib/memory.mjs", "text/javascript; charset=utf-8"],
   "/manage": ["public/manage.html", "text/html; charset=utf-8"],
   "/manage.js": ["public/manage.js", "text/javascript; charset=utf-8"],
 };
@@ -227,6 +230,22 @@ const server = createServer(async (req, res) => {
       if (path === "/api/characters/delete") {
         const body = await json();
         return send(res, 200, await deleteCharacter(String(body.id)));
+      }
+      if (path === "/api/session-memories/update") {
+        const body = await json();
+        return send(
+          res,
+          200,
+          await updateSessionMemory(String(body.id), body.text),
+        );
+      }
+      if (path === "/api/session-memories/delete") {
+        const body = await json();
+        return send(
+          res,
+          200,
+          await deleteSessionMemory(String(body.id)),
+        );
       }
       if (path === "/api/tags/create") {
         const body = await json();

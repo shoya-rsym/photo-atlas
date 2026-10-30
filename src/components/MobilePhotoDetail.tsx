@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import type { TouchEvent } from "react";
 import { useRef } from "react";
 import Breadcrumb, { type BreadcrumbItem } from "@/components/Breadcrumb";
+import { PhotoMemoryDisclosure } from "@/components/MemoryDisclosure";
 import PhotoTags from "@/components/PhotoTags";
 import PhotoThumbnail from "@/components/PhotoThumbnail";
 import { formatPhotoDate, getCharacterNames } from "@/lib/photos";
@@ -52,10 +53,11 @@ export default function MobilePhotoDetail({
       }}
       onTouchEnd={handleTouchEnd}
     >
-      <figure className="-mx-4 overflow-hidden bg-black">
+      <figure className="relative -mx-4 overflow-hidden bg-black">
         <div className="aspect-[4/5] max-h-[78svh] overflow-hidden">
           <PhotoThumbnail src={photo.image} alt={photo.title} contain />
         </div>
+        <PhotoMemoryDisclosure text={photo.photoMemory} />
         <figcaption className="flex items-center justify-between gap-3 px-4 py-3 text-sm text-white/75">
           <span>{formatPhotoDate(photo.date)}</span>
           <span className="text-xs">左右にスワイプして写真を見る</span>

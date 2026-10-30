@@ -73,6 +73,9 @@ dialog::backdrop { background: rgba(0, 0, 0, 0.6); }
 .confirm { display: grid; grid-template-columns: 110px 1fr; gap: 6px 10px; margin: 0; }
 .confirm dt { color: var(--muted); }
 .confirm dd { margin: 0; word-break: break-all; }
+.memory-candidates { margin-top: 14px; padding: 10px; border: 1px solid var(--border); border-radius: 6px; }
+.memory-candidates legend { padding: 0 6px; color: var(--muted); }
+.memory-candidates p { margin: 2px 0 8px; }
 
 [hidden] { display: none !important; }
 
@@ -87,6 +90,9 @@ body.manage-page { padding-bottom: 104px; }
 .pagination input { width: 76px; text-align: center; }
 .character-list { display: grid; gap: 8px; max-height: 48vh; overflow: auto; margin-top: 12px; }
 .character-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px; border: 1px solid var(--border); border-radius: 6px; }
+.session-memory-list { display: grid; gap: 12px; max-height: 60vh; overflow: auto; margin-top: 12px; }
+.session-memory-item { display: grid; gap: 6px; padding: 10px; border: 1px solid var(--border); border-radius: 6px; }
+.session-memory-item textarea { min-height: 64px; }
 .gallery.big { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
 .card { cursor: pointer; }
 .card.sel { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }

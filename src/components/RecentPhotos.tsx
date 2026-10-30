@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PhotoMemoryDisclosure } from "@/components/MemoryDisclosure";
 import PhotoThumbnail from "@/components/PhotoThumbnail";
 import {
   formatPhotoDate,
@@ -22,8 +23,9 @@ export default function RecentPhotos({ photos, compact = false }: Props) {
       {photos.map((photo) => (
         <li
           key={photo.id}
-          className="overflow-hidden rounded-lg border border-border bg-card"
+          className="relative overflow-hidden rounded-lg border border-border bg-card"
         >
+          <PhotoMemoryDisclosure text={photo.photoMemory} />
           <Link href={`/photo/${photo.id}`} className="block">
             <div className="aspect-[4/3] w-full">
               <PhotoThumbnail src={photo.thumbnail} alt={photo.title} />

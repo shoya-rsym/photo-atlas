@@ -5,6 +5,7 @@ import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import sharp from "sharp";
 import { parseDateInput } from "./date.mjs";
+import { createSessionMemoryCandidates } from "./memory.mjs";
 import { findExactName } from "./search.mjs";
 import {
   LOCAL_DIR,
@@ -85,12 +86,29 @@ export async function discardStaged(tokens) {
 }
 
 export async function loadMaster() {
-  const [prefectures, locations, tags, characters, photos] = await Promise.all(
-    ["prefectures", "locations", "tags", "characters", "photos"].map((n) => readJson(dataFile(n), [])),
+  const [prefectures, locations, tags, characters, photos, sessionMemories] = await Promise.all(
+    ["prefectures", "locations", "tags", "characters", "photos", "session-memories"].map((n) =>
+      readJson(dataFile(n), []),
+    ),
   );
   const counts = {};
   for (const p of photos) counts[p.locationId] = (counts[p.locationId] ?? 0) + 1;
-  return { prefectures, locations, tags, characters, photoCounts: counts, photoTotal: photos.length };
+  const sessionPhotoCounts = {};
+  for (const photo of photos) {
+    if (!photo.date) continue;
+    const key = `${photo.locationId}|${photo.date}`;
+    sessionPhotoCounts[key] = (sessionPhotoCounts[key] ?? 0) + 1;
+  }
+  return {
+    prefectures,
+    locations,
+    tags,
+    characters,
+    photoCounts: counts,
+    photoTotal: photos.length,
+    sessionPhotoCounts,
+    sessionMemories,
+  };
 }
 
 /** 原寸画像を書き出す。形式・サイズが規定内ならバイト列をそのままコピーする */
@@ -144,8 +162,10 @@ function requireText(value, label) {
  * @param {object} payload client から送られる登録内容
  */
 export async function commitImport(payload) {
-  const [locations, tags, characters, photos, prefectures] = await Promise.all(
-    ["locations", "tags", "characters", "photos", "prefectures"].map((n) => readJson(dataFile(n), [])),
+  const [locations, tags, characters, photos, prefectures, sessionMemories] = await Promise.all(
+    ["locations", "tags", "characters", "photos", "prefectures", "session-memories"].map((n) =>
+      readJson(dataFile(n), []),
+    ),
   );
   const items = Array.isArray(payload.items) ? payload.items : [];
   if (items.length === 0) throw new Error("登録する画像がありません");
@@ -240,12 +260,14 @@ export async function commitImport(payload) {
   // 書き込み準備
   const comment = payload.comment?.trim() || undefined;
   const baseTitle = payload.title?.trim() || location.name;
+  const sessionDate = dateResult.value;
   const width = String(items.length).length;
   let number = nextPhotoNumber(photos);
   const now = Date.now();
   const createdFiles = [];
   const newPhotos = [];
   const newHashes = {};
+  let sessionMemory;
   await mkdir(PHOTOS_DIR, { recursive: true });
   await mkdir(THUMBNAILS_DIR, { recursive: true });
 
@@ -263,7 +285,7 @@ export async function commitImport(payload) {
         title: items.length === 1 ? baseTitle : `${baseTitle} ${String(index + 1).padStart(width, "0")}`,
         image: `/photos/${file}`,
         thumbnail: `/thumbnails/${id}.webp`,
-        date: dateResult.value,
+        date: sessionDate,
         // 取り込み順を保つため、1枚ごとに1msずつ進める
         createdAt: new Date(now + index).toISOString(),
         locationId: location.id,
@@ -273,6 +295,43 @@ export async function commitImport(payload) {
         isCover: item.isCover ? true : undefined,
       });
       newHashes[info.hash] ??= id;
+    }
+
+    const sessionPhotoCount = sessionDate
+      ? photos.filter(
+          (photo) => photo.locationId === location.id && photo.date === sessionDate,
+        ).length + newPhotos.length
+      : 0;
+    const hasSessionMemory = sessionMemories.some(
+      (memory) =>
+        memory.locationId === location.id && memory.sessionDate === sessionDate,
+    );
+    if (sessionDate && sessionPhotoCount >= 10 && !hasSessionMemory) {
+      const candidates = createSessionMemoryCandidates({
+        locationId: location.id,
+        sessionDate,
+        tags: finalTags.map((id) => allTags.find((tag) => tag.id === id)).filter(Boolean),
+        characters: finalCharacterIds
+          .map((id) => allCharacters.find((character) => character.id === id))
+          .filter(Boolean),
+        photoCount: sessionPhotoCount,
+      });
+      const requestedText = String(payload.sessionMemoryText ?? "").trim();
+      const text =
+        requestedText.length > 0 && [...requestedText].length <= 120
+          ? requestedText
+          : candidates[0];
+      const usedIds = new Set(sessionMemories.map((memory) => memory.id));
+      const timestamp = new Date(now).toISOString();
+      sessionMemory = {
+        id: allocateId("session_memory", undefined, usedIds),
+        locationId: location.id,
+        sessionDate,
+        text,
+        generatedBy: "template",
+        createdAt: timestamp,
+        updatedAt: timestamp,
+      };
     }
 
     // JSON更新（画像がすべて書けてから）
@@ -295,6 +354,9 @@ export async function commitImport(payload) {
           })
         : photos;
       await write("photos", [...existing, ...newPhotos], "expanded");
+      if (sessionMemory) {
+        await write("session-memories", [...sessionMemories, sessionMemory], "expanded");
+      }
     } catch (error) {
       for (const b of backups.reverse()) await writeAtomic(b.file, b.before);
       throw error;
@@ -316,6 +378,7 @@ export async function commitImport(payload) {
     newTags,
     newCharacters,
     newLocations,
+    sessionMemory: sessionMemory ?? null,
     validation,
   };
 }

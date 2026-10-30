@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MemorySetting } from "@/components/MemoryPreferenceProvider";
 import MobileBottomNav from "@/components/MobileBottomNav";
 
 export default function Header() {
@@ -33,6 +34,7 @@ export default function Header() {
             aria-label="メインナビゲーション"
             className="flex items-center gap-3 text-xs sm:gap-6 sm:text-sm"
           >
+            <MemorySetting />
             <Link href="/#desktop-explore" className="hidden text-white/75 hover:text-white sm:inline">
               地図から探す
             </Link>
@@ -51,13 +53,16 @@ export default function Header() {
           <Link href="/" className="text-base font-black tracking-wide">
             ARフォト図鑑
           </Link>
-          <Link
-            href="/search"
-            aria-label="写真を探す"
-            className="rounded-full bg-sky-400/10 px-4 py-2 text-sm font-bold text-sky-200"
-          >
-            写真を探す
-          </Link>
+          <div className="flex items-center gap-2">
+            <MemorySetting compact />
+            <Link
+              href="/search"
+              aria-label="写真を探す"
+              className="rounded-full bg-sky-400/10 px-4 py-2 text-sm font-bold text-sky-200"
+            >
+              写真を探す
+            </Link>
+          </div>
         </div>
       </header>
       <MobileBottomNav />

@@ -10,6 +10,7 @@ const locations = read("locations");
 const tags = read("tags");
 const characters = read("characters");
 const photos = read("photos");
+const sessionMemories = read("session-memories");
 const regions = read("japan-map-regions");
 const subregions = read("subregions");
 const svg = readFileSync(new URL("../public/maps/japan-regions.svg", import.meta.url), "utf8");
@@ -23,7 +24,9 @@ function checkIds(label, list) {
     if (!item.id || !ID_PATTERN.test(item.id)) errors.push(`${label}: 不正なID ${item.id}`);
     if (seen.has(item.id)) errors.push(`${label}: 重複ID ${item.id}`);
     seen.add(item.id);
-    if (!item.name && label !== "photos") errors.push(`${label}: name未設定 ${item.id}`);
+    if (!item.name && !["photos", "session-memories"].includes(label)) {
+      errors.push(`${label}: name未設定 ${item.id}`);
+    }
   }
   return seen;
 }
@@ -34,6 +37,7 @@ const locationIds = checkIds("locations", locations);
 const tagIds = checkIds("tags", tags);
 const characterIds = checkIds("characters", characters);
 checkIds("photos", photos);
+checkIds("session-memories", sessionMemories);
 
 for (const p of prefectures) {
   if (!areaIds.has(p.areaId)) errors.push(`prefectures: areaId不正 ${p.id}`);
@@ -88,12 +92,46 @@ for (const p of photos) {
     }
   }
   if (p.date && !/^\d{4}-\d{2}-\d{2}$/.test(p.date)) errors.push(`photos: date形式不正 ${p.id}`);
+  if (
+    p.photoMemory !== undefined &&
+    (typeof p.photoMemory !== "string" || [...p.photoMemory].length > 120)
+  ) {
+    errors.push(`photos: photoMemoryが120文字を超過 ${p.id}`);
+  }
   if (p.isCover !== undefined && p.isCover !== true) errors.push(`photos: isCoverはtrueのみ ${p.id}`);
   if (p.isCover) {
     if (coverLocations.has(p.locationId)) errors.push(`photos: 代表写真が複数 ${p.locationId}`);
     coverLocations.add(p.locationId);
   }
   if (Number.isNaN(Date.parse(p.createdAt))) errors.push(`photos: createdAt形式不正 ${p.id}`);
+}
+const sessionKeys = new Set();
+for (const memory of sessionMemories) {
+  if (!locationIds.has(memory.locationId)) {
+    errors.push(`session-memories: locationId不正 ${memory.id}`);
+  }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(memory.sessionDate)) {
+    errors.push(`session-memories: sessionDate形式不正 ${memory.id}`);
+  }
+  if (
+    typeof memory.text !== "string" ||
+    !memory.text.trim() ||
+    [...memory.text].length > 120
+  ) {
+    errors.push(`session-memories: text不正 ${memory.id}`);
+  }
+  if (!["template", "ai", "manual"].includes(memory.generatedBy)) {
+    errors.push(`session-memories: generatedBy不正 ${memory.id}`);
+  }
+  if (Number.isNaN(Date.parse(memory.createdAt))) {
+    errors.push(`session-memories: createdAt形式不正 ${memory.id}`);
+  }
+  if (Number.isNaN(Date.parse(memory.updatedAt))) {
+    errors.push(`session-memories: updatedAt形式不正 ${memory.id}`);
+  }
+  const key = `${memory.locationId}|${memory.sessionDate}`;
+  if (sessionKeys.has(key)) errors.push(`session-memories: セッション重複 ${key}`);
+  sessionKeys.add(key);
 }
 for (const l of locations) {
   if (!usedLocations.has(l.id)) errors.push(`locations: 孤立地点 ${l.id}`);

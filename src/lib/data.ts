@@ -6,6 +6,7 @@ import charactersJson from "@/data/characters.json";
 import photosJson from "@/data/photos.json";
 import japanMapRegionsJson from "@/data/japan-map-regions.json";
 import subregionsJson from "@/data/subregions.json";
+import sessionMemoriesJson from "@/data/session-memories.json";
 import type {
   Area,
   Character,
@@ -14,10 +15,12 @@ import type {
   Photo,
   Prefecture,
   Subregion,
+  SessionMemory,
   Tag,
 } from "@/types";
 
 export const subregions: Subregion[] = subregionsJson as Subregion[];
+export const sessionMemories: SessionMemory[] = sessionMemoriesJson;
 
 export const areas: Area[] = areasJson;
 export const prefectures: Prefecture[] = prefecturesJson;

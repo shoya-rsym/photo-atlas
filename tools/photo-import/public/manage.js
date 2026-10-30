@@ -552,6 +552,81 @@ function renderCharacterManager() {
   );
 }
 
+function renderSessionMemoryManager() {
+  const memories = state.master.sessionMemories ?? [];
+  $("sessionMemoryList").replaceChildren(
+    ...(memories.length
+      ? memories.map((memory) => {
+          const textInput = h(
+            "textarea",
+            { maxlength: "120", "aria-label": "Session Memory" },
+            memory.text,
+          );
+          return h(
+            "div",
+            { class: "session-memory-item" },
+            h("strong", {}, `${locName(memory.locationId)} / ${memory.sessionDate}`),
+            h("span", { class: "muted" }, `作成方法: ${memory.generatedBy}`),
+            textInput,
+            h(
+              "div",
+              { class: "row" },
+              h(
+                "button",
+                {
+                  type: "button",
+                  class: "primary",
+                  onclick: () => saveSessionMemory(memory.id, textInput.value),
+                },
+                "保存",
+              ),
+              h(
+                "button",
+                {
+                  type: "button",
+                  class: "danger",
+                  onclick: () => removeSessionMemory(memory),
+                },
+                "削除",
+              ),
+            ),
+          );
+        })
+      : [h("p", { class: "muted" }, "Session Memoryはまだありません")]),
+  );
+}
+
+function openSessionMemoryManager() {
+  $("sessionMemoryError").hidden = true;
+  renderSessionMemoryManager();
+  $("sessionMemoryEditor").showModal();
+}
+
+async function saveSessionMemory(id, text) {
+  try {
+    const result = await api("/api/session-memories/update", { id, text });
+    await reload();
+    renderSessionMemoryManager();
+    showResult(`${locName(result.sessionMemory.locationId)} のSession Memoryを保存しました`, result);
+  } catch (error) {
+    $("sessionMemoryError").textContent = error.message;
+    $("sessionMemoryError").hidden = false;
+  }
+}
+
+async function removeSessionMemory(memory) {
+  if (!confirm(`${locName(memory.locationId)} / ${memory.sessionDate} のSession Memoryを削除しますか？`)) return;
+  try {
+    const result = await api("/api/session-memories/delete", { id: memory.id });
+    await reload();
+    renderSessionMemoryManager();
+    showResult(`${locName(memory.locationId)} のSession Memoryを削除しました`, result);
+  } catch (error) {
+    $("sessionMemoryError").textContent = error.message;
+    $("sessionMemoryError").hidden = false;
+  }
+}
+
 function openCharacterManager() {
   $("characterName").value = "";
   $("characterSeries").value = "";
@@ -811,6 +886,8 @@ function openEditor(id) {
   $("edDate").value = p.date ?? "";
   $("edLocation").value = locName(p.locationId);
   $("edComment").value = p.comment ?? "";
+  $("edPhotoMemory").value = p.photoMemory ?? "";
+  $("edPhotoMemoryCount").textContent = `${[...$("edPhotoMemory").value].length} / 120`;
   $("edCover").checked = Boolean(p.isCover);
   $("edNewTagName").value = "";
   $("edCreateTagBtn").disabled = true;
@@ -903,6 +980,7 @@ async function saveEditor() {
         characterIds: [...state.editCharacters],
         tagIds: [...state.editTags],
         comment: $("edComment").value,
+        photoMemory: $("edPhotoMemory").value,
         isCover: $("edCover").checked,
       },
     });
@@ -977,6 +1055,11 @@ function bind() {
   });
 
   $("manageLocations").addEventListener("click", openLocationEditor);
+  $("manageSessionMemories").addEventListener("click", openSessionMemoryManager);
+  $("sessionMemoryClose").addEventListener("click", () => $("sessionMemoryEditor").close());
+  $("edPhotoMemory").addEventListener("input", () => {
+    $("edPhotoMemoryCount").textContent = `${[...$("edPhotoMemory").value].length} / 120`;
+  });
   $("undoLastChange").addEventListener("click", async () => {
     try {
       await restoreLastChange();

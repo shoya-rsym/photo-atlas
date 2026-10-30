@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumb";
 import FeaturedPhotoCard from "@/components/FeaturedPhotoCard";
+import { SessionMemoryText } from "@/components/MemoryDisclosure";
 import PhotoGrid from "@/components/PhotoGrid";
 import PhotoTags from "@/components/PhotoTags";
 import SummaryCards from "@/components/SummaryCards";
 import VisualHero from "@/components/VisualHero";
-import { locations } from "@/lib/data";
+import { locations, sessionMemories } from "@/lib/data";
 import { getRepresentativePhoto, UNKNOWN_DATE_LABEL } from "@/lib/photos";
 import {
   findLocation,
@@ -15,8 +16,43 @@ import {
   getPhotosByLocation,
   getTagIdsByLocation,
 } from "@/lib/queries";
+import type { Photo, SessionMemory } from "@/types";
 
 type Props = { params: Promise<{ id: string }> };
+type PhotoSession = {
+  date?: string;
+  photos: Photo[];
+  memory?: SessionMemory;
+};
+
+function PhotoSessions({ sessions }: { sessions: PhotoSession[] }) {
+  if (sessions.length === 0) {
+    return (
+      <p className="rounded-xl border border-border bg-card p-6 text-muted">
+        写真が登録されていません
+      </p>
+    );
+  }
+
+  return (
+    <div className="space-y-8">
+      {sessions.map((session) => (
+        <section key={session.date ?? "unknown"} className="space-y-3">
+          <h3 className="text-sm font-semibold text-muted">
+            {session.date ?? UNKNOWN_DATE_LABEL} · {session.photos.length} 枚
+          </h3>
+          {session.memory ? (
+            <SessionMemoryText
+              text={session.memory.text}
+              date={session.memory.sessionDate}
+            />
+          ) : null}
+          <PhotoGrid photos={session.photos} />
+        </section>
+      ))}
+    </div>
+  );
+}
 
 export const dynamicParams = false;
 
@@ -43,6 +79,23 @@ export default async function LocationPage({ params }: Props) {
   const stats = getLocationStatistics(location.id);
   const tagIds = getTagIdsByLocation(location.id);
   const representative = getRepresentativePhoto(photos);
+  const memoriesByDate = new Map(
+    sessionMemories
+      .filter((memory) => memory.locationId === location.id)
+      .map((memory) => [memory.sessionDate, memory]),
+  );
+  const photosByDate = new Map<string, PhotoSession>();
+  for (const photo of photos) {
+    const key = photo.date ?? "";
+    const session = photosByDate.get(key) ?? {
+      date: photo.date,
+      photos: [],
+      memory: photo.date ? memoriesByDate.get(photo.date) : undefined,
+    };
+    session.photos.push(photo);
+    photosByDate.set(key, session);
+  }
+  const sessions = [...photosByDate.values()];
 
   return (
     <>
@@ -108,13 +161,7 @@ export default async function LocationPage({ params }: Props) {
               撮影された写真
             </h2>
           </div>
-          {photos.length === 0 ? (
-            <p className="rounded-xl border border-border bg-card p-6 text-muted">
-              写真が登録されていません
-            </p>
-          ) : (
-            <PhotoGrid photos={photos} />
-          )}
+          <PhotoSessions sessions={sessions} />
         </section>
       </div>
 
@@ -163,13 +210,7 @@ export default async function LocationPage({ params }: Props) {
               撮影された写真
             </h2>
           </div>
-          {photos.length === 0 ? (
-            <p className="rounded-xl border border-border bg-card p-6 text-muted">
-              写真が登録されていません
-            </p>
-          ) : (
-            <PhotoGrid photos={photos} />
-          )}
+          <PhotoSessions sessions={sessions} />
         </section>
       </div>
     </>

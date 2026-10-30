@@ -12,6 +12,7 @@
       <a href="/">→ 写真登録</a>
       <button id="manageLocations" type="button">撮影地点情報を編集</button>
       <button id="manageCharacters" type="button">キャラクター管理</button>
+      <button id="manageSessionMemories" type="button">Session Memory管理</button>
       <span class="muted" id="totals"></span>
     </header>
 
@@ -151,6 +152,9 @@
           </div>
           <h2>コメント</h2>
           <textarea id="edComment" rows="3"></textarea>
+          <h2>Photo Memory（任意・120文字まで）</h2>
+          <textarea id="edPhotoMemory" rows="2" maxlength="120" placeholder="写真から想像を広げる短い一文"></textarea>
+          <div id="edPhotoMemoryCount" class="info"></div>
           <label class="check"><input id="edCover" type="checkbox" /> この地点の代表写真にする（他の代表は解除）</label>
         </div>
       </div>
@@ -200,6 +204,16 @@
       <div id="characterList" class="character-list"></div>
       <div class="row end">
         <button id="characterClose" type="button">閉じる</button>
+      </div>
+    </dialog>
+
+    <dialog id="sessionMemoryEditor" class="editor">
+      <h2>Session Memory管理</h2>
+      <p class="muted">撮影場所と撮影日ごとのMemoryを編集・削除できます。</p>
+      <div id="sessionMemoryList" class="session-memory-list"></div>
+      <p id="sessionMemoryError" class="error" hidden></p>
+      <div class="row end">
+        <button id="sessionMemoryClose" type="button">閉じる</button>
       </div>
     </dialog>
 

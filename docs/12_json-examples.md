@@ -192,6 +192,7 @@ subregionId は任意。
     ],
     "characterIds": ["hatsune_miku", "kagamine_rin"],
     "comment": "横浜駅で撮影",
+    "photoMemory": "帰るにはまだ少し早かった。",
     "isCover": true
   },
   {
@@ -207,6 +208,28 @@ subregionId は任意。
   }
 ]
 ```
+
+---
+
+# session-memories.json
+
+撮影場所と撮影日で一意に決まるセッションのMemory。生成元はテンプレート、将来のAI、または手動編集を区別する。
+
+```json
+[
+  {
+    "id": "session_memory_001",
+    "locationId": "yokohama_station",
+    "sessionDate": "2026-10-27",
+    "text": "人の流れが落ち着き、周囲に静かな間が生まれていた。",
+    "generatedBy": "template",
+    "createdAt": "2026-10-27T12:00:00+09:00",
+    "updatedAt": "2026-10-27T12:00:00+09:00"
+  }
+]
+```
+
+`Photo.photoMemory` は任意の120文字以内。テンプレート生成時も画像は読み込まず、閲覧時に生成しない。
 
 ---
 

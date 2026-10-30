@@ -256,11 +256,39 @@ type Photo = {
 
   comment?: string;
 
+  photoMemory?: string;
+
   isCover?: boolean;
 };
 ```
 
 `characterIds` は設定された Character.id の配列。1枚の写真に複数のキャラクターを設定でき、未設定の場合は省略する。
+
+`photoMemory` は写真ごとに管理者が設定する短い一文。未設定を許可し、120文字以内とする。説明文や画像解析結果は保存しない。
+
+---
+
+# SessionMemory
+
+撮影場所と撮影日が同じ写真群に付与する、短い情景の余白。撮影日不明の写真はセッションにまとめない。
+
+```typescript
+type SessionMemory = {
+  id: string;
+  locationId: string;
+  sessionDate: string;
+  text: string;
+  generatedBy: "template" | "ai" | "manual";
+  createdAt: string;
+  updatedAt: string;
+};
+```
+
+- セッションキーは `locationId + sessionDate`。同じ組み合わせにつき最大1件。
+- 既知の撮影日で同じセッションの写真が10枚以上になった登録時のみ、テンプレート候補を生成・保存する。条件未達なら作成しない。
+- MVPの生成方法はタグ等に応じた候補文テンプレート。画像は参照せず、AI APIや外部サービスへ送信しない。
+- 管理画面で編集すると `generatedBy` は `manual` になる。将来のローカルAIは `ai` として識別できる。
+- 生成文は20〜40文字程度を目安とし、場所名・キャラクター名・撮影行為・ストーリーを含めない。
 
 ---
 
@@ -483,6 +511,7 @@ tags.json
 characters.json
 japan-map-regions.json
 subregions.json
+session-memories.json
 ```
 
 ---
@@ -496,3 +525,4 @@ subregions.json
 - Tag
 - Character
 - JapanMapRegion
+- SessionMemory

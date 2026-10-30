@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumb";
+import { PhotoMemoryDisclosure } from "@/components/MemoryDisclosure";
 import MobilePhotoDetail from "@/components/MobilePhotoDetail";
 import PhotoGrid from "@/components/PhotoGrid";
 import PhotoTags from "@/components/PhotoTags";
@@ -95,10 +96,11 @@ export default async function PhotoPage({ params }: Props) {
         <Breadcrumb items={breadcrumbItems} />
 
         <section className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.55fr)_minmax(300px,0.8fr)]">
-          <figure className="overflow-hidden rounded-2xl border border-border bg-card p-2 sm:p-3">
+          <figure className="relative overflow-hidden rounded-2xl border border-border bg-card p-2 sm:p-3">
             <div className="aspect-[4/3] max-h-[78vh] overflow-hidden rounded-xl bg-background">
               <PhotoThumbnail src={photo.image} alt={photo.title} contain />
             </div>
+            <PhotoMemoryDisclosure text={photo.photoMemory} />
             <figcaption className="flex flex-wrap items-center justify-between gap-2 px-2 py-3 text-sm text-muted">
               <span>{location.name}</span>
               <span>{formatPhotoDate(photo.date)}</span>

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useState } from "react";
 import PhotoModal from "@/components/PhotoModal";
+import { PhotoMemoryDisclosure } from "@/components/MemoryDisclosure";
 import PhotoThumbnail from "@/components/PhotoThumbnail";
 import { formatPhotoDate, getLocationName } from "@/lib/photos";
 import type { Photo } from "@/types";
@@ -39,18 +40,21 @@ export default function PhotoGrid({ photos, showLocation = false }: Props) {
             key={photo.id}
             className="group overflow-hidden rounded-xl border border-border bg-card transition hover:-translate-y-0.5 hover:border-accent hover:shadow-lg hover:shadow-black/20"
           >
-            <button
-              type="button"
-              aria-label={`${photo.title}を拡大表示`}
-              className="block aspect-[4/3] w-full overflow-hidden bg-background"
-              onClick={() => setOpenIndex(index)}
-            >
-              <PhotoThumbnail
-                src={photo.thumbnail}
-                alt={photo.title}
-                className="transition duration-500 group-hover:scale-105"
-              />
-            </button>
+            <div className="relative">
+              <button
+                type="button"
+                aria-label={`${photo.title}を拡大表示`}
+                className="block aspect-[4/3] w-full overflow-hidden bg-background"
+                onClick={() => setOpenIndex(index)}
+              >
+                <PhotoThumbnail
+                  src={photo.thumbnail}
+                  alt={photo.title}
+                  className="transition duration-500 group-hover:scale-105"
+                />
+              </button>
+              <PhotoMemoryDisclosure text={photo.photoMemory} />
+            </div>
             <Link href={`/photo/${photo.id}`} className="block space-y-1.5 p-3 text-sm">
               <p className="truncate font-semibold">{photo.title}</p>
               <p className="truncate text-xs text-muted">

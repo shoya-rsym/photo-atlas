@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PhotoMemoryDisclosure } from "@/components/MemoryDisclosure";
 import PhotoThumbnail from "@/components/PhotoThumbnail";
 import { formatPhotoDate, getLocationName } from "@/lib/photos";
 import type { Photo } from "@/types";
@@ -28,8 +29,9 @@ export default function MobilePhotoRail({ photos }: Props) {
           {photos.slice(0, 8).map((photo) => (
             <li
               key={photo.id}
-              className="w-[76vw] max-w-[20rem] shrink-0 snap-start overflow-hidden rounded-xl border border-border bg-card"
+              className="relative w-[76vw] max-w-[20rem] shrink-0 snap-start overflow-hidden rounded-xl border border-border bg-card"
             >
+              <PhotoMemoryDisclosure text={photo.photoMemory} />
               <Link href={`/photo/${photo.id}`} className="block">
                 <div className="aspect-[4/3] overflow-hidden bg-background">
                   <PhotoThumbnail src={photo.thumbnail} alt={photo.title} />

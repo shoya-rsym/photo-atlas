@@ -49,6 +49,7 @@ Location中心設計ではない。
 - 検索
 - フィルター
 - 1枚の写真への複数キャラクター設定
+- セッション単位のSession Memoryと写真単位のPhoto Memory
 
 ---
 
@@ -75,7 +76,10 @@ photos.json
 tags.json
 characters.json
 japan-map-regions.json
+session-memories.json
 ```
+
+Memoryは写真の説明ではなく、閲覧者が想像を広げるための短い余白です。Session Memoryは撮影場所・撮影日・タグ・写真枚数などからテンプレート候補を作り、画像や外部AIサービスは利用しません。Photo Memoryは管理ツールから手動設定します。
 
 ---
 

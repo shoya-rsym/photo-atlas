@@ -278,3 +278,16 @@ OpenGraph
 - ダークモード対応
 - レスポンシブ対応
 - GitHub Pages公開成功
+
+---
+
+# Memory System
+
+- Session Memoryは `locationId + sessionDate` ごとに最大1件である
+- 撮影日が既知で、登録後に同一セッションが10枚以上になった場合のみ登録時に候補を生成・保存する
+- MVPでは画像解析・AI API・外部サービスを使わない
+- Session Memoryは地点ページの該当日付の写真一覧より前に、控えめに表示する
+- Photo MemoryはPhoto-Manageで編集・削除でき、120文字を超える内容は保存できない
+- Photo Memoryは写真右上のアイコンを押した場合だけ表示される
+- Memory表示設定は初期値ONで、選択をブラウザーに保持する
+- Memory表示をOFFにするとSession MemoryとPhoto Memoryの両方が閲覧ページで非表示になる

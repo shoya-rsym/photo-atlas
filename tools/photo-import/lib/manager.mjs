@@ -22,7 +22,7 @@ import { findExactName } from "./search.mjs";
 
 const TRASH_DIR = join(LOCAL_DIR, "trash");
 const UNDO_FILE = join(LOCAL_DIR, "manage-undo.json");
-const UNDO_DATA_FILES = ["photos", "locations", "tags", "characters"];
+const UNDO_DATA_FILES = ["photos", "locations", "tags", "characters", "session-memories"];
 const SIMILARITY_THRESHOLD = 8;
 const PERCEPTUAL_SIZE = 32;
 const PERCEPTUAL_FREQUENCIES = 8;
@@ -73,6 +73,15 @@ function isUndoRecord(value) {
 async function readUndoRecord() {
   const record = await readJson(UNDO_FILE, null);
   if (record === null) return null;
+  if (
+    record.version === 1 &&
+    record.before &&
+    typeof record.before.photos === "string" &&
+    !("session-memories" in record.before)
+  ) {
+    await clearUndoRecord();
+    return null;
+  }
   if (!isUndoRecord(record)) throw new Error("取り消し情報が読み取れません");
   return record;
 }
@@ -464,6 +473,13 @@ export function updatePhoto(id, patch) {
       next.locationId = patch.locationId;
     }
     if ("comment" in patch) next.comment = String(patch.comment ?? "").trim() || undefined;
+    if ("photoMemory" in patch) {
+      const photoMemory = String(patch.photoMemory ?? "").trim();
+      if ([...photoMemory].length > 120) {
+        throw new Error("Photo Memoryは120文字以内で入力してください");
+      }
+      next.photoMemory = photoMemory || undefined;
+    }
     if ("isCover" in patch) next.isCover = patch.isCover === true;
 
     let updated = photos.map((p) => (p.id === id ? cleanPhoto(next) : p));
@@ -491,6 +507,59 @@ export function updatePhoto(id, patch) {
       titleUpdatedCount,
     });
   }, { label: "写真の個別編集" });
+}
+
+export function updateSessionMemory(id, rawText) {
+  return exclusive(async () => {
+    const [photos, locations, memories] = await Promise.all([
+      readJson(dataFile("photos"), []),
+      readJson(dataFile("locations"), []),
+      readJson(dataFile("session-memories"), []),
+    ]);
+    const memory = memories.find((item) => item.id === id);
+    if (!memory) throw new Error(`Session Memoryが見つかりません: ${id}`);
+    const text = String(rawText ?? "").trim();
+    if (!text) throw new Error("Session Memoryを入力してください");
+    if ([...text].length > 120) {
+      throw new Error("Session Memoryは120文字以内で入力してください");
+    }
+
+    const updatedMemory = {
+      ...memory,
+      text,
+      generatedBy: "manual",
+      updatedAt: new Date().toISOString(),
+    };
+    const updatedMemories = memories.map((item) =>
+      item.id === id ? updatedMemory : item,
+    );
+    await writeAtomic(
+      dataFile("session-memories"),
+      formatJsonList(updatedMemories, "expanded"),
+    );
+    return finish(photos, locations, { sessionMemory: updatedMemory });
+  }, { label: "Session Memoryの編集" });
+}
+
+export function deleteSessionMemory(id) {
+  return exclusive(async () => {
+    const [photos, locations, memories] = await Promise.all([
+      readJson(dataFile("photos"), []),
+      readJson(dataFile("locations"), []),
+      readJson(dataFile("session-memories"), []),
+    ]);
+    const memory = memories.find((item) => item.id === id);
+    if (!memory) throw new Error(`Session Memoryが見つかりません: ${id}`);
+
+    await writeAtomic(
+      dataFile("session-memories"),
+      formatJsonList(
+        memories.filter((item) => item.id !== id),
+        "expanded",
+      ),
+    );
+    return finish(photos, locations, { deletedSessionMemory: memory });
+  }, { label: "Session Memoryの削除" });
 }
 
 /** 既存の撮影地点情報を更新する（ID は写真参照を保つため変更しない） */
