@@ -43,11 +43,6 @@
     "prefectureId": "okinawa"
   },
   {
-    "id": "location_004",
-    "name": "長崎",
-    "prefectureId": "nagasaki"
-  },
-  {
     "id": "location_005",
     "name": "一時登録",
     "prefectureId": "aomori"
@@ -56,26 +51,6 @@
     "id": "location_006",
     "name": "栃木県",
     "prefectureId": "tochigi"
-  },
-  {
-    "id": "location_007",
-    "name": "千葉県",
-    "prefectureId": "chiba"
-  },
-  {
-    "id": "location_008",
-    "name": "神奈川県",
-    "prefectureId": "kanagawa"
-  },
-  {
-    "id": "location_009",
-    "name": "埼玉県",
-    "prefectureId": "saitama"
-  },
-  {
-    "id": "location_010",
-    "name": "群馬県",
-    "prefectureId": "gunma"
   },
   {
     "id": "location_011",
@@ -277,7 +252,7 @@
   },
   {
     "id": "location_036",
-    "name": "あしかがフラワーパーク 藤のライトアップ",
+    "name": "あしかがフラワーパーク",
     "prefectureId": "tochigi",
     "address": "栃木県足利市迫間町６０７",
     "lat": 36.314274,
@@ -754,5 +729,493 @@
     "address": "山梨県南都留郡富士河口湖町",
     "lat": 35.4643056,
     "lng": 138.585505
+  },
+  {
+    "id": "location_003",
+    "name": "所沢航空記念公園",
+    "prefectureId": "saitama",
+    "address": "埼玉県所沢市並木１丁目１３",
+    "lat": 35.798306,
+    "lng": 139.469131
+  },
+  {
+    "id": "location_042",
+    "name": "天狗山",
+    "prefectureId": "hokkaido",
+    "address": "北海道小樽市天狗山",
+    "lat": 43.170647,
+    "lng": 140.958908
+  },
+  {
+    "id": "location_098",
+    "name": "北海道大学",
+    "prefectureId": "hokkaido",
+    "address": "北海道札幌市北区北８条西５丁目",
+    "lat": 43.070446,
+    "lng": 141.347153
+  },
+  {
+    "id": "location_099",
+    "name": "白い恋人パーク",
+    "prefectureId": "hokkaido",
+    "address": "北海道札幌市西区宮の沢２条２丁目１１−３６",
+    "lat": 43.089111,
+    "lng": 141.271469
+  },
+  {
+    "id": "location_100",
+    "name": "江の島シーキャンドル",
+    "prefectureId": "kanagawa",
+    "address": "神奈川県藤沢市江の島２丁目３−２８",
+    "lat": 35.299046,
+    "lng": 139.480179
+  },
+  {
+    "id": "location_101",
+    "name": "葛西臨海水族園",
+    "prefectureId": "tokyo",
+    "address": "東京都江戸川区臨海町６丁目２−３",
+    "lat": 35.640774,
+    "lng": 139.855331
+  },
+  {
+    "id": "location_102",
+    "name": "四季の香ローズガーデン",
+    "prefectureId": "tokyo",
+    "address": "東京都練馬区光が丘５丁目２−６",
+    "lat": 35.760433,
+    "lng": 139.626617
+  },
+  {
+    "id": "location_103",
+    "name": "河口湖 音楽と森の美術館",
+    "prefectureId": "yamanashi",
+    "address": "山梨県南都留郡富士河口湖町河口３０７７−２０",
+    "lat": 35.522194,
+    "lng": 138.768906
+  },
+  {
+    "id": "location_104",
+    "name": "渋谷・原宿市街",
+    "prefectureId": "tokyo",
+    "address": "東京都渋谷区神宮前",
+    "lat": 35.671551,
+    "lng": 139.705307
+  },
+  {
+    "id": "location_105",
+    "name": "ロックハート城",
+    "prefectureId": "gunma",
+    "address": "群馬県吾妻郡高山村中山５５８３−１",
+    "lat": 36.621689,
+    "lng": 138.959335
+  },
+  {
+    "id": "location_106",
+    "name": "ぐんまフラワーパーク",
+    "prefectureId": "gunma",
+    "address": "群馬県前橋市柏倉町２４７１−７",
+    "lat": 36.456093,
+    "lng": 139.175903
+  },
+  {
+    "id": "location_107",
+    "name": "たんばらラベンダーパーク",
+    "prefectureId": "gunma",
+    "address": "群馬県沼田市上発知町３５０−１",
+    "lat": 36.74551,
+    "lng": 139.06813
+  },
+  {
+    "id": "location_108",
+    "name": "狭山山不動寺",
+    "prefectureId": "saitama",
+    "address": "埼玉県所沢市上山口２２１４",
+    "lat": 35.772476,
+    "lng": 139.417343
+  },
+  {
+    "id": "location_010",
+    "name": "月の石もみじ公園",
+    "prefectureId": "saitama",
+    "address": "埼玉県秩父郡長瀞町長瀞９４７",
+    "lat": 36.094967,
+    "lng": 139.10228
+  },
+  {
+    "id": "location_109",
+    "name": "埼玉トヨペット 秩父グリーンミューズパーク",
+    "prefectureId": "saitama",
+    "address": "埼玉県秩父郡小鹿野町長留２５１８",
+    "lat": 35.994389,
+    "lng": 139.038101
+  },
+  {
+    "id": "location_110",
+    "name": "権現堂",
+    "prefectureId": "saitama",
+    "address": "埼玉県幸手市",
+    "lat": 36.088745,
+    "lng": 139.728119
+  },
+  {
+    "id": "location_111",
+    "name": "青毛堀川",
+    "prefectureId": "saitama",
+    "address": "埼玉県久喜市青毛",
+    "lat": 36.073891,
+    "lng": 139.698059
+  },
+  {
+    "id": "location_112",
+    "name": "鹿室コスモス畑",
+    "prefectureId": "saitama",
+    "address": "埼玉県さいたま市岩槻区鹿室１４６６",
+    "lat": 35.995247,
+    "lng": 139.705063
+  },
+  {
+    "id": "location_009",
+    "name": "三浦海岸 城ヶ島",
+    "prefectureId": "kanagawa",
+    "address": "神奈川県三浦市三崎町城ヶ島",
+    "lat": 35.133396,
+    "lng": 139.619797
+  },
+  {
+    "id": "location_113",
+    "name": "長井海の手公園ソレイユの丘",
+    "prefectureId": "kanagawa",
+    "address": "神奈川県横須賀市長井４丁目",
+    "lat": 35.196491,
+    "lng": 139.614563
+  },
+  {
+    "id": "location_114",
+    "name": "三崎口駅",
+    "prefectureId": "kanagawa",
+    "address": "神奈川県三浦市初声町下宮田",
+    "lat": 35.17926,
+    "lng": 139.636917
+  },
+  {
+    "id": "location_115",
+    "name": "猪苗代湖",
+    "prefectureId": "fukushima",
+    "address": "福島県猪苗代",
+    "lat": 37.557777,
+    "lng": 140.104736
+  },
+  {
+    "id": "location_116",
+    "name": "鶴岡八幡宮",
+    "prefectureId": "kanagawa",
+    "address": "神奈川県鎌倉市雪ノ下２丁目１−３１",
+    "lat": 35.324554,
+    "lng": 139.554749
+  },
+  {
+    "id": "location_117",
+    "name": "由比ガ浜",
+    "prefectureId": "kanagawa",
+    "address": "神奈川県鎌倉市由比ガ浜",
+    "lat": 35.315674,
+    "lng": 139.545929
+  },
+  {
+    "id": "location_118",
+    "name": "三浦海岸駅",
+    "prefectureId": "kanagawa",
+    "address": "神奈川県三浦市南下浦町上宮田",
+    "lat": 35.19202,
+    "lng": 139.65239
+  },
+  {
+    "id": "location_119",
+    "name": "京急油壺マリンパーク",
+    "prefectureId": "kanagawa",
+    "address": "神奈川県三浦市三崎町小網代１０８２",
+    "lat": 35.161957,
+    "lng": 139.611786
+  },
+  {
+    "id": "location_120",
+    "name": "さがみ湖 MORI MORI",
+    "prefectureId": "kanagawa",
+    "address": "神奈川県相模原市緑区若柳１６３４",
+    "lat": 35.60717,
+    "lng": 139.205704
+  },
+  {
+    "id": "location_121",
+    "name": "象の鼻パーク",
+    "prefectureId": "kanagawa",
+    "address": "神奈川県横浜市中区海岸通１丁目",
+    "lat": 35.450535,
+    "lng": 139.646835
+  },
+  {
+    "id": "location_122",
+    "name": "横浜赤レンガ倉庫",
+    "prefectureId": "kanagawa",
+    "address": "神奈川県横浜市中区新港１丁目１−１",
+    "lat": 35.451965,
+    "lng": 139.643311
+  },
+  {
+    "id": "location_123",
+    "name": "港の見える公演",
+    "prefectureId": "kanagawa",
+    "address": "神奈川県横浜市中区山手町１１４",
+    "lat": 35.43898,
+    "lng": 139.655029
+  },
+  {
+    "id": "location_124",
+    "name": "山下公園",
+    "prefectureId": "kanagawa",
+    "address": "神奈川県横浜市中区山下町２７９",
+    "lat": 35.444874,
+    "lng": 139.653641
+  },
+  {
+    "id": "location_125",
+    "name": "横浜イングリッシュガーデン",
+    "prefectureId": "kanagawa",
+    "address": "神奈川県横浜市西区西平沼町町内６−１ tvk ecom park",
+    "lat": 35.457443,
+    "lng": 139.612778
+  },
+  {
+    "id": "location_008",
+    "name": "根元海水浴場",
+    "prefectureId": "chiba",
+    "address": "千葉県南房総市白浜町根本",
+    "lat": 34.908806,
+    "lng": 139.838715
+  },
+  {
+    "id": "location_126",
+    "name": "沖ノ島",
+    "prefectureId": "chiba",
+    "address": "千葉県館山市富士見",
+    "lat": 34.986835,
+    "lng": 139.834045
+  },
+  {
+    "id": "location_127",
+    "name": "洲崎神社",
+    "prefectureId": "chiba",
+    "address": "千葉県館山市洲崎",
+    "lat": 34.972313,
+    "lng": 139.759415
+  },
+  {
+    "id": "location_128",
+    "name": "洲崎灯台",
+    "prefectureId": "chiba",
+    "address": "千葉県館山市洲崎１０４３",
+    "lat": 34.977871,
+    "lng": 139.755356
+  },
+  {
+    "id": "location_129",
+    "name": "マクハリイルミ",
+    "prefectureId": "chiba",
+    "address": "千葉県千葉市美浜区ひび野２丁目１１２",
+    "lat": 35.648197,
+    "lng": 140.041092
+  },
+  {
+    "id": "location_130",
+    "name": "谷津バラ園",
+    "prefectureId": "chiba",
+    "address": "千葉県習志野市谷津３丁目１−１４",
+    "lat": 35.680408,
+    "lng": 140.004807
+  },
+  {
+    "id": "location_131",
+    "name": "成田ゆめ牧場",
+    "prefectureId": "chiba",
+    "address": "千葉県成田市名木730ｰ3",
+    "lat": 35.868221,
+    "lng": 140.39566
+  },
+  {
+    "id": "location_132",
+    "name": "あけぼの山農業公園",
+    "prefectureId": "chiba",
+    "address": "千葉県柏市布施２００５−２",
+    "lat": 35.891518,
+    "lng": 139.992828
+  },
+  {
+    "id": "location_133",
+    "name": "中善寺湖",
+    "prefectureId": "tochigi",
+    "address": "栃木県日光市",
+    "lat": 37.021351,
+    "lng": 139.677505
+  },
+  {
+    "id": "location_134",
+    "name": "那須高原",
+    "prefectureId": "tochigi",
+    "address": "栃木県那須郡那須町湯本１８２",
+    "lat": 37.106594,
+    "lng": 139.992386
+  },
+  {
+    "id": "location_135",
+    "name": "大山参道",
+    "prefectureId": "tochigi",
+    "address": "栃木県那須塩原市下永田２丁目１０２３",
+    "lat": 36.882488,
+    "lng": 139.992203
+  },
+  {
+    "id": "location_136",
+    "name": "大平山",
+    "prefectureId": "tochigi",
+    "address": "栃木県栃木市平井町",
+    "lat": 36.369488,
+    "lng": 139.704895
+  },
+  {
+    "id": "location_137",
+    "name": "京都駅",
+    "prefectureId": "kyoto",
+    "address": "京都府京都市下京区東塩小路釜殿町",
+    "lat": 34.984936,
+    "lng": 135.75769
+  },
+  {
+    "id": "location_138",
+    "name": "なばなの里",
+    "prefectureId": "mie",
+    "address": "三重県桑名市長島町駒江漆畑２７０",
+    "lat": 35.081676,
+    "lng": 136.703308
+  },
+  {
+    "id": "location_139",
+    "name": "箱根ガラスの森美術館",
+    "prefectureId": "kanagawa",
+    "address": "神奈川県足柄下郡箱根町仙石原９４０−４８",
+    "lat": 35.267868,
+    "lng": 139.013794
+  },
+  {
+    "id": "location_140",
+    "name": "碧テラス",
+    "prefectureId": "shizuoka",
+    "address": "静岡県伊豆の国市小坂２６０−１",
+    "lat": 35.01841,
+    "lng": 138.930328
+  },
+  {
+    "id": "location_141",
+    "name": "松原公園",
+    "prefectureId": "shizuoka",
+    "address": "静岡県伊豆市土肥２６５７−６",
+    "lat": 34.910706,
+    "lng": 138.79039
+  },
+  {
+    "id": "location_142",
+    "name": "元気な百姓達の菜の花畑",
+    "prefectureId": "shizuoka",
+    "address": "静岡県賀茂郡南伊豆町湊３０７",
+    "lat": 34.650166,
+    "lng": 138.888565
+  },
+  {
+    "id": "location_143",
+    "name": "ハウステンボス",
+    "prefectureId": "nagasaki",
+    "address": "長崎県佐世保市ハウステンボス町１−１",
+    "lat": 33.080772,
+    "lng": 129.784363
+  },
+  {
+    "id": "location_144",
+    "name": "眼鏡橋",
+    "prefectureId": "nagasaki",
+    "address": "長崎県長崎市魚の町２",
+    "lat": 32.748314,
+    "lng": 129.87912
+  },
+  {
+    "id": "location_145",
+    "name": "グラバー園",
+    "prefectureId": "nagasaki",
+    "address": "長崎県長崎市南山手町８−１",
+    "lat": 32.734528,
+    "lng": 129.869583
+  },
+  {
+    "id": "location_146",
+    "name": "出島町",
+    "prefectureId": "nagasaki",
+    "address": "長崎県長崎市",
+    "lat": 32.742996,
+    "lng": 129.87236
+  },
+  {
+    "id": "location_147",
+    "name": "長崎市街",
+    "prefectureId": "nagasaki",
+    "address": "長崎県長崎市新地町１０−１３",
+    "lat": 32.741749,
+    "lng": 129.875534
+  },
+  {
+    "id": "location_148",
+    "name": "佐世保駅前",
+    "prefectureId": "nagasaki",
+    "address": "長崎県佐世保市三浦町２１−１",
+    "lat": 33.163998,
+    "lng": 129.7258
+  },
+  {
+    "id": "location_149",
+    "name": "大村公園",
+    "prefectureId": "nagasaki",
+    "address": "長崎県大村市玖島１丁目４３",
+    "lat": 32.898335,
+    "lng": 129.959686
+  },
+  {
+    "id": "location_004",
+    "name": "美浜タウンリゾート・アメリカンビレッジ",
+    "prefectureId": "okinawa",
+    "address": "沖縄県中頭郡北谷町美浜",
+    "lat": 26.311689,
+    "lng": 127.761368
+  },
+  {
+    "id": "location_150",
+    "name": "熱帯ドリームセンター",
+    "prefectureId": "okinawa",
+    "address": "沖縄県国頭郡本部町石川424番地",
+    "lat": 26.693777,
+    "lng": 127.878372
+  },
+  {
+    "id": "location_151",
+    "name": "備瀬崎",
+    "prefectureId": "okinawa",
+    "address": "沖縄県国頭郡本部町備瀬６３９−２１",
+    "lat": 26.708784,
+    "lng": 127.880142
+  },
+  {
+    "id": "location_152",
+    "name": "古宇利島",
+    "prefectureId": "okinawa",
+    "address": "沖縄県国頭郡今帰仁村古宇利",
+    "lat": 26.704348,
+    "lng": 128.018097
   }
 ]
