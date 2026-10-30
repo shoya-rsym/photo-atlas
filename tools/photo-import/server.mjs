@@ -19,16 +19,20 @@ import {
   createCharacter,
   createLocation,
   createTagAndApply,
+  addMemoryCandidate,
+  deleteMemoryCandidate,
   deletePhotos,
   deleteCharacter,
   deleteSessionMemory,
   findSimilarPhotos,
   getSessionMemoryBackfillCandidates,
+  getMemoryReviewData,
   getUndoStatus,
   loadPhotos,
   pruneLocations,
   readImageFile,
   renumberPhotoTitles,
+  saveMemoryReview,
   updatePhoto,
   updateLocation,
   updateSessionMemory,
@@ -56,6 +60,7 @@ const STATIC = {
   "/lib/memory.mjs": ["lib/memory.mjs", "text/javascript; charset=utf-8"],
   "/manage": ["public/manage.html", "text/html; charset=utf-8"],
   "/manage.js": ["public/manage.js", "text/javascript; charset=utf-8"],
+  "/memory-review.js": ["public/memory-review.js", "text/javascript; charset=utf-8"],
 };
 
 const IMAGE_TYPES = { jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp" };
@@ -158,6 +163,9 @@ const server = createServer(async (req, res) => {
       if (path === "/api/session-memories/backfill-candidates") {
         return send(res, 200, await getSessionMemoryBackfillCandidates());
       }
+      if (path === "/api/memory-review") {
+        return send(res, 200, await getMemoryReviewData());
+      }
       if (path === "/api/location-search") {
         const query = url.searchParams.get("q")?.trim() ?? "";
         if (!query || query.length > 200) {
@@ -247,6 +255,22 @@ const server = createServer(async (req, res) => {
       if (path === "/api/session-memories/backfill") {
         const body = await json();
         return send(res, 200, await backfillSessionMemories(body.entries));
+      }
+      if (path === "/api/memory-reviews/save") {
+        const body = await json();
+        return send(
+          res,
+          200,
+          await saveMemoryReview(body.sessionMemoryId, body.rating, body.memo),
+        );
+      }
+      if (path === "/api/memory-candidates/add") {
+        const body = await json();
+        return send(res, 200, await addMemoryCandidate(body.text));
+      }
+      if (path === "/api/memory-candidates/delete") {
+        const body = await json();
+        return send(res, 200, await deleteMemoryCandidate(body.text));
       }
       if (path === "/api/session-memories/delete") {
         const body = await json();

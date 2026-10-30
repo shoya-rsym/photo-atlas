@@ -233,6 +233,44 @@ subregionId は任意。
 
 ---
 
+# memory-library.json
+
+Session Memoryの評価スナップショットとレビュー履歴。本文が変更された場合は新しい本文を別のレビュー対象として保存する。
+
+```json
+[
+  {
+    "id": "memory_review_001",
+    "sessionMemoryId": "session_memory_001",
+    "locationId": "yokohama_station",
+    "locationName": "横浜駅",
+    "sessionDate": "2026-10-27",
+    "text": "人の流れが落ち着き、周囲に静かな間が生まれていた。",
+    "rating": "A",
+    "memo": "余白が強い",
+    "reviewedAt": "2026-10-30T12:00:00.000Z"
+  }
+]
+```
+
+評価は `A` / `B` / `C` / `NG`。同一本文の再評価履歴を残し、最新の評価を現在の評価として扱う。
+
+---
+
+# memory-candidates.json
+
+将来の生成支援へ活用する候補文の配列。候補は管理画面から追加・削除し、重複登録しない。
+
+```json
+[
+  "海風だけが残っていた。",
+  "少しだけ立ち止まる理由があった。",
+  "灯りだけが残っていた。"
+]
+```
+
+---
+
 # japan-map-regions.json
 
 地域と都道府県の関連を管理する。

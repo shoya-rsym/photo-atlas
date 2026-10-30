@@ -291,3 +291,9 @@ OpenGraph
 - Photo Memoryは写真右上のアイコンを押した場合だけ表示される
 - Memory表示設定は初期値ONで、選択をブラウザーに保持する
 - Memory表示をOFFにするとSession MemoryとPhoto Memoryの両方が閲覧ページで非表示になる
+- Photo-ManageでSession MemoryをA / B / C / NG評価し、任意コメントを保存できる
+- 評価済みMemoryを検索でき、Memory Candidate Poolへ候補文を重複なく追加・削除できる
+- Analyticsに総Memory数、評価分布、平均文字数、よく使われる単語、重複Memory、偏り警告を表示する
+- 重複Memoryの使用回数、ベストMemory TOP10、NG Memory、未評価Memoryを管理画面で確認できる
+- `npm run export-memory` が評価区分別の `memory-review.md` を出力する
+- `npm run memory-report` が指定月または当月の `memory-report.md` を出力する

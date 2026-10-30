@@ -65,6 +65,11 @@ npm run import      # http://127.0.0.1:4321 （PORT で変更可）
 - **Photo Memory:** Photo-Manageの個別編集から任意の一文（120文字以内）を設定・削除できる。写真一覧や詳細では右上の吹き出しアイコンを押した時だけ表示
 - **Memory表示設定:** サイトヘッダーのON/OFFをブラウザー内に保存する。OFFではSession MemoryとPhoto Memoryの両方を閲覧画面に表示しない
 - **Session Memory管理:** Photo-Manage上部から登録済みMemoryを編集・削除できる。編集したMemoryは `generatedBy: "manual"` として保存。撮影日あり・10枚以上・Memory未設定の既存セッションを一覧し、候補を確認・編集して一括付与できる。写真の再登録は不要で、保存対象は `session-memories.json` のみ。テンプレート候補をそのまま保存した場合は `generatedBy: "template"`、候補文を編集した場合は `"manual"` として記録され、付与操作はUndoできる
+- **Memory Review:** Photo-Manage上部からSession MemoryをA / B / C / NGで評価し、任意コメントを付けられる。Memory本文の変更後は新しい本文として未評価に戻り、過去の評価スナップショットはLibraryに残る
+- **Memory Library / Analytics:** 評価済みMemoryを検索できる。評価分布、平均文字数、よく使われる単語、重複Memoryの使用回数、偏り警告、A評価TOP10、NG、未評価を確認できる
+- **Memory Candidate Pool:** 候補文を管理画面から追加・削除できる。レビュー一覧とLibraryから候補文を入力欄へ移して追加できる
+- **Memory Export:** `npm run export-memory` で評価別の `memory-review.md` を出力し、ChatGPTやCopilotへ渡せる
+- **月次レポート:** `npm run memory-report` で当月分、または `npm run memory-report -- --month=2026-10` のように指定した月の `memory-report.md` を出力する
 - **タイトル再編集:** 写真を1枚または複数枚選択し、「選択した写真のタイトルを再編集」を実行すると、地点ごとに空いている最小番号から再採番する。選択対象自身の番号はいったん空きとして扱うため、再実行しても不必要に番号が増えない。番号は選択外の既存タイトルと同じ桁数に整える
 - **地点の新規追加と一括適用:** 写真を選択し、一括編集の「新しい地点を追加して選択中の写真に適用」から地点名・都道府県などを登録。追加した地点が選択中の全写真へまとめて適用される。ID は自動採番される
 - **詳細編集:** カードをダブルクリック or 「編集」。タイトル・撮影日（`2026年4月15日` も入力可）・地点・キャラクター・タグ・コメント・代表写真（同地点の他の代表は自動解除）

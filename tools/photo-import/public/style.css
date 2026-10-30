@@ -97,6 +97,29 @@ body.manage-page { padding-bottom: 104px; }
 .session-memory-previews img { width: 88px; height: 66px; object-fit: cover; border-radius: 4px; background: #000; }
 .session-memory-backfill-item > label:first-child { font-weight: 600; }
 .session-memory-backfill-item select { margin-top: 4px; }
+.memory-review-editor { max-height: 92vh; overflow-y: auto; }
+.memory-review-tabs .active { border-color: var(--accent); color: var(--accent); }
+.memory-review-pane { margin-top: 12px; }
+.memory-review-summary { margin: 8px 0; color: var(--muted); }
+.memory-review-list { display: grid; gap: 10px; max-height: 62vh; overflow: auto; margin-top: 10px; }
+.memory-review-card, .memory-candidate-item { display: grid; gap: 8px; padding: 12px; border: 1px solid var(--border); border-radius: 8px; }
+.memory-review-card-heading, .memory-review-card-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.memory-review-text { margin: 0; padding: 8px 12px; border-left: 2px solid var(--border); color: var(--text); white-space: pre-wrap; }
+.memory-review-controls { display: grid; grid-template-columns: minmax(100px, 160px) minmax(180px, 1fr) auto auto; align-items: end; gap: 8px; }
+.memory-review-memo textarea { min-height: 54px; }
+.memory-rating { padding: 3px 8px; border: 1px solid var(--border); border-radius: 999px; font-weight: 700; }
+.rating-NG { color: var(--err); }
+.memory-analytics-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 8px; }
+.memory-analytics-metric { display: grid; gap: 4px; padding: 10px; border: 1px solid var(--border); border-radius: 8px; }
+.memory-analytics-metric span, .memory-analytics-section small { color: var(--muted); }
+.memory-analytics-metric strong { font-size: 1.3rem; }
+.memory-analytics-section { margin-top: 16px; }
+.memory-analytics-section h3 { margin-bottom: 6px; }
+.memory-analytics-list { display: grid; gap: 8px; }
+.memory-analytics-item { padding: 8px; border: 1px solid var(--border); border-radius: 6px; }
+.memory-analytics-item p { margin: 5px 0; }
+.memory-word-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.memory-word { padding: 4px 8px; border: 1px solid var(--border); border-radius: 999px; }
 .gallery.big { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
 .card { cursor: pointer; }
 .card.sel { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
@@ -115,6 +138,8 @@ dialog.editor { width: min(900px, 94vw); }
 @media (max-width: 800px) {
   .layout.manage { grid-template-columns: 1fr; }
   .editor-body { grid-template-columns: 1fr; }
+  .memory-review-controls { grid-template-columns: 1fr; }
+  .memory-review-card-heading, .memory-review-card-footer { align-items: flex-start; flex-direction: column; }
   .bulk { position: static; max-height: none; }
   body.manage-page { padding-bottom: calc(140px + env(safe-area-inset-bottom, 0px)); }
   .bar.sticky.selection-controls { right: 12px; left: 12px; }

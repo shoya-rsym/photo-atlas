@@ -11,6 +11,8 @@ const tags = read("tags");
 const characters = read("characters");
 const photos = read("photos");
 const sessionMemories = read("session-memories");
+const memoryLibrary = read("memory-library");
+const memoryCandidates = read("memory-candidates");
 const regions = read("japan-map-regions");
 const subregions = read("subregions");
 const svg = readFileSync(new URL("../public/maps/japan-regions.svg", import.meta.url), "utf8");
@@ -133,7 +135,49 @@ for (const memory of sessionMemories) {
   if (sessionKeys.has(key)) errors.push(`session-memories: セッション重複 ${key}`);
   sessionKeys.add(key);
 }
-for (const l of locations) {
+  const reviewIds = new Set();
+  for (const review of memoryLibrary) {
+    if (!review.id || !ID_PATTERN.test(review.id)) {
+      errors.push(`memory-library: 不正なID ${review.id}`);
+    }
+    if (reviewIds.has(review.id)) errors.push(`memory-library: 重複ID ${review.id}`);
+    reviewIds.add(review.id);
+    if (!review.sessionMemoryId || !ID_PATTERN.test(review.sessionMemoryId)) {
+      errors.push(`memory-library: sessionMemoryId不正 ${review.id}`);
+    }
+    if (typeof review.locationName !== "string" || !review.locationName.trim()) {
+      errors.push(`memory-library: locationName不正 ${review.id}`);
+    }
+    if (!["A", "B", "C", "NG"].includes(review.rating)) {
+      errors.push(`memory-library: rating不正 ${review.id}`);
+    }
+    if (
+      typeof review.text !== "string" ||
+      !review.text.trim() ||
+      [...review.text].length > 120
+    ) {
+      errors.push(`memory-library: text不正 ${review.id}`);
+    }
+    if (review.memo !== undefined && (typeof review.memo !== "string" || [...review.memo].length > 500)) {
+      errors.push(`memory-library: memo不正 ${review.id}`);
+    }
+    if (Number.isNaN(Date.parse(review.reviewedAt))) {
+      errors.push(`memory-library: reviewedAt形式不正 ${review.id}`);
+    }
+    if (!review.locationId || !/^\d{4}-\d{2}-\d{2}$/.test(review.sessionDate)) {
+      errors.push(`memory-library: セッション情報不正 ${review.id}`);
+    }
+  }
+  const candidateTexts = new Set();
+  for (const candidate of memoryCandidates) {
+    if (typeof candidate !== "string" || !candidate.trim() || [...candidate].length > 120) {
+      errors.push("memory-candidates: 1〜120文字の文字列が必要です");
+      continue;
+    }
+    if (candidateTexts.has(candidate)) errors.push(`memory-candidates: 重複候補 ${candidate}`);
+    candidateTexts.add(candidate);
+  }
+  for (const l of locations) {
   if (!usedLocations.has(l.id)) errors.push(`locations: 孤立地点 ${l.id}`);
 }
 

@@ -272,6 +272,53 @@ createdAt
 ISO8601
 ```
 
+photoMemory
+
+任意。設定する場合は文字列で120文字以内。
+
+---
+
+# SessionMemory
+
+session-memories.json
+
+---
+
+- id は必須・一意
+- locationId は locations.json に存在すること
+- sessionDate は YYYY-MM-DD 形式
+- 同じ locationId + sessionDate は最大1件
+- text は必須、120文字以内
+- generatedBy は template / ai / manual のいずれか
+- createdAt と updatedAt は ISO8601 形式
+
+---
+
+# MemoryReview
+
+memory-library.json
+
+---
+
+- id は必須・一意
+- sessionMemoryId は英小文字・数字・アンダースコアで構成すること
+- locationName は必須
+- rating は A / B / C / NG のいずれか
+- text は必須、120文字以内
+- memo は任意、500文字以内
+- reviewedAt は ISO8601 形式
+
+---
+
+# MemoryCandidate
+
+memory-candidates.json
+
+---
+
+- 1〜120文字の文字列配列
+- 完全一致する候補の重複は禁止
+
 ---
 
 # JapanMapRegion

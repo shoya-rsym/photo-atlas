@@ -290,6 +290,31 @@ type SessionMemory = {
 - 管理画面で編集すると `generatedBy` は `manual` になる。将来のローカルAIは `ai` として識別できる。
 - 生成文は20〜40文字程度を目安とし、場所名・キャラクター名・撮影行為・ストーリーを含めない。
 
+## MemoryReview
+
+Session Memoryの評価スナップショット。評価の履歴を残し、現在のMemoryと完全一致する最新レビューを現在評価として扱う。Memory本文が編集された場合、新しい本文は未評価となる。
+
+```typescript
+type MemoryReview = {
+  id: string;
+  sessionMemoryId: string;
+  locationId: string;
+  locationName: string;
+  sessionDate: string;
+  text: string;
+  rating: "A" | "B" | "C" | "NG";
+  memo?: string;
+  reviewedAt: string;
+};
+```
+
+`memory-library.json` に保存する。評価対象のMemory本文をスナップショットとして保持し、レビュー履歴から月次集計と評価済みLibraryを作成する。
+
+## MemoryCandidate
+
+将来の候補選定・生成支援に使うMemory文の辞書。`memory-candidates.json` は重複のない120文字以内の文字列配列とし、画像や外部サービスは利用しない。
+将来AIへ接続する場合は、Candidate PoolとA / B評価を正例、C / NG評価を抑制例として渡すGenerator層を追加し、SessionMemoryの保存形式とは分離する。生成元は既存の `generatedBy: "ai"` で識別し、画像を入力へ含めない。
+
 ---
 
 ## isCover

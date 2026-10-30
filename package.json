@@ -9,7 +9,9 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "validate": "node scripts/validate-data.mjs",
-    "import": "node tools/photo-import/server.mjs"
+    "import": "node tools/photo-import/server.mjs",
+    "export-memory": "node scripts/export-memory.mjs",
+    "memory-report": "node scripts/memory-report.mjs"
   },
   "dependencies": {
     "leaflet": "^1.9.4",

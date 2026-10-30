@@ -77,9 +77,11 @@ tags.json
 characters.json
 japan-map-regions.json
 session-memories.json
+memory-library.json
+memory-candidates.json
 ```
 
-Memoryは写真の説明ではなく、閲覧者が想像を広げるための短い余白です。Session Memoryは撮影場所・撮影日・タグ・写真枚数などからテンプレート候補を作り、画像や外部AIサービスは利用しません。Photo Memoryは管理ツールから手動設定します。
+Memoryは写真の説明ではなく、閲覧者が想像を広げるための短い余白です。Session Memoryは撮影場所・撮影日・タグ・写真枚数などからテンプレート候補を作り、画像や外部AIサービスは利用しません。Photo Memoryは管理ツールから手動設定します。管理者はPhoto-ManageでSession MemoryをA / B / C / NG評価し、評価Library・候補辞書・使用傾向を管理できます。`npm run export-memory` は評価データを、`npm run memory-report` は月次レポートをMarkdownで出力します。
 
 ---
 

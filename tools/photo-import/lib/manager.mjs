@@ -5,6 +5,13 @@ import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 import { parseDateInput } from "./date.mjs";
 import { createSessionMemoryCandidates } from "./memory.mjs";
+import {
+  buildMemoryAnalytics,
+  getLatestMemoryReviewEntries,
+  getLatestMemoryReviews,
+  memoryReviewKey,
+  MEMORY_REVIEW_RATINGS,
+} from "./memory-review.mjs";
 import sharp from "sharp";
 import {
   LOCAL_DIR,
@@ -23,7 +30,15 @@ import { findExactName } from "./search.mjs";
 
 const TRASH_DIR = join(LOCAL_DIR, "trash");
 const UNDO_FILE = join(LOCAL_DIR, "manage-undo.json");
-const UNDO_DATA_FILES = ["photos", "locations", "tags", "characters", "session-memories"];
+const UNDO_DATA_FILES = [
+  "photos",
+  "locations",
+  "tags",
+  "characters",
+  "session-memories",
+  "memory-library",
+  "memory-candidates",
+];
 const SIMILARITY_THRESHOLD = 8;
 const PERCEPTUAL_SIZE = 32;
 const PERCEPTUAL_FREQUENCIES = 8;
@@ -77,8 +92,7 @@ async function readUndoRecord() {
   if (
     record.version === 1 &&
     record.before &&
-    typeof record.before.photos === "string" &&
-    !("session-memories" in record.before)
+    UNDO_DATA_FILES.some((name) => typeof record.before[name] !== "string")
   ) {
     await clearUndoRecord();
     return null;
@@ -504,6 +518,176 @@ export function backfillSessionMemories(entries) {
       });
     },
     { label: "既存セッションへのMemory一括付与" },
+  );
+}
+
+export function getMemoryReviewData() {
+  return exclusive(
+    async () => {
+      const [
+        sessionMemories,
+        library,
+        candidates,
+        locations,
+        photos,
+        tags,
+        characters,
+      ] = await Promise.all([
+        readJson(dataFile("session-memories"), []),
+        readJson(dataFile("memory-library"), []),
+        readJson(dataFile("memory-candidates"), []),
+        readJson(dataFile("locations"), []),
+        readJson(dataFile("photos"), []),
+        readJson(dataFile("tags"), []),
+        readJson(dataFile("characters"), []),
+      ]);
+      const latestReviews = getLatestMemoryReviews(library);
+      const sessionPhotoCounts = new Map();
+      for (const photo of photos) {
+        if (!photo.date) continue;
+        const key = `${photo.locationId}|${photo.date}`;
+        sessionPhotoCounts.set(key, (sessionPhotoCounts.get(key) ?? 0) + 1);
+      }
+      const memories = sessionMemories
+        .map((memory) => {
+          const locationName =
+            locations.find((location) => location.id === memory.locationId)?.name ??
+            memory.locationId;
+          return {
+            ...memory,
+            locationName,
+            session: `${locationName} / ${memory.sessionDate}`,
+            photoCount:
+              sessionPhotoCounts.get(`${memory.locationId}|${memory.sessionDate}`) ?? 0,
+            review:
+              latestReviews.get(memoryReviewKey(memory.id, memory.text)) ?? null,
+          };
+        })
+        .sort(
+          (left, right) =>
+            Number(Boolean(left.review)) - Number(Boolean(right.review)) ||
+            right.sessionDate.localeCompare(left.sessionDate) ||
+            left.locationName.localeCompare(right.locationName, "ja"),
+        );
+      const libraryEntries = getLatestMemoryReviewEntries(library).map((review) => ({
+        ...review,
+        locationName:
+          locations.find((location) => location.id === review.locationId)?.name ??
+          review.locationName ??
+          review.locationId,
+      }));
+      const backfillCandidateCount = buildSessionMemoryBackfillCandidates(
+        photos,
+        locations,
+        tags,
+        characters,
+        sessionMemories,
+      ).length;
+      return {
+        memories,
+        library: libraryEntries,
+        candidates,
+        backfillCandidateCount,
+        analytics: buildMemoryAnalytics(memories),
+      };
+    },
+    { trackUndo: false },
+  );
+}
+
+export function saveMemoryReview(sessionMemoryId, rawRating, rawMemo) {
+  return exclusive(
+    async () => {
+      const id = String(sessionMemoryId ?? "").trim();
+      const rating = String(rawRating ?? "").trim();
+      const memo = String(rawMemo ?? "").trim();
+      if (!id) throw new Error("Session Memoryを指定してください");
+      if (!MEMORY_REVIEW_RATINGS.includes(rating)) {
+        throw new Error("評価はA・B・C・NGから選択してください");
+      }
+      if ([...memo].length > 500) throw new Error("コメントは500文字以内で入力してください");
+
+      const [sessionMemories, library, locations] = await Promise.all([
+        readJson(dataFile("session-memories"), []),
+        readJson(dataFile("memory-library"), []),
+        readJson(dataFile("locations"), []),
+      ]);
+      const memory = sessionMemories.find((item) => item.id === id);
+      if (!memory) throw new Error(`Session Memoryが見つかりません: ${id}`);
+
+      const latest = getLatestMemoryReviews(library).get(
+        memoryReviewKey(memory.id, memory.text),
+      );
+      if (latest?.rating === rating && (latest.memo ?? "") === memo) {
+        return { memoryReview: latest, unchanged: true };
+      }
+
+      const usedIds = new Set(library.map((review) => review.id));
+      const locationName =
+        locations.find((location) => location.id === memory.locationId)?.name ??
+        memory.locationId;
+      const review = {
+        id: allocateId("memory_review", undefined, usedIds),
+        sessionMemoryId: memory.id,
+        locationId: memory.locationId,
+        locationName,
+        sessionDate: memory.sessionDate,
+        text: memory.text,
+        rating,
+        memo: memo || undefined,
+        reviewedAt: new Date().toISOString(),
+      };
+      await writeAtomic(
+        dataFile("memory-library"),
+        formatJsonList([...library, review], "expanded"),
+      );
+      const { photos } = await loadAll();
+      return finish(photos, locations, { memoryReview: review });
+    },
+    { label: "Memory Reviewの保存" },
+  );
+}
+
+export function addMemoryCandidate(rawText) {
+  return exclusive(
+    async () => {
+      const text = String(rawText ?? "").trim();
+      if (!text || [...text].length > 120) {
+        throw new Error("候補Memoryは1〜120文字で入力してください");
+      }
+      const [candidates, photos, locations] = await Promise.all([
+        readJson(dataFile("memory-candidates"), []),
+        readJson(dataFile("photos"), []),
+        readJson(dataFile("locations"), []),
+      ]);
+      if (candidates.includes(text)) throw new Error("同じ候補Memoryが登録済みです");
+      await writeAtomic(
+        dataFile("memory-candidates"),
+        `${JSON.stringify([...candidates, text], null, 2)}\n`,
+      );
+      return finish(photos, locations, { memoryCandidate: text });
+    },
+    { label: "Memory候補の追加" },
+  );
+}
+
+export function deleteMemoryCandidate(rawText) {
+  return exclusive(
+    async () => {
+      const text = String(rawText ?? "").trim();
+      const [candidates, photos, locations] = await Promise.all([
+        readJson(dataFile("memory-candidates"), []),
+        readJson(dataFile("photos"), []),
+        readJson(dataFile("locations"), []),
+      ]);
+      if (!candidates.includes(text)) throw new Error("削除する候補Memoryが見つかりません");
+      await writeAtomic(
+        dataFile("memory-candidates"),
+        `${JSON.stringify(candidates.filter((candidate) => candidate !== text), null, 2)}\n`,
+      );
+      return finish(photos, locations, { deletedMemoryCandidate: text });
+    },
+    { label: "Memory候補の削除" },
   );
 }
 

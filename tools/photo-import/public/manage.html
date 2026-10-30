@@ -13,6 +13,7 @@
       <button id="manageLocations" type="button">撮影地点情報を編集</button>
       <button id="manageCharacters" type="button">キャラクター管理</button>
       <button id="manageSessionMemories" type="button">Session Memory管理</button>
+      <button id="manageMemoryReview" type="button">Memory Review</button>
       <span class="muted" id="totals"></span>
     </header>
 
@@ -246,6 +247,62 @@
       </div>
     </dialog>
 
+    <dialog id="memoryReviewEditor" class="editor memory-review-editor">
+      <h2>Memory Review System</h2>
+      <p class="muted">Memoryを説明文として評価せず、写真と閲覧者の間に残る余白として見直します。</p>
+      <nav class="row memory-review-tabs" aria-label="Memory Reviewメニュー">
+        <button type="button" data-memory-tab="review">Review</button>
+        <button type="button" data-memory-tab="library">Library</button>
+        <button type="button" data-memory-tab="analytics">Analytics</button>
+        <button type="button" data-memory-tab="candidates">Candidate Pool</button>
+      </nav>
+      <p id="memoryReviewMessage" class="info" role="status" aria-live="polite"></p>
+
+      <section id="memoryReviewReviewPane" class="memory-review-pane">
+        <div id="memoryReviewSummary" class="memory-review-summary"></div>
+        <label>表示
+          <select id="memoryReviewFilter">
+            <option value="all">すべて</option>
+            <option value="unreviewed">未評価</option>
+            <option value="A">A評価</option>
+            <option value="B">B評価</option>
+            <option value="C">C評価</option>
+            <option value="NG">NG</option>
+          </select>
+        </label>
+        <div id="memoryReviewRows" class="memory-review-list"></div>
+      </section>
+
+      <section id="memoryReviewLibraryPane" class="memory-review-pane" hidden>
+        <div class="row">
+          <input id="memoryLibrarySearch" type="search" placeholder="Memory・地点・コメントを検索" />
+          <select id="memoryLibraryRating">
+            <option value="">すべての評価</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="NG">NG</option>
+          </select>
+        </div>
+        <div id="memoryLibraryRows" class="memory-review-list"></div>
+      </section>
+
+      <section id="memoryReviewAnalyticsPane" class="memory-review-pane" hidden>
+        <div id="memoryReviewAnalytics"></div>
+      </section>
+
+      <section id="memoryReviewCandidatesPane" class="memory-review-pane" hidden>
+        <label>候補文<textarea id="memoryCandidateText" rows="2" maxlength="120" placeholder="120文字以内の短いMemory候補"></textarea></label>
+        <button id="memoryCandidateAdd" type="button" class="primary">候補を追加</button>
+        <label>候補を検索<input id="memoryCandidateSearch" type="search" /></label>
+        <div id="memoryCandidateRows" class="memory-review-list"></div>
+      </section>
+      <div class="row end">
+        <button id="memoryReviewClose" type="button">閉じる</button>
+      </div>
+    </dialog>
+
     <script type="module" src="/manage.js"></script>
+    <script type="module" src="/memory-review.js"></script>
   </body>
 </html>
