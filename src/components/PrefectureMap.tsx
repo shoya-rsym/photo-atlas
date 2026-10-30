@@ -8,7 +8,7 @@ const LeafletMap = dynamic(() => import("@/components/LeafletMap"), {
   ssr: false,
   loading: () => (
     <div className="flex h-full items-center justify-center text-muted">
-      地図を読み込み中...
+      地図をひらいています…
     </div>
   ),
 });
@@ -26,7 +26,7 @@ class MapErrorBoundary extends Component<{ children: ReactNode }, BoundaryState>
     if (this.state.failed) {
       return (
         <div role="alert" className="flex h-full items-center justify-center text-muted">
-          地図を表示できません
+          地図を表示できませんでした
         </div>
       );
     }

@@ -28,7 +28,7 @@ const items = [
   },
   {
     href: "/search#character-filter",
-    label: "キャラ",
+    label: "キャラクター",
     icon: (
       <>
         <circle cx="12" cy="8" r="4" />

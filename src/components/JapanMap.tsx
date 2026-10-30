@@ -142,7 +142,7 @@ export default function JapanMap({
   units,
   fit = "all",
   ariaLabel,
-  hint = "地図の地域にカーソルを合わせる（スマホはタップ）と、写真のプレビューが表示されます。",
+  hint = "地域を選ぶと、そこに残る写真がひらきます。",
   variant = "default",
   idPrefix = "",
 }: Props) {
@@ -211,11 +211,11 @@ export default function JapanMap({
     >
       <div className="rounded-lg border border-border bg-card p-2 sm:p-4">
         {load.status === "loading" ? (
-          <p className="py-16 text-center text-muted">読み込み中...</p>
+          <p className="py-16 text-center text-muted">地図をひらいています…</p>
         ) : null}
         {load.status === "error" ? (
           <p role="alert" className="py-16 text-center text-muted">
-            日本地図を表示できません
+            日本地図を表示できませんでした
           </p>
         ) : null}
         {load.status === "ready" ? (
@@ -321,19 +321,19 @@ export default function JapanMap({
                 className="map-legend-swatch mr-2"
                 style={{ backgroundColor: "var(--map-fill-photos)" }}
               />
-              写真あり
+              写真が残る場所
             </span>
             <span>
               <span
                 className="map-legend-swatch mr-2"
                 style={{ backgroundColor: "var(--map-fill)" }}
               />
-              写真未登録
+              まだ写真のない場所
             </span>
             <span className="hidden text-accent md:inline">
-              Hoverで写真をプレビュー
+              地域にカーソルを重ねて写真をひらく
             </span>
-            <span className="text-accent md:hidden">タップで写真をプレビュー</span>
+            <span className="text-accent md:hidden">タップして写真をひらく</span>
           </div>
         ) : null}
       </div>
@@ -365,20 +365,20 @@ export default function JapanMap({
               href={activeUnit.href}
               className="mt-4 inline-block font-semibold text-accent underline underline-offset-4"
             >
-              {activeUnit.name}のページへ
+              {activeUnit.name}を辿る
             </Link>
           </div>
         ) : (
           <div className="flex h-full flex-col justify-center">
             {variant === "home" ? (
               <>
-                <p className="text-lg font-bold">地図から写真を探す</p>
+                <p className="text-lg font-bold">地図から写真を辿る</p>
                 <p className="mt-2 hidden text-sm leading-6 text-muted md:block">
-                  気になる地域にカーソルを合わせると、その場所の写真が見られます。
-                  地域を選んで、まだ知らない景色を探してみましょう。
+                  地域にカーソルを重ねると、そこに残る写真がひらきます。
+                  選ぶと、その地域へ辿れます。
                 </p>
                 <p className="mt-2 text-sm leading-6 text-muted md:hidden">
-                  地域をタップして写真を見てみましょう。もう一度タップすると地域ページへ進みます。
+                  地域をタップすると写真がひらきます。もう一度タップすると地域へ進みます。
                 </p>
                 <p className="mt-4 hidden text-xs text-muted md:block">{hint}</p>
               </>
@@ -386,7 +386,7 @@ export default function JapanMap({
               <>
                 <p className="hidden text-muted md:block">{hint}</p>
                 <p className="text-sm leading-6 text-muted md:hidden">
-                  地図をタップすると写真をプレビューできます。もう一度タップするとページへ移動します。
+                  地図をタップすると写真がひらきます。もう一度タップすると場所へ進みます。
                 </p>
               </>
             )}

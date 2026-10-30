@@ -14,7 +14,7 @@ export default function LinkCard({
   title,
   lines = [],
   image,
-  actionLabel = "続けて探索",
+  actionLabel = "辿る",
 }: Props) {
   return (
     <Link
@@ -25,12 +25,12 @@ export default function LinkCard({
         {image ? (
           <PhotoThumbnail
             src={image}
-            alt={`${title}の代表写真`}
+            alt={`${title}に残る写真`}
             className="transition duration-500 group-hover:scale-105"
           />
         ) : (
           <div className="flex h-full items-center justify-center bg-gradient-to-br from-slate-800 to-slate-950 text-xs text-muted">
-            写真を探す
+            まだ写真のない場所です
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/75 to-transparent" />

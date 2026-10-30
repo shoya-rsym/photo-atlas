@@ -49,9 +49,6 @@ export function getStatistics(): Statistics {
     photoCount: allPhotos.length,
     locationCount: locations.filter((l) => locationIds.has(l.id)).length,
     prefectureCount: prefectureIds.size,
-    characterCount: new Set(
-      allPhotos.flatMap((photo) => photo.characterIds ?? []),
-    ).size,
   };
 }
 

@@ -5,10 +5,10 @@ export type BreadcrumbItem = { label: string; href?: string };
 type Props = { items: BreadcrumbItem[]; inverse?: boolean };
 
 export default function Breadcrumb({ items, inverse = false }: Props) {
-  const all: BreadcrumbItem[] = [{ label: "TOP", href: "/" }, ...items];
+  const all: BreadcrumbItem[] = [{ label: "Photo Atlas", href: "/" }, ...items];
   return (
     <nav
-      aria-label="パンくず"
+      aria-label="ページの階層"
       className={`mb-6 text-sm ${inverse ? "text-white/65" : "text-muted"}`}
     >
       <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">

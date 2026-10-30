@@ -26,8 +26,8 @@ export default function RecommendationSpot({ spots }: Props) {
   if (!spot) {
     return (
       <section className="rounded-2xl border border-border bg-card p-5">
-        <h2 className="text-lg font-bold">今日のおすすめスポット</h2>
-        <p className="mt-3 text-sm text-muted">写真が登録されていません</p>
+        <h2 className="text-lg font-bold">今日見つけた景色</h2>
+        <p className="mt-3 text-sm text-muted">まだ写真のない場所です</p>
       </section>
     );
   }
@@ -35,7 +35,7 @@ export default function RecommendationSpot({ spots }: Props) {
   return (
     <section className="overflow-hidden rounded-2xl border border-border bg-card">
       <div className="flex items-center justify-between gap-3 p-4 pb-3">
-        <h2 className="font-bold">✦ 今日のおすすめスポット</h2>
+        <h2 className="font-bold">✦ 今日見つけた景色</h2>
         {spots.length > 1 ? (
           <button
             type="button"
@@ -45,7 +45,7 @@ export default function RecommendationSpot({ spots }: Props) {
               setSpot(pickRandom(choices, 1)[0] ?? spot);
             }}
           >
-            別の場所
+            別の景色
           </button>
         ) : null}
       </div>
@@ -65,7 +65,7 @@ export default function RecommendationSpot({ spots }: Props) {
         </div>
         <span className="absolute bottom-4 right-4 flex h-9 w-9 items-center justify-center rounded-full border border-white/70 bg-black/40 text-lg transition group-hover:bg-sky-500">
           <span aria-hidden="true">›</span>
-          <span className="sr-only">{spot.name}の撮影地点ページへ</span>
+          <span className="sr-only">{spot.name}に残る写真を辿る</span>
         </span>
       </Link>
     </section>

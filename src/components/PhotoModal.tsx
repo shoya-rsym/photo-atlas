@@ -86,7 +86,7 @@ export default function PhotoModal({
             disabled={!hasPrev}
             onClick={onPrev}
           >
-            ← 前へ
+            ← 前の写真
           </button>
           <button
             type="button"
@@ -94,7 +94,7 @@ export default function PhotoModal({
             disabled={!hasNext}
             onClick={onNext}
           >
-            次へ →
+            次の写真 →
           </button>
         </div>
       </div>

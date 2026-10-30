@@ -12,17 +12,17 @@ export default function MobilePhotoRail({ photos }: Props) {
       <div className="mb-3 flex items-end justify-between gap-3">
         <div>
           <p className="text-xs font-semibold tracking-[0.18em] text-accent uppercase">
-            Fresh from the archive
+            Recent fragments
           </p>
           <h2 id="mobile-recent-photos-title" className="mt-1 text-xl font-bold">
-            最近追加された写真
+            最近の写真
           </h2>
         </div>
-        <span className="shrink-0 text-xs text-muted">横にスワイプ</span>
+        <span className="shrink-0 text-xs text-muted">横にめくる</span>
       </div>
       {photos.length === 0 ? (
         <p className="rounded-xl border border-border bg-card p-4 text-muted">
-          写真が登録されていません
+          写真はまだありません。
         </p>
       ) : (
         <ul className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-3">
@@ -39,7 +39,7 @@ export default function MobilePhotoRail({ photos }: Props) {
                 <div className="p-3">
                   <p className="truncate font-semibold">{photo.title}</p>
                   <p className="mt-1 truncate text-sm text-muted">
-                    {getLocationName(photo.locationId) ?? "撮影場所未登録"} ·{" "}
+                    {getLocationName(photo.locationId) ?? "場所の手がかりはありません"} ·{" "}
                     {formatPhotoDate(photo.date)}
                   </p>
                 </div>

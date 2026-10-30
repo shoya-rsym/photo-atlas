@@ -23,26 +23,26 @@ export default function Header() {
             </span>
             <span>
               <span className="block text-base font-bold tracking-wide group-hover:text-sky-200">
-                ARフォト図鑑
+                Photo Atlas
               </span>
               <span className="hidden text-[10px] tracking-wide text-white/50 sm:block">
-                地図から辿る写真図鑑
+                地図から辿る写真館
               </span>
             </span>
           </Link>
           <nav
-            aria-label="メインナビゲーション"
+            aria-label="写真館のナビゲーション"
             className="flex items-center gap-3 text-xs sm:gap-6 sm:text-sm"
           >
             <MemorySetting />
             <Link href="/#desktop-explore" className="hidden text-white/75 hover:text-white sm:inline">
-              地図から探す
+              地図を辿る
             </Link>
             <Link
               href="/search"
               className="rounded-full border border-sky-300/30 bg-sky-400/10 px-3 py-1.5 font-semibold text-sky-200 transition hover:bg-sky-400/20"
             >
-              写真を探す
+              写真の断片を探す
             </Link>
           </nav>
         </div>
@@ -51,16 +51,16 @@ export default function Header() {
       <header className="sticky top-0 z-30 border-b border-white/10 bg-[#0b111a]/95 text-white shadow-sm backdrop-blur-xl md:hidden">
         <div className="mx-auto flex h-14 max-w-site items-center justify-between px-4">
           <Link href="/" className="text-base font-black tracking-wide">
-            ARフォト図鑑
+            Photo Atlas
           </Link>
           <div className="flex items-center gap-2">
             <MemorySetting compact />
             <Link
               href="/search"
-              aria-label="写真を探す"
+              aria-label="写真の断片を探す"
               className="rounded-full bg-sky-400/10 px-4 py-2 text-sm font-bold text-sky-200"
             >
-              写真を探す
+              写真を辿る
             </Link>
           </div>
         </div>

@@ -5,24 +5,18 @@ type Props = { statistics: Statistics };
 
 export default function StatsPanel({ statistics }: Props) {
   const items = [
-    { label: "写真数", value: statistics.photoCount, unit: "枚", icon: "camera" },
+    { label: "写真", value: statistics.photoCount, unit: "枚", icon: "camera" },
     {
-      label: "撮影地点数",
+      label: "写真が残る場所",
       value: statistics.locationCount,
-      unit: "箇所",
+      unit: "か所",
       icon: "pin",
     },
     {
-      label: "都道府県数",
+      label: "広がり",
       value: statistics.prefectureCount,
       unit: "都道府県",
       icon: "map",
-    },
-    {
-      label: "登場キャラクター",
-      value: statistics.characterCount,
-      unit: "種類",
-      icon: "spark",
     },
   ];
 
@@ -46,12 +40,6 @@ export default function StatsPanel({ statistics }: Props) {
           <path d="M9 3v15m6-12v15" />
         </>
       ),
-      spark: (
-        <>
-          <path d="m12 3 1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7z" />
-          <path d="m19 15 .8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z" />
-        </>
-      ),
     };
     return (
       <svg
@@ -68,7 +56,7 @@ export default function StatsPanel({ statistics }: Props) {
   };
 
   return (
-    <dl className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+    <dl className="grid grid-cols-2 gap-3 lg:grid-cols-3">
       {items.map((item, index) => (
         <div
           key={item.label}

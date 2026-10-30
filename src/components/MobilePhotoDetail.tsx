@@ -60,7 +60,7 @@ export default function MobilePhotoDetail({
         <PhotoMemoryDisclosure text={photo.photoMemory} />
         <figcaption className="flex items-center justify-between gap-3 px-4 py-3 text-sm text-white/75">
           <span>{formatPhotoDate(photo.date)}</span>
-          <span className="text-xs">左右にスワイプして写真を見る</span>
+          <span className="text-xs">左右にめくって、写真を辿る</span>
         </figcaption>
       </figure>
 
@@ -68,7 +68,7 @@ export default function MobilePhotoDetail({
         <h1 className="text-2xl font-black leading-tight">{photo.title}</h1>
         <div>
           <p className="text-xs font-semibold tracking-[0.16em] text-muted uppercase">
-            撮影場所
+            場所
           </p>
           <Link
             href={`/location/${locationId}`}

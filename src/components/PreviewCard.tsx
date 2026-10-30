@@ -20,7 +20,7 @@ export default function PreviewCard({
       <p className="text-lg font-bold">{preview.name}</p>
       <p className="mt-1 text-sm text-muted">
         写真 {preview.photoCount} 枚
-        {showLocationCount ? ` / 撮影地点 ${preview.locationCount} 件` : ""}
+        {showLocationCount ? ` / 写真が残る場所 ${preview.locationCount} か所` : ""}
       </p>
       {photos.length > 0 ? (
         <ul className="mt-3 grid grid-cols-2 gap-1.5">
@@ -34,7 +34,7 @@ export default function PreviewCard({
           ))}
         </ul>
       ) : (
-        <p className="mt-3 text-sm text-muted">写真が登録されていません</p>
+        <p className="mt-3 text-sm text-muted">ここには、まだ写真がありません</p>
       )}
     </div>
   );

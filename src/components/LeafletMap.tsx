@@ -43,7 +43,7 @@ export default function LeafletMap({ items }: Props) {
   if (positioned.length === 0) {
     return (
       <div className="flex h-full items-center justify-center text-muted">
-        地図に表示できる撮影地点がありません
+        この地図に表示できる場所は、まだありません
       </div>
     );
   }

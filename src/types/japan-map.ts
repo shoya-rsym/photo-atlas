@@ -15,7 +15,6 @@ export type Statistics = {
   photoCount: number;
   locationCount: number;
   prefectureCount: number;
-  characterCount: number;
 };
 
 /** 地図上でHover/選択/遷移できる描画単位（地域・都道府県・サブ地域） */

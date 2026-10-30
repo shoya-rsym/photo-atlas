@@ -15,7 +15,7 @@ export function PhotoMemoryDisclosure({ text }: PhotoMemoryProps) {
     <span className="absolute right-2 top-2 z-10">
       <button
         type="button"
-        aria-label="この写真のMemoryを表示"
+        aria-label="この写真に添えられた余白をひらく"
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
         className="flex h-8 w-8 items-center justify-center rounded-full border border-white/25 bg-black/55 text-sm text-white/85 shadow-sm backdrop-blur transition hover:bg-black/75"

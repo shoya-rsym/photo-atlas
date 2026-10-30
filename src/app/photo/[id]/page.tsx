@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const photo = findPhoto(id);
   if (!photo) return {};
-  const title = `${photo.title} | ARフォト図鑑`;
+  const title = `${photo.title} | Photo Atlas`;
   const description = photo.comment ?? `${photo.title}の写真詳細`;
   return {
     title,
@@ -81,7 +81,7 @@ export default async function PhotoPage({ params }: Props) {
           <section aria-labelledby="mobile-related-photos-title">
             <div className="mb-3">
               <p className="text-xs font-semibold tracking-[0.18em] text-accent uppercase">
-                From the same place
+                More from this place
               </p>
               <h2 id="mobile-related-photos-title" className="mt-1 text-xl font-bold">
                 関連写真
@@ -109,7 +109,7 @@ export default async function PhotoPage({ params }: Props) {
 
           <aside className="rounded-2xl border border-border bg-card p-5 sm:p-6">
             <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
-              Photo archive
+              A fragment of the journey
             </p>
             <h1 className="mt-2 text-2xl font-black leading-tight sm:text-3xl">
               {photo.title}
@@ -120,7 +120,7 @@ export default async function PhotoPage({ params }: Props) {
                 <dd className="mt-1 font-semibold">{formatPhotoDate(photo.date)}</dd>
               </div>
               <div>
-                <dt className="text-xs text-muted">撮影場所</dt>
+                <dt className="text-xs text-muted">場所</dt>
                 <dd className="mt-1">
                   <Link
                     href={`/location/${location.id}`}
@@ -143,32 +143,32 @@ export default async function PhotoPage({ params }: Props) {
                 </dd>
               </div>
               <div>
-                <dt className="text-xs text-muted">コメント</dt>
+                <dt className="text-xs text-muted">添えられた言葉</dt>
                 <dd className="mt-1 whitespace-pre-line leading-6">
-                  {photo.comment ?? "コメントはありません"}
+                  {photo.comment ?? "まだ言葉は添えられていません"}
                 </dd>
               </div>
             </dl>
           </aside>
         </section>
 
-        <nav aria-label="写真ナビゲーション" className="grid grid-cols-3 gap-3">
+        <nav aria-label="写真を辿る" className="grid grid-cols-3 gap-3">
           {prev ? (
             <Link href={`/photo/${prev.id}`} className={navClass}>
-              前へ
+              前の写真
             </Link>
           ) : (
-            <span className={disabledClass}>前へ</span>
+            <span className={disabledClass}>前の写真</span>
           )}
           <Link href={`/location/${location.id}`} className={navClass}>
-            一覧へ
+            場所の写真へ
           </Link>
           {next ? (
             <Link href={`/photo/${next.id}`} className={navClass}>
-              次へ
+              次の写真
             </Link>
           ) : (
-            <span className={disabledClass}>次へ</span>
+            <span className={disabledClass}>次の写真</span>
           )}
         </nav>
 
@@ -177,10 +177,10 @@ export default async function PhotoPage({ params }: Props) {
             <div className="mb-4 flex items-end justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
-                  From the same place
+                  More from this place
                 </p>
                 <h2 id="related-photos-title" className="mt-1 text-2xl font-bold">
-                  同じ場所で撮影された写真
+                  この場所に残るほかの写真
                 </h2>
               </div>
               <Link

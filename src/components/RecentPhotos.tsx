@@ -13,7 +13,7 @@ type Props = { photos: Photo[]; compact?: boolean };
 
 export default function RecentPhotos({ photos, compact = false }: Props) {
   if (photos.length === 0) {
-    return <p className="text-muted">写真が登録されていません</p>;
+    return <p className="text-muted">写真はまだありません。</p>;
   }
 
   return (

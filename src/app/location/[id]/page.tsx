@@ -29,7 +29,7 @@ function PhotoSessions({ sessions }: { sessions: PhotoSession[] }) {
   if (sessions.length === 0) {
     return (
       <p className="rounded-xl border border-border bg-card p-6 text-muted">
-        写真が登録されていません
+        ここには、まだ写真がありません
       </p>
     );
   }
@@ -64,8 +64,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const location = findLocation(id);
   if (!location) return {};
-  const title = `${location.name} | ARフォト図鑑`;
-  const description = `${location.name}で撮影した写真一覧`;
+  const title = `${location.name} | Photo Atlas`;
+  const description = `${location.name}に残る写真と、場所の記憶を辿る。`;
   return { title, description, openGraph: { title, description } };
 }
 
@@ -104,7 +104,7 @@ export default async function LocationPage({ params }: Props) {
           <FeaturedPhotoCard
             photo={representative}
             href={`/photo/${representative.id}`}
-            label="代表写真"
+            label="この場所に残る一枚"
             title={representative.title}
             detail={location.name}
             titleAsText
@@ -118,7 +118,7 @@ export default async function LocationPage({ params }: Props) {
             {location.name}
           </h1>
           <p className="mt-2 leading-6 text-muted">
-            {location.address ?? "住所未登録"}
+            {location.address ?? "住所の手がかりはありません"}
           </p>
           <Breadcrumb
             items={[
@@ -135,19 +135,19 @@ export default async function LocationPage({ params }: Props) {
           className="rounded-2xl border border-border bg-card p-4"
         >
           <h2 id="mobile-location-tags-title" className="mb-3 text-lg font-bold">
-            この場所のタグ
+            写真の手がかり
           </h2>
           <PhotoTags tagIds={tagIds} />
         </section>
         <SummaryCards
           items={[
-            { label: "写真枚数", value: `${stats.photoCount} 枚` },
+            { label: "残された写真", value: `${stats.photoCount} 枚` },
             {
-              label: "初回撮影日",
+              label: "最初の記録",
               value: stats.firstPhotoDate ?? UNKNOWN_DATE_LABEL,
             },
             {
-              label: "最新撮影日",
+              label: "近ごろの記録",
               value: stats.latestPhotoDate ?? UNKNOWN_DATE_LABEL,
             },
           ]}
@@ -155,10 +155,10 @@ export default async function LocationPage({ params }: Props) {
         <section aria-labelledby="mobile-location-photos-title">
           <div className="mb-3">
             <p className="text-xs font-semibold tracking-[0.18em] text-accent uppercase">
-              Photo collection
+              Photos from this place
             </p>
             <h2 id="mobile-location-photos-title" className="mt-1 text-xl font-bold">
-              撮影された写真
+              ここに残る写真
             </h2>
           </div>
           <PhotoSessions sessions={sessions} />
@@ -169,7 +169,7 @@ export default async function LocationPage({ params }: Props) {
         <VisualHero
           eyebrow={[area?.name, prefecture?.name].filter(Boolean).join(" · ")}
           title={location.name}
-          description={`${location.address ?? "住所未登録"}。この場所で出会った写真を見てみましょう。`}
+          description={`${location.address ?? "住所の手がかりはありません"}。ここに残る景色を辿る。`}
           photo={representative}
           breadcrumbs={[
             ...(area ? [{ label: area.name, href: `/area/${area.id}` }] : []),
@@ -181,10 +181,10 @@ export default async function LocationPage({ params }: Props) {
         />
         <SummaryCards
           items={[
-            { label: "総写真数", value: `${stats.photoCount} 枚` },
-            { label: "初回撮影日", value: stats.firstPhotoDate ?? UNKNOWN_DATE_LABEL },
-            { label: "最新撮影日", value: stats.latestPhotoDate ?? UNKNOWN_DATE_LABEL },
-            { label: "関連タグ", value: `${tagIds.length} 種類` },
+            { label: "残された写真", value: `${stats.photoCount} 枚` },
+            { label: "最初の記録", value: stats.firstPhotoDate ?? UNKNOWN_DATE_LABEL },
+            { label: "近ごろの記録", value: stats.latestPhotoDate ?? UNKNOWN_DATE_LABEL },
+            { label: "写真の手がかり", value: `${tagIds.length} 種類` },
           ]}
         />
 
@@ -193,10 +193,10 @@ export default async function LocationPage({ params }: Props) {
           className="rounded-2xl border border-border bg-card p-5"
         >
           <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
-            Location collection
+            A place in the album
           </p>
           <h2 id="location-tags-title" className="mb-3 mt-1 text-xl font-bold">
-            この場所のタグ
+            写真の手がかり
           </h2>
           <PhotoTags tagIds={tagIds} />
         </section>
@@ -207,7 +207,7 @@ export default async function LocationPage({ params }: Props) {
               Photos from this place
             </p>
             <h2 id="location-photos-title" className="mt-1 text-2xl font-bold">
-              撮影された写真
+              ここに残る写真
             </h2>
           </div>
           <PhotoSessions sessions={sessions} />

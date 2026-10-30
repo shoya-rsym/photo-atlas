@@ -32,8 +32,8 @@ export function MemoryPreferenceProvider({
     try {
       setEnabled(window.localStorage.getItem(STORAGE_KEY) !== "false");
     } catch (cause) {
-      console.error("Memory表示設定を読み込めませんでした", cause);
-      setError("Memory表示設定を読み込めませんでした");
+      console.error("余白の表示設定を読み込めませんでした", cause);
+      setError("余白の表示設定を読み込めませんでした");
     } finally {
       setReady(true);
     }
@@ -46,8 +46,8 @@ export function MemoryPreferenceProvider({
       setEnabled(next);
       setError(null);
     } catch (cause) {
-      console.error("Memory表示設定を保存できませんでした", cause);
-      setError("Memory表示設定を保存できませんでした");
+      console.error("余白の表示設定を保存できませんでした", cause);
+      setError("余白の表示設定を保存できませんでした");
     }
   }, [enabled]);
 
@@ -86,8 +86,8 @@ export function MemorySetting({ compact = false }: { compact?: boolean }) {
         className="rounded-full border border-white/15 px-3 py-1.5 text-xs font-semibold text-white/75 transition hover:border-sky-300/50 hover:text-white disabled:opacity-50"
       >
         {compact
-          ? `💭 ${enabled ? "ON" : "OFF"}`
-          : `Memory ${enabled ? "ON" : "OFF"}`}
+          ? `💭 余白 ${enabled ? "ON" : "OFF"}`
+          : `余白表示 ${enabled ? "ON" : "OFF"}`}
       </button>
       {error ? (
         <span role="alert" className="text-xs text-rose-300">

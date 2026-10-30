@@ -27,7 +27,7 @@ export default function PhotoGrid({ photos, showLocation = false }: Props) {
   );
 
   if (photos.length === 0) {
-    return <p className="text-muted">写真が登録されていません</p>;
+    return <p className="text-muted">ここには、まだ写真がありません。</p>;
   }
 
   const current = openIndex !== null ? photos[openIndex] : undefined;

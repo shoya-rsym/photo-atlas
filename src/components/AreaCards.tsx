@@ -17,18 +17,18 @@ export default function AreaCards({
   headingId = "area-cards-title",
 }: Props) {
   return (
-    <section aria-labelledby="area-cards-title">
+    <section aria-labelledby={headingId}>
       <div className="mb-4 flex items-end justify-between gap-4">
         <div>
           <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
-            Explore by region
+            Places on the map
           </p>
           <h2 id={headingId} className="mt-1 text-2xl font-bold">
-            地域から探す
+            地域を巡る
           </h2>
         </div>
         <p className="hidden text-sm text-muted sm:block">
-          気になる地域を選んで写真を見つけよう
+          地図の向こうに、まだ知らない景色。
         </p>
       </div>
       <ul className="grid grid-cols-2 gap-3 md:grid-cols-4">
@@ -41,22 +41,22 @@ export default function AreaCards({
               {area.photo ? (
                 <PhotoThumbnail
                   src={area.photo.thumbnail}
-                  alt={`${area.name}の代表写真`}
+                  alt={`${area.name}に残る写真`}
                 />
               ) : (
                 <div className="flex h-full items-center justify-center bg-gradient-to-br from-slate-800 to-slate-950 text-sm text-muted">
-                  写真を探す
+                  この地域の写真はまだありません
                 </div>
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/15 to-transparent transition group-hover:from-black/95" />
               <div className="absolute inset-x-0 bottom-0 p-3 text-white sm:p-4">
                 <h3 className="text-lg font-bold">{area.name}</h3>
                 <p className="mt-1 text-xs text-white/80">
-                  写真 {area.photoCount} 枚 · 地点 {area.locationCount} 箇所
+                  写真 {area.photoCount} 枚 · 場所 {area.locationCount} 箇所
                 </p>
               </div>
               <span className="absolute right-3 top-3 rounded-full border border-white/40 bg-black/35 px-2 py-1 text-xs text-white opacity-0 transition group-hover:opacity-100">
-                探索する →
+                辿る →
               </span>
             </Link>
           </li>

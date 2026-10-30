@@ -4,9 +4,9 @@ import Header from "@/components/Header";
 import { MemoryPreferenceProvider } from "@/components/MemoryPreferenceProvider";
 import "./globals.css";
 
-const SITE_TITLE = "ARフォト図鑑";
+const SITE_TITLE = "Photo Atlas";
 const SITE_DESCRIPTION =
-  "地図から辿る写真図鑑。日本地図から地域・都道府県・撮影地点へ辿り、ARフォトや写真を閲覧できます。";
+  "Discover Japan through photos. 地図から辿る写真館。写真に残った旅の断片を巡ろう。";
 
 export const metadata: Metadata = {
   title: SITE_TITLE,

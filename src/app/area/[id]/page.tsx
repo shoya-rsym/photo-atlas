@@ -22,8 +22,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const area = findArea(id);
   if (!area) return {};
-  const title = `${area.name} | ARフォト図鑑`;
-  const description = area.description ?? `${area.name}の都道府県一覧`;
+  const title = `${area.name} | Photo Atlas`;
+  const description = area.description ?? "写真に残った旅の断片を、地図から辿る。";
   return { title, description, openGraph: { title, description } };
 }
 
@@ -74,9 +74,9 @@ export default async function AreaPage({ params }: Props) {
               href={`/prefecture/${prefecture.id}`}
               title={prefecture.name}
               image={summary?.photo?.thumbnail}
-              actionLabel="都道府県を探索"
+              actionLabel="都道府県を辿る"
               lines={[
-                `写真 ${summary?.photoCount ?? 0} 枚 · 地点 ${summary?.locationCount ?? 0} 箇所`,
+                `写真 ${summary?.photoCount ?? 0} 枚 · 場所 ${summary?.locationCount ?? 0} か所`,
                 ...(subs.length > 0
                   ? [subs.map((subregion) => subregion.name).join("・")]
                   : []),
@@ -92,19 +92,19 @@ export default async function AreaPage({ params }: Props) {
     <>
       <div className="space-y-7 md:hidden">
         <VisualHero
-          eyebrow="Explore the region"
+          eyebrow="旅の断片を辿る"
           title={`${area.name}地方`}
-          description={area.description ?? `${area.name}の風景と写真を地図から探索しましょう。`}
+          description={area.description ?? "写真に残った旅の断片を、地図から辿る。"}
           photo={representativePhoto}
           breadcrumbs={[{ label: area.name }]}
           mobilePresentation
         />
         <SummaryCards
           items={[
-            { label: "写真数", value: `${areaPhotos.length} 枚` },
+            { label: "写真", value: `${areaPhotos.length} 枚` },
             {
-              label: "撮影地点数",
-              value: `${new Set(areaPhotos.map((photo) => photo.locationId)).size} 箇所`,
+              label: "写真が残る場所",
+              value: `${new Set(areaPhotos.map((photo) => photo.locationId)).size} か所`,
             },
             { label: "都道府県数", value: `${prefectures.length} 都道府県` },
           ]}
@@ -113,7 +113,7 @@ export default async function AreaPage({ params }: Props) {
           <FeaturedPhotoCard
             photo={representativePhoto}
             href={`/photo/${representativePhoto.id}`}
-            label="地域の代表写真"
+            label="この地域に残る一枚"
             title={representativePhoto.title}
             detail={area.name}
           />
@@ -121,25 +121,25 @@ export default async function AreaPage({ params }: Props) {
         <section aria-label="地域地図">
           <div className="mb-3">
             <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
-              Explore on the map
+              地図から写真を辿る
             </p>
-            <h2 className="mt-1 text-xl font-bold">{area.name}の地図</h2>
+            <h2 className="mt-1 text-xl font-bold">{area.name}の地図から写真を辿る</h2>
           </div>
           <JapanMap
             units={units}
             fit="units"
             ariaLabel={`${area.name}の地図`}
-            hint="地図の都道府県にタップして写真をプレビューできます。"
+            hint="都道府県を選ぶと、そこに残る写真がひらきます。"
             variant="home"
           />
         </section>
         <section aria-labelledby="mobile-prefecture-list-title">
           <div className="mb-3">
             <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
-              Choose a prefecture
+              Follow the map
             </p>
             <h2 id="mobile-prefecture-list-title" className="mt-1 text-xl font-bold">
-              都道府県を探す
+              都道府県を辿る
             </h2>
           </div>
           {prefectureCards}
@@ -148,18 +148,18 @@ export default async function AreaPage({ params }: Props) {
 
       <div className="hidden space-y-8 sm:space-y-10 md:block">
         <VisualHero
-          eyebrow="Explore the region"
+          eyebrow="旅の断片を辿る"
           title={`${area.name}地方`}
-          description={area.description ?? `${area.name}の風景と写真を地図から探索しましょう。`}
+          description={area.description ?? "写真に残った旅の断片を、地図から辿る。"}
           photo={representativePhoto}
           breadcrumbs={[{ label: area.name }]}
         />
         <SummaryCards
           items={[
-            { label: "写真数", value: `${areaPhotos.length} 枚` },
+            { label: "写真", value: `${areaPhotos.length} 枚` },
             {
-              label: "撮影地点数",
-              value: `${new Set(areaPhotos.map((photo) => photo.locationId)).size} 箇所`,
+              label: "写真が残る場所",
+              value: `${new Set(areaPhotos.map((photo) => photo.locationId)).size} か所`,
             },
             { label: "都道府県数", value: `${prefectures.length} 都道府県` },
           ]}
@@ -168,15 +168,15 @@ export default async function AreaPage({ params }: Props) {
         <section aria-label="地域地図">
           <div className="mb-4">
             <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
-              Explore on the map
+              地図から写真を辿る
             </p>
-            <h2 className="mt-1 text-2xl font-bold">{area.name}の地図</h2>
+            <h2 className="mt-1 text-2xl font-bold">{area.name}の地図から写真を辿る</h2>
           </div>
           <JapanMap
             units={units}
             fit="units"
             ariaLabel={`${area.name}の地図`}
-            hint="地図の都道府県にカーソルを合わせる（スマホはタップ）と、写真のプレビューが表示されます。"
+            hint="都道府県にカーソルを重ねると写真がひらきます。選ぶと、その地域へ辿れます。"
             variant="home"
           />
         </section>
@@ -184,10 +184,10 @@ export default async function AreaPage({ params }: Props) {
         <section aria-labelledby="prefecture-list-title">
           <div className="mb-4">
             <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
-              Choose a prefecture
+              Follow the map
             </p>
             <h2 id="prefecture-list-title" className="mt-1 text-2xl font-bold">
-              都道府県を探す
+              都道府県を辿る
             </h2>
           </div>
           {prefectureCards}

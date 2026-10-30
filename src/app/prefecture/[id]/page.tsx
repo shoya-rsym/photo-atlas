@@ -27,8 +27,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const prefecture = findPrefecture(id);
   if (!prefecture) return {};
-  const title = `${prefecture.name} | ARフォト図鑑`;
-  const description = `${prefecture.name}の撮影地点一覧`;
+  const title = `${prefecture.name} | Photo Atlas`;
+  const description = `${prefecture.name}に残る写真を、地図から辿る。`;
   return { title, description, openGraph: { title, description } };
 }
 
@@ -99,10 +99,10 @@ export default async function PrefecturePage({ params }: Props) {
           href={`/location/${location.id}`}
           title={location.name}
           image={getRepresentativePhoto(locationPhotos)?.thumbnail}
-          actionLabel="撮影地点を見る"
+          actionLabel="場所を巡る"
           lines={[
             `写真 ${stats.photoCount} 枚`,
-            `最新撮影 ${stats.latestPhotoDate ?? "撮影日不明"}`,
+            `新しい記録 ${stats.latestPhotoDate ?? "撮影日不明"}`,
           ]}
         />
       </li>
@@ -114,7 +114,7 @@ export default async function PrefecturePage({ params }: Props) {
       <VisualHero
         eyebrow={area?.name ?? "Explore the prefecture"}
         title={prefecture.name}
-        description={`${prefecture.name}にある撮影地点と写真を、地図からたどって見つけましょう。`}
+        description={`${prefecture.name}に残る写真を、地図から辿る。`}
         photo={heroPhoto}
         breadcrumbs={[
           ...(area ? [{ label: area.name, href: `/area/${area.id}` }] : []),
@@ -124,8 +124,8 @@ export default async function PrefecturePage({ params }: Props) {
       />
       <SummaryCards
         items={[
-          { label: "写真数", value: `${prefecturePhotos.length} 枚` },
-          { label: "撮影地点数", value: `${locationsWithPhotos} 箇所` },
+          { label: "写真", value: `${prefecturePhotos.length} 枚` },
+          { label: "写真が残る場所", value: `${locationsWithPhotos} か所` },
           { label: "地域", value: area?.name ?? "日本" },
         ]}
       />
@@ -134,7 +134,7 @@ export default async function PrefecturePage({ params }: Props) {
           <FeaturedPhotoCard
             photo={recommendedLocation.photo}
             href={`/location/${recommendedLocation.location.id}`}
-            label="おすすめ地点"
+            label="今日見つけた景色"
             title={recommendedLocation.location.name}
             detail={`写真 ${recommendedLocation.photoCount} 枚 · ${prefecture.name}`}
           />
@@ -142,13 +142,13 @@ export default async function PrefecturePage({ params }: Props) {
       ) : null}
 
       <section
-        aria-label="撮影地点地図と一覧"
+        aria-label="地図と写真が残る場所"
         className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]"
       >
         <div className="order-2 md:order-1">
           <div className="mb-4">
             <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
-              Locations on the map
+              Places on the map
             </p>
             <h2 className="mt-1 text-xl font-bold md:text-2xl">{prefecture.name}の地図</h2>
           </div>
@@ -158,16 +158,15 @@ export default async function PrefecturePage({ params }: Props) {
         <div className="order-1 md:order-2">
           <div className="mb-4">
             <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
-              Field guide
+              Where photos remain
             </p>
             <h2 className="mt-1 text-xl font-bold md:text-2xl">
-              <span className="md:hidden">撮影地点一覧</span>
-              <span className="hidden md:inline">撮影地点を探す</span>
+              <span>写真が残された場所</span>
             </h2>
           </div>
           {locations.length === 0 ? (
             <p className="rounded-xl border border-border bg-card p-5 text-muted">
-              撮影地点が登録されていません
+              まだ写真のない場所です
             </p>
           ) : (
             <div className="space-y-6 md:max-h-[34rem] md:overflow-y-auto md:pr-1">
@@ -181,7 +180,7 @@ export default async function PrefecturePage({ params }: Props) {
                     <h3 className="mb-3 text-lg font-bold">{group.name}</h3>
                   ) : null}
                   {group.items.length === 0 ? (
-                    <p className="text-sm text-muted">撮影地点が登録されていません</p>
+                    <p className="text-sm text-muted">まだ写真が残された場所はありません</p>
                   ) : (
                     <ul className="grid grid-cols-1 gap-3 md:grid-cols-2">
                       {group.items.map(renderLocation)}

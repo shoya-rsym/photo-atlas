@@ -3,7 +3,6 @@ import Link from "next/link";
 type PopularTag = {
   id: string;
   name: string;
-  count: number;
   color?: string;
 };
 
@@ -12,7 +11,7 @@ type Props = { tags: PopularTag[] };
 export default function PopularTags({ tags }: Props) {
   return (
     <section className="rounded-2xl border border-border bg-card p-4">
-      <h2 className="font-bold">人気のタグ</h2>
+      <h2 className="font-bold">写真の手がかり</h2>
       {tags.length ? (
         <ul className="mt-3 flex flex-wrap gap-2">
           {tags.map((tag) => (
@@ -27,13 +26,12 @@ export default function PopularTags({ tags }: Props) {
                 }
               >
                 {tag.name}
-                <span className="text-xs text-muted">{tag.count}</span>
               </Link>
             </li>
           ))}
         </ul>
       ) : (
-        <p className="mt-3 text-sm text-muted">タグ付きの写真はありません</p>
+        <p className="mt-3 text-sm text-muted">写真についた言葉は、まだありません</p>
       )}
     </section>
   );

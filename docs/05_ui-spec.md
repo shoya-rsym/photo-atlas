@@ -447,31 +447,31 @@ TOP > 関東 > 神奈川県 > 横浜駅 > 横浜駅AR
 TOP
 
 ```text
-ARフォト図鑑
+Photo Atlas
 ```
 
 地域
 
 ```text
-関東 | ARフォト図鑑
+関東 | Photo Atlas
 ```
 
 都道府県
 
 ```text
-神奈川県 | ARフォト図鑑
+神奈川県 | Photo Atlas
 ```
 
 撮影地点
 
 ```text
-横浜駅 | ARフォト図鑑
+横浜駅 | Photo Atlas
 ```
 
 写真
 
 ```text
-横浜駅AR | ARフォト図鑑
+横浜駅AR | Photo Atlas
 ```
 
 ---

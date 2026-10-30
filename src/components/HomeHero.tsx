@@ -65,19 +65,19 @@ export default function HomeHero({
           Discover Japan through photos
         </p>
         <h1 className="text-4xl font-black tracking-tight text-white drop-shadow-lg sm:text-6xl lg:text-7xl">
-          ARフォト図鑑
+          Photo Atlas
         </h1>
         <p className="mt-3 text-xl font-semibold text-white sm:text-2xl">
-          地図から辿る写真図鑑
+          地図から辿る写真館
         </p>
         <p className="mt-3 max-w-xl text-sm leading-6 text-white/85 sm:text-base sm:leading-7">
-          日本の風景とキャラクターが出会った場所を探そう
+          写真に残った旅の断片を巡ろう
         </p>
         <Link
           href={mobilePresentation ? "#explore" : "#desktop-explore"}
           className="mt-7 inline-flex items-center gap-2 rounded-full bg-sky-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-sky-950/30 transition hover:bg-sky-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
         >
-          地図から探す <span aria-hidden="true">→</span>
+          地図から辿る <span aria-hidden="true">→</span>
         </Link>
       </div>
       {photo ? (
@@ -85,7 +85,7 @@ export default function HomeHero({
           href={`/photo/${photo.id}`}
           className="absolute bottom-4 right-4 hidden max-w-xs rounded-lg border border-white/20 bg-black/50 px-4 py-3 text-right text-white backdrop-blur-sm sm:block"
         >
-          <span className="block text-xs text-white/70">代表写真</span>
+          <span className="block text-xs text-white/70">この場所に残る一枚</span>
           <span className="mt-1 block font-semibold">{locationName ?? photo.title}</span>
         </Link>
       ) : null}

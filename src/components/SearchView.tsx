@@ -55,11 +55,11 @@ export default function SearchView({ photos }: Props) {
         onSubmit={(e) => e.preventDefault()}
       >
         <label className="block sm:col-span-2 lg:col-span-4">
-          <span className="mb-1 block text-sm font-medium text-muted">キーワード</span>
+          <span className="mb-1 block text-sm font-medium text-muted">手がかり</span>
           <input
             type="search"
             value={filters.keyword}
-            placeholder="タイトル・タグ・コメント・撮影地点名"
+            placeholder="タイトル・場所・タグ・添えられた言葉"
             className={fieldClass}
             onChange={(e) => update({ keyword: e.target.value })}
           />
@@ -133,7 +133,7 @@ export default function SearchView({ photos }: Props) {
             className="rounded-lg border border-border bg-card px-4 py-2 hover:border-accent"
             onClick={() => setFilters(EMPTY_FILTERS)}
           >
-            条件をクリア
+            条件をリセット
           </button>
         </div>
       </form>
@@ -141,12 +141,12 @@ export default function SearchView({ photos }: Props) {
       <section aria-live="polite">
         <div className="mb-4">
           <p className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
-            Photo collection
+            Found fragments
           </p>
-          <h2 className="mt-1 text-2xl font-bold">検索結果 {results.length} 件</h2>
+          <h2 className="mt-1 text-2xl font-bold">見つかった写真 {results.length} 枚</h2>
         </div>
         {results.length === 0 ? (
-          <p className="text-muted">該当する写真がありません</p>
+          <p className="text-muted">この手がかりでは写真が見つかりませんでした。</p>
         ) : (
           <PhotoGrid photos={results} showLocation />
         )}
