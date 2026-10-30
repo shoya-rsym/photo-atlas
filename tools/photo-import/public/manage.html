@@ -63,13 +63,18 @@
 
       <section class="panel">
         <div class="row toolbar">
-          <input id="search" type="search" placeholder="検索: タイトル・タグ・キャラクター・地点名・コメント（スペース区切りでAND）" />
+          <input id="search" type="search" placeholder="検索: タイトル・タグ・キャラクター・地点名・Memory・コメント（スペース区切りでAND）" />
           <select id="filter">
             <option value="">すべて</option>
             <option value="nodate">撮影日不明</option>
             <option value="notag">タグなし</option>
             <option value="nochar">キャラクターなし</option>
             <option value="cover">代表写真</option>
+            <optgroup label="Favorite">
+              <option value="favorite">お気に入り</option>
+              <option value="favoriteMemory">Favorite Memoryあり</option>
+              <option value="noFavoriteMemory">Favorite Memoryなし</option>
+            </optgroup>
             <optgroup label="Photo Memory">
               <option value="photoMemory">あり</option>
               <option value="noPhotoMemory">なし</option>
@@ -161,9 +166,15 @@
           </div>
           <h2>コメント</h2>
           <textarea id="edComment" rows="3"></textarea>
-          <h2>Photo Memory（任意・120文字まで）</h2>
+          <h2>Photo / Favorite Memory（任意・120文字まで）</h2>
           <textarea id="edPhotoMemory" rows="2" maxlength="120" placeholder="写真から想像を広げる短い一文"></textarea>
           <div id="edPhotoMemoryCount" class="info"></div>
+          <label class="check"><input id="edFavorite" type="checkbox" /> お気に入り写真（全管理者で共有）</label>
+          <p id="edFavoriteMemoryInfo" class="info"></p>
+          <div class="row">
+            <button id="edFavoriteMemoryGenerate" type="button" hidden>Favorite Memory候補を作成・再生成</button>
+            <button id="edFavoriteMemoryDelete" type="button" class="danger" hidden>Photo / Favorite Memoryを削除</button>
+          </div>
           <label class="check"><input id="edCover" type="checkbox" /> この地点の代表写真にする（他の代表は解除）</label>
         </div>
       </div>
@@ -173,6 +184,32 @@
         <span class="grow"></span>
         <button id="edCancel" type="button">キャンセル</button>
         <button id="edSave" type="button" class="primary">保存</button>
+      </div>
+    </dialog>
+
+    <dialog id="favoriteMemoryDialog" class="editor favorite-memory-dialog">
+      <h2>Favorite Memory候補</h2>
+      <p class="muted">画像をCopilot Chatへ手動で添付し、下のプロンプトをコピーして候補を作成してください。ここから外部へ自動送信はしません。</p>
+      <div class="favorite-memory-preview">
+        <img id="favoriteMemoryImage" alt="" />
+        <p id="favoriteMemoryPhotoTitle"></p>
+      </div>
+      <label>Copilot Chat用プロンプト
+        <textarea id="favoriteMemoryPrompt" rows="9" readonly></textarea>
+      </label>
+      <div class="row">
+        <button id="favoriteMemoryCopyPrompt" type="button" class="primary">プロンプトをコピー</button>
+        <button id="favoriteMemoryRegenerate" type="button">別案を作るため再生成</button>
+      </div>
+      <label>Copilotの候補を3行で貼り付け
+        <textarea id="favoriteMemoryCandidateInput" rows="4" placeholder="候補1&#10;候補2&#10;候補3"></textarea>
+      </label>
+      <button id="favoriteMemoryParse" type="button">候補を表示</button>
+      <p id="favoriteMemoryMessage" class="info" role="status" aria-live="polite"></p>
+      <div id="favoriteMemoryCandidates" class="favorite-memory-candidates" hidden></div>
+      <div class="row end">
+        <button id="favoriteMemorySkip" type="button">スキップ</button>
+        <button id="favoriteMemorySave" type="button" class="primary" disabled>選択した候補を保存</button>
       </div>
     </dialog>
 
@@ -304,5 +341,6 @@
 
     <script type="module" src="/manage.js"></script>
     <script type="module" src="/memory-review.js"></script>
+    <script type="module" src="/favorite-memory.js"></script>
   </body>
 </html>

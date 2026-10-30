@@ -15,6 +15,12 @@ export type Photo = {
   comment?: string;
   /** 写真から閲覧者の想像を広げる短い一文 */
   photoMemory?: string;
+  /** 管理者が共有するお気に入り写真 */
+  isFavorite?: boolean;
+  /** Favorite Memoryを採用した日時 */
+  photoMemoryGeneratedAt?: string;
+  /** Memoryの設定元 */
+  photoMemorySource?: "copilot" | "manual";
   /** 撮影地点の代表写真。地点ごとに1枚を想定 */
   isCover?: boolean;
 };

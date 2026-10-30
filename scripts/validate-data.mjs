@@ -100,6 +100,30 @@ for (const p of photos) {
   ) {
     errors.push(`photos: photoMemoryが120文字を超過 ${p.id}`);
   }
+  if (p.isFavorite !== undefined && p.isFavorite !== true) {
+    errors.push(`photos: isFavoriteはtrueのみ ${p.id}`);
+  }
+  if (
+    p.photoMemorySource !== undefined &&
+    !["copilot", "manual"].includes(p.photoMemorySource)
+  ) {
+    errors.push(`photos: photoMemorySource不正 ${p.id}`);
+  }
+  if (p.photoMemorySource !== undefined && !p.photoMemory) {
+    errors.push(`photos: photoMemorySourceに本文がありません ${p.id}`);
+  }
+  if (
+    p.photoMemoryGeneratedAt !== undefined &&
+    (typeof p.photoMemoryGeneratedAt !== "string" ||
+      Number.isNaN(Date.parse(p.photoMemoryGeneratedAt)) ||
+      p.photoMemorySource !== "copilot" ||
+      !p.photoMemory)
+  ) {
+    errors.push(`photos: photoMemoryGeneratedAt不正 ${p.id}`);
+  }
+  if (p.photoMemorySource === "copilot" && !p.photoMemoryGeneratedAt) {
+    errors.push(`photos: Copilot Memoryの生成日時未設定 ${p.id}`);
+  }
   if (p.isCover !== undefined && p.isCover !== true) errors.push(`photos: isCoverはtrueのみ ${p.id}`);
   if (p.isCover) {
     if (coverLocations.has(p.locationId)) errors.push(`photos: 代表写真が複数 ${p.locationId}`);

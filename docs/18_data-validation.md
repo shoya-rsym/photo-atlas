@@ -278,6 +278,15 @@ photoMemory
 
 ---
 
+Favorite Memory fields
+
+- `isFavorite` は任意。指定する場合は `true`
+- `photoMemorySource` は `copilot` または `manual`
+- `photoMemoryGeneratedAt` は `photoMemorySource` が `copilot` の場合に必須で、ISO8601日時であること
+- Memoryの削除時は `photoMemory` と生成メタデータも削除すること
+
+---
+
 # SessionMemory
 
 session-memories.json

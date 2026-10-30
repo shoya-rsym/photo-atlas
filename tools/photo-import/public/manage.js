@@ -60,7 +60,7 @@ const locName = (id) => state.master.locations.find((l) => l.id === id)?.name ??
 
 function searchText(p) {
   return normalize(
-    [p.title, p.comment ?? "", locName(p.locationId), ...charNames(p.characterIds), ...(p.tags ?? []).map(tagName)].join(" "),
+    [p.title, p.comment ?? "", p.photoMemory ?? "", locName(p.locationId), ...charNames(p.characterIds), ...(p.tags ?? []).map(tagName)].join(" "),
   );
 }
 
@@ -77,7 +77,10 @@ function applyFilter() {
     if (filter === "notag" && (p.tags ?? []).length > 0) return false;
     if (filter === "nochar" && (p.characterIds ?? []).length > 0) return false;
     if (filter === "cover" && !p.isCover) return false;
+    if (filter === "favorite" && !p.isFavorite) return false;
     const hasPhotoMemory = typeof p.photoMemory === "string" && p.photoMemory.trim().length > 0;
+    if (filter === "favoriteMemory" && (!p.isFavorite || !hasPhotoMemory)) return false;
+    if (filter === "noFavoriteMemory" && (!p.isFavorite || hasPhotoMemory)) return false;
     if (filter === "photoMemory" && !hasPhotoMemory) return false;
     if (filter === "noPhotoMemory" && hasPhotoMemory) return false;
     const hasSessionMemory = Boolean(
@@ -150,6 +153,7 @@ function renderCard(p) {
     },
     h("img", { src: p.thumbnail, alt: p.title, loading: "lazy" }),
     p.isCover ? h("span", { class: "cover", title: "代表写真" }, "★") : null,
+    p.isFavorite ? h("span", { class: "favorite-mark", title: "お気に入り" }, "♥") : null,
     h("div", { class: "title", title: p.title }, p.title),
     h("div", { class: "meta" }, locName(p.locationId)),
     h("div", { class: "meta", title: tags }, tags),
@@ -1036,7 +1040,9 @@ function openEditor(id) {
   $("edComment").value = p.comment ?? "";
   $("edPhotoMemory").value = p.photoMemory ?? "";
   $("edPhotoMemoryCount").textContent = `${[...$("edPhotoMemory").value].length} / 120`;
+  $("edFavorite").checked = Boolean(p.isFavorite);
   $("edCover").checked = Boolean(p.isCover);
+  updateEditorFavoriteMemoryControls(p);
   $("edNewTagName").value = "";
   $("edCreateTagBtn").disabled = true;
   $("edError").hidden = true;
@@ -1044,6 +1050,37 @@ function openEditor(id) {
   renderEditorCharacters();
   renderEditorDate();
   $("editor").showModal();
+}
+
+function updateEditorFavoriteMemoryControls(photo) {
+  $("edFavoriteMemoryGenerate").hidden = !photo.isFavorite;
+  $("edFavoriteMemoryDelete").hidden = !photo.photoMemory;
+  const source = photo.photoMemorySource === "copilot"
+    ? `Copilot候補から採用${photo.photoMemoryGeneratedAt ? `（${photo.photoMemoryGeneratedAt}）` : ""}`
+    : photo.photoMemorySource === "manual" ? "手動設定" : "";
+  $("edFavoriteMemoryInfo").textContent = source;
+}
+
+function openFavoriteMemoryGenerator(photo) {
+  const sessionMemory = photo.date
+    ? (state.master.sessionMemories ?? []).find(
+        (memory) => memory.locationId === photo.locationId && memory.sessionDate === photo.date,
+      )
+    : null;
+  document.dispatchEvent(
+    new CustomEvent("favorite-memory:open", {
+      detail: {
+        photoId: photo.id,
+        title: photo.title,
+        image: photo.image,
+        date: photo.date ?? "",
+        locationName: locName(photo.locationId),
+        tagNames: (photo.tags ?? []).map(tagName),
+        sessionMemoryText: sessionMemory?.text ?? "",
+        existingMemory: photo.photoMemory ?? "",
+      },
+    }),
+  );
 }
 
 function renderEditorCharacters() {
@@ -1119,8 +1156,10 @@ async function saveEditor() {
     return;
   }
   try {
+    const previousFavorite = state.editing.isFavorite === true;
+    const editedPhotoId = state.editing.id;
     const res = await api("/api/photos/update", {
-      id: state.editing.id,
+      id: editedPhotoId,
       patch: {
         title: $("edTitle").value,
         date: $("edDate").value,
@@ -1129,12 +1168,31 @@ async function saveEditor() {
         tagIds: [...state.editTags],
         comment: $("edComment").value,
         photoMemory: $("edPhotoMemory").value,
+        isFavorite: $("edFavorite").checked,
         isCover: $("edCover").checked,
       },
     });
     $("editor").close();
     await reload();
-    showResult(`${state.editing.id} を更新しました`, res);
+    const updatedPhoto = state.photos.find((photo) => photo.id === editedPhotoId);
+    showResult(`${editedPhotoId} を更新しました`, res);
+    if (!previousFavorite && updatedPhoto?.isFavorite) openFavoriteMemoryGenerator(updatedPhoto);
+  } catch (error) {
+    $("edError").textContent = error.message;
+    $("edError").hidden = false;
+  }
+}
+
+async function deleteEditedPhotoMemory() {
+  const photo = state.editing;
+  if (!photo?.photoMemory || !confirm("この写真のMemoryを削除しますか？")) return;
+  try {
+    const res = await api("/api/photos/update", { id: photo.id, patch: { photoMemory: "" } });
+    $("editor").close();
+    await reload();
+    const updatedPhoto = state.photos.find((item) => item.id === photo.id);
+    if (updatedPhoto) openEditor(updatedPhoto.id);
+    showResult(`${photo.id} のMemoryを削除しました`, res);
   } catch (error) {
     $("edError").textContent = error.message;
     $("edError").hidden = false;
@@ -1324,18 +1382,38 @@ function bind() {
   });
 
   $("edDate").addEventListener("input", renderEditorDate);
+  $("edPhotoMemory").addEventListener("input", () => {
+    $("edPhotoMemoryCount").textContent = `${[...$("edPhotoMemory").value].length} / 120`;
+  });
   $("edNewTagName").addEventListener("input", () => {
     $("edCreateTagBtn").disabled = !$("edNewTagName").value.trim();
   });
   $("edCreateTagBtn").addEventListener("click", createTagForEditedPhoto);
   $("edCancel").addEventListener("click", () => $("editor").close());
   $("edSave").addEventListener("click", saveEditor);
+  $("edFavoriteMemoryGenerate").addEventListener("click", () => {
+    if (state.editing?.isFavorite) openFavoriteMemoryGenerator(state.editing);
+  });
+  $("edFavoriteMemoryDelete").addEventListener("click", deleteEditedPhotoMemory);
   $("edDelete").addEventListener("click", async () => {
     const p = state.editing;
     if (!confirm(`「${p.title}」を削除します。`)) return;
     $("editor").close();
     state.selected.delete(p.id);
     await run(`${p.id} を削除しました`, "/api/photos/delete", { ids: [p.id] });
+  });
+
+  document.addEventListener("favorite-memory:saved", async (event) => {
+    const { photoId, result } = event.detail;
+    await reload();
+    const updatedPhoto = state.photos.find((photo) => photo.id === photoId);
+    if ($("editor").open && state.editing?.id === photoId && updatedPhoto) {
+      state.editing = updatedPhoto;
+      $("edPhotoMemory").value = updatedPhoto.photoMemory ?? "";
+      $("edPhotoMemoryCount").textContent = `${[...$("edPhotoMemory").value].length} / 120`;
+      updateEditorFavoriteMemoryControls(updatedPhoto);
+    }
+    showResult(`${photoId} のFavorite Memoryを保存しました`, result);
   });
 }
 

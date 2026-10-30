@@ -823,6 +823,33 @@ export function updatePhoto(id, patch) {
         throw new Error("Photo Memoryは120文字以内で入力してください");
       }
       next.photoMemory = photoMemory || undefined;
+      if (!photoMemory) {
+        next.photoMemoryGeneratedAt = undefined;
+        next.photoMemorySource = undefined;
+      } else if (patch.photoMemorySource !== undefined) {
+        if (!["copilot", "manual"].includes(patch.photoMemorySource)) {
+          throw new Error("Photo Memoryの設定元が不正です");
+        }
+        next.photoMemorySource = patch.photoMemorySource;
+        if (patch.photoMemorySource === "copilot") {
+          const generatedAt = patch.photoMemoryGeneratedAt;
+          if (typeof generatedAt !== "string" || Number.isNaN(Date.parse(generatedAt))) {
+            throw new Error("Copilot Memoryの生成日時が不正です");
+          }
+          next.photoMemoryGeneratedAt = generatedAt;
+        } else {
+          next.photoMemoryGeneratedAt = undefined;
+        }
+      } else if (photoMemory !== (target.photoMemory ?? "")) {
+        next.photoMemorySource = "manual";
+        next.photoMemoryGeneratedAt = undefined;
+      }
+    }
+    if ("isFavorite" in patch) {
+      if (typeof patch.isFavorite !== "boolean") {
+        throw new Error("お気に入りの指定が不正です");
+      }
+      next.isFavorite = patch.isFavorite ? true : undefined;
     }
     if ("isCover" in patch) next.isCover = patch.isCover === true;
 

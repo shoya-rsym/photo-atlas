@@ -76,6 +76,16 @@ dialog::backdrop { background: rgba(0, 0, 0, 0.6); }
 .memory-candidates { margin-top: 14px; padding: 10px; border: 1px solid var(--border); border-radius: 6px; }
 .memory-candidates legend { padding: 0 6px; color: var(--muted); }
 .memory-candidates p { margin: 2px 0 8px; }
+.favorite-mark { position: absolute; top: 4px; right: 6px; color: #fb7185; font-size: 15px; text-shadow: 0 1px 3px #000; }
+.favorite-memory-dialog { max-height: 92vh; overflow-y: auto; }
+.favorite-memory-preview { display: grid; grid-template-columns: 120px 1fr; gap: 12px; align-items: center; margin: 10px 0; }
+.favorite-memory-preview img { width: 120px; max-height: 100px; object-fit: cover; border-radius: 6px; background: #000; }
+.favorite-memory-preview p { overflow-wrap: anywhere; }
+.favorite-memory-dialog textarea { margin-top: 4px; }
+.favorite-memory-candidates { display: grid; gap: 8px; margin-top: 10px; }
+.favorite-memory-option { display: flex; gap: 8px; align-items: flex-start; padding: 9px; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; }
+.favorite-memory-option input { width: auto; margin-top: 4px; }
+.favorite-memory-option span { white-space: pre-wrap; overflow-wrap: anywhere; }
 
 [hidden] { display: none !important; }
 

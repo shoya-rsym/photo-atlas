@@ -193,6 +193,9 @@ subregionId は任意。
     "characterIds": ["hatsune_miku", "kagamine_rin"],
     "comment": "横浜駅で撮影",
     "photoMemory": "帰るにはまだ少し早かった。",
+    "isFavorite": true,
+    "photoMemoryGeneratedAt": "2026-10-28T12:00:00+09:00",
+    "photoMemorySource": "copilot",
     "isCover": true
   },
   {

@@ -61,6 +61,7 @@ const STATIC = {
   "/manage": ["public/manage.html", "text/html; charset=utf-8"],
   "/manage.js": ["public/manage.js", "text/javascript; charset=utf-8"],
   "/memory-review.js": ["public/memory-review.js", "text/javascript; charset=utf-8"],
+  "/favorite-memory.js": ["public/favorite-memory.js", "text/javascript; charset=utf-8"],
 };
 
 const IMAGE_TYPES = { jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp" };

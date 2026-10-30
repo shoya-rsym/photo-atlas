@@ -258,6 +258,12 @@ type Photo = {
 
   photoMemory?: string;
 
+  isFavorite?: boolean;
+
+  photoMemoryGeneratedAt?: string;
+
+  photoMemorySource?: "copilot" | "manual";
+
   isCover?: boolean;
 };
 ```
@@ -265,6 +271,8 @@ type Photo = {
 `characterIds` は設定された Character.id の配列。1枚の写真に複数のキャラクターを設定でき、未設定の場合は省略する。
 
 `photoMemory` は写真ごとに管理者が設定する短い一文。未設定を許可し、120文字以内とする。説明文や画像解析結果は保存しない。
+
+`isFavorite` が `true` の写真は管理者共有のお気に入り。Favorite Memoryも既存の `photoMemory` に保存し、`photoMemorySource` と `photoMemoryGeneratedAt` で採用元・採用日時を記録する。Copilot用プロンプトは管理画面で作成し、画像を含む情報は外部サービスへ自動送信しない。候補3件から人が選ぶまで既存Memoryを変更しない。
 
 ---
 
