@@ -278,6 +278,23 @@ photoMemory
 
 ---
 
+# Memory Library
+
+memory-library.json は Session Memory と Favorite Memory のレビュー履歴を保持する。
+
+共通項目:
+
+- `id`: 必須・一意。英小文字、数字、アンダースコア
+- `text`: 必須。空文字不可、120文字以内
+- `rating`: `A` / `B` / `C` / `NG`
+- `memo`: 任意。文字列で500文字以内
+- `createdAt`: Favorite Memoryでは必須のISO8601日時
+- `reviewedAt`: レビュー日時。旧Session Memory記録では `createdAt` を代替にできる
+
+Session Memoryの履歴は `sessionMemoryId`、`locationId`、`locationName`、`sessionDate` を保持する。Favorite Memoryの履歴は `photoId` を保持し、写真が後から削除されても評価スナップショットはLibraryに残せる。Favorite Memoryの `locationName`、`photoTitle`、撮影日は任意の表示用情報。
+
+---
+
 Favorite Memory fields
 
 - `isFavorite` は任意。指定する場合は `true`

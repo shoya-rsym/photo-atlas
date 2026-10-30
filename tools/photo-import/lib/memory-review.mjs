@@ -32,15 +32,30 @@ const COMMON_JAPANESE_WORDS = new Set([
 ]);
 
 export function memoryReviewKey(sessionMemoryId, text) {
-  return `${sessionMemoryId}\u0000${text}`;
+  return `session\u0000${sessionMemoryId}\u0000${text}`;
+}
+
+export function favoriteMemoryReviewKey(photoId, text) {
+  return `favorite\u0000${photoId}\u0000${text}`;
+}
+
+function getMemoryReviewKey(review) {
+  if (review.memoryType === "favorite" || review.photoId) {
+    return favoriteMemoryReviewKey(review.photoId, review.text);
+  }
+  return memoryReviewKey(review.sessionMemoryId, review.text);
+}
+
+function getReviewTimestamp(review) {
+  return review.reviewedAt ?? review.createdAt ?? "";
 }
 
 export function getLatestMemoryReviews(library) {
   const latest = new Map();
   for (const review of library) {
-    const key = memoryReviewKey(review.sessionMemoryId, review.text);
+    const key = getMemoryReviewKey(review);
     const current = latest.get(key);
-    if (!current || review.reviewedAt.localeCompare(current.reviewedAt) >= 0) {
+    if (!current || getReviewTimestamp(review).localeCompare(getReviewTimestamp(current)) >= 0) {
       latest.set(key, review);
     }
   }
@@ -49,7 +64,7 @@ export function getLatestMemoryReviews(library) {
 
 export function getLatestMemoryReviewEntries(library) {
   return [...getLatestMemoryReviews(library).values()].sort((left, right) =>
-    right.reviewedAt.localeCompare(left.reviewedAt),
+    getReviewTimestamp(right).localeCompare(getReviewTimestamp(left)),
   );
 }
 
@@ -134,7 +149,9 @@ export function buildMemoryAnalytics(memoryRows) {
       .sort(
         (left, right) =>
           (usageCounts.get(right.text) ?? 0) - (usageCounts.get(left.text) ?? 0) ||
-          (right.review?.reviewedAt ?? "").localeCompare(left.review?.reviewedAt ?? ""),
+          getReviewTimestamp(right.review ?? {}).localeCompare(
+            getReviewTimestamp(left.review ?? {}),
+          ),
       )
       .slice(0, 10),
     ngMemories: memoryRows.filter((row) => row.review?.rating === "NG"),
@@ -152,16 +169,24 @@ function markdownText(value) {
 
 function reviewMarkdownEntry(review) {
   const location = markdownText(review.locationName ?? review.locationId);
-  const date = markdownText(review.sessionDate);
+  const isFavorite = review.memoryType === "favorite" || Boolean(review.photoId);
+  const context = isFavorite
+    ? `Favorite Memory / ${location} / ${markdownText(review.photoTitle ?? review.photoId)}`
+    : `${location} / ${markdownText(review.sessionDate)}`;
   const text = markdownText(review.text);
   const memo = review.memo?.trim() ? `\n  - コメント: ${markdownText(review.memo)}` : "";
-  return `- **${location} / ${date}**\n  > ${text}\n  - 評価: ${review.rating}${memo}`;
+  return `- **${context}**\n  > ${text}\n  - 評価: ${review.rating}${memo}`;
 }
 
 export function buildMemoryReviewMarkdown(library, locations = []) {
   const reviews = getLatestMemoryReviewEntries(library);
   const locationNames = new Map(locations.map((location) => [location.id, location.name]));
-  const sections = ["# Session Memories", ""];
+  const sections = [
+    "# Memory Review Library",
+    "",
+    "Memoryの文体を人の目でレビューするための記録です。説明ではなく、写真と閲覧者の間に残る余白を基準に確認してください。",
+    "",
+  ];
   for (const rating of MEMORY_REVIEW_RATINGS) {
     sections.push(`## ${RATING_LABELS[rating]}`, "");
     const entries = reviews

@@ -7,6 +7,7 @@ import { parseDateInput } from "./date.mjs";
 import { createSessionMemoryCandidates } from "./memory.mjs";
 import {
   buildMemoryAnalytics,
+  favoriteMemoryReviewKey,
   getLatestMemoryReviewEntries,
   getLatestMemoryReviews,
   memoryReviewKey,
@@ -555,6 +556,7 @@ export function getMemoryReviewData() {
             memory.locationId;
           return {
             ...memory,
+            memoryType: "session",
             locationName,
             session: `${locationName} / ${memory.sessionDate}`,
             photoCount:
@@ -569,8 +571,38 @@ export function getMemoryReviewData() {
             right.sessionDate.localeCompare(left.sessionDate) ||
             left.locationName.localeCompare(right.locationName, "ja"),
         );
+      const favoriteMemories = photos
+        .filter((photo) => photo.isFavorite && photo.photoMemory?.trim())
+        .map((photo) => {
+          const locationName =
+            locations.find((location) => location.id === photo.locationId)?.name ??
+            photo.locationId;
+          return {
+            id: photo.id,
+            memoryType: "favorite",
+            photoId: photo.id,
+            photoTitle: photo.title,
+            thumbnail: photo.thumbnail,
+            image: photo.image,
+            locationId: photo.locationId,
+            locationName,
+            sessionDate: photo.date ?? "",
+            text: photo.photoMemory,
+            review:
+              latestReviews.get(favoriteMemoryReviewKey(photo.id, photo.photoMemory)) ?? null,
+          };
+        })
+        .sort(
+          (left, right) =>
+            Number(Boolean(left.review)) - Number(Boolean(right.review)) ||
+            right.sessionDate.localeCompare(left.sessionDate) ||
+            left.locationName.localeCompare(right.locationName, "ja") ||
+            left.photoTitle.localeCompare(right.photoTitle, "ja"),
+        );
       const libraryEntries = getLatestMemoryReviewEntries(library).map((review) => ({
         ...review,
+        memoryType:
+          review.memoryType === "favorite" || review.photoId ? "favorite" : "session",
         locationName:
           locations.find((location) => location.id === review.locationId)?.name ??
           review.locationName ??
@@ -585,10 +617,11 @@ export function getMemoryReviewData() {
       ).length;
       return {
         memories,
+        favoriteMemories,
         library: libraryEntries,
         candidates,
         backfillCandidateCount,
-        analytics: buildMemoryAnalytics(memories),
+        analytics: buildMemoryAnalytics([...memories, ...favoriteMemories]),
       };
     },
     { trackUndo: false },
@@ -628,6 +661,7 @@ export function saveMemoryReview(sessionMemoryId, rawRating, rawMemo) {
         memory.locationId;
       const review = {
         id: allocateId("memory_review", undefined, usedIds),
+        memoryType: "session",
         sessionMemoryId: memory.id,
         locationId: memory.locationId,
         locationName,
@@ -635,6 +669,7 @@ export function saveMemoryReview(sessionMemoryId, rawRating, rawMemo) {
         text: memory.text,
         rating,
         memo: memo || undefined,
+        createdAt: new Date().toISOString(),
         reviewedAt: new Date().toISOString(),
       };
       await writeAtomic(
@@ -645,6 +680,67 @@ export function saveMemoryReview(sessionMemoryId, rawRating, rawMemo) {
       return finish(photos, locations, { memoryReview: review });
     },
     { label: "Memory Reviewの保存" },
+  );
+}
+
+export function saveFavoriteMemoryReview(photoId, rawText, rawRating, rawMemo) {
+  return exclusive(
+    async () => {
+      const id = String(photoId ?? "").trim();
+      const text = String(rawText ?? "").trim();
+      const rating = String(rawRating ?? "").trim();
+      const memo = String(rawMemo ?? "").trim();
+      if (!id) throw new Error("Favorite Memoryの写真を指定してください");
+      if (!text || [...text].length > 120) {
+        throw new Error("Favorite Memoryは1〜120文字で指定してください");
+      }
+      if (!MEMORY_REVIEW_RATINGS.includes(rating)) {
+        throw new Error("評価はA・B・C・NGから選択してください");
+      }
+      if ([...memo].length > 500) throw new Error("コメントは500文字以内で入力してください");
+
+      const [photos, library, locations] = await Promise.all([
+        readJson(dataFile("photos"), []),
+        readJson(dataFile("memory-library"), []),
+        readJson(dataFile("locations"), []),
+      ]);
+      const photo = photos.find((item) => item.id === id);
+      if (!photo || !photo.isFavorite || photo.photoMemory !== text) {
+        throw new Error("対象のFavorite Memoryが見つからないか、更新されています");
+      }
+
+      const key = favoriteMemoryReviewKey(photo.id, text);
+      const latest = getLatestMemoryReviews(library).get(key);
+      if (latest?.rating === rating && (latest.memo ?? "") === memo) {
+        return { memoryReview: latest, unchanged: true };
+      }
+
+      const usedIds = new Set(library.map((review) => review.id));
+      const locationName =
+        locations.find((location) => location.id === photo.locationId)?.name ??
+        photo.locationId;
+      const now = new Date().toISOString();
+      const review = {
+        id: allocateId("memory_review", undefined, usedIds),
+        memoryType: "favorite",
+        photoId: photo.id,
+        photoTitle: photo.title,
+        locationId: photo.locationId,
+        locationName,
+        sessionDate: photo.date ?? "",
+        text,
+        rating,
+        memo,
+        createdAt: now,
+        reviewedAt: now,
+      };
+      await writeAtomic(
+        dataFile("memory-library"),
+        formatJsonList([...library, review], "expanded"),
+      );
+      return finish(photos, locations, { memoryReview: review });
+    },
+    { label: "Favorite Memory Reviewの保存" },
   );
 }
 

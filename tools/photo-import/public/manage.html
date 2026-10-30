@@ -288,7 +288,8 @@
       <h2>Memory Review System</h2>
       <p class="muted">Memoryを説明文として評価せず、写真と閲覧者の間に残る余白として見直します。</p>
       <nav class="row memory-review-tabs" aria-label="Memory Reviewメニュー">
-        <button type="button" data-memory-tab="review">Review</button>
+        <button type="button" data-memory-tab="review">Session Review</button>
+        <button type="button" data-memory-tab="favorites">Favorite Review</button>
         <button type="button" data-memory-tab="library">Library</button>
         <button type="button" data-memory-tab="analytics">Analytics</button>
         <button type="button" data-memory-tab="candidates">Candidate Pool</button>
@@ -310,9 +311,29 @@
         <div id="memoryReviewRows" class="memory-review-list"></div>
       </section>
 
+      <section id="memoryReviewFavoritesPane" class="memory-review-pane" hidden>
+        <p class="muted">お気に入り写真に保存済みのFavorite Memoryを評価します。評価は写真ではなくMemoryの文体に付けます。</p>
+        <label>表示
+          <select id="favoriteMemoryReviewFilter">
+            <option value="all">すべて</option>
+            <option value="unreviewed">未評価</option>
+            <option value="A">A評価</option>
+            <option value="B">B評価</option>
+            <option value="C">C評価</option>
+            <option value="NG">NG</option>
+          </select>
+        </label>
+        <div id="favoriteMemoryReviewRows" class="memory-review-list"></div>
+      </section>
+
       <section id="memoryReviewLibraryPane" class="memory-review-pane" hidden>
         <div class="row">
-          <input id="memoryLibrarySearch" type="search" placeholder="Memory・地点・コメントを検索" />
+          <input id="memoryLibrarySearch" type="search" placeholder="Memory・写真・地点・コメントを検索" />
+          <select id="memoryLibraryType">
+            <option value="">すべての種類</option>
+            <option value="session">Session Memory</option>
+            <option value="favorite">Favorite Memory</option>
+          </select>
           <select id="memoryLibraryRating">
             <option value="">すべての評価</option>
             <option value="A">A</option>

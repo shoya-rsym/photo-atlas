@@ -300,23 +300,31 @@ type SessionMemory = {
 
 ## MemoryReview
 
-Session Memoryの評価スナップショット。評価の履歴を残し、現在のMemoryと完全一致する最新レビューを現在評価として扱う。Memory本文が編集された場合、新しい本文は未評価となる。
+Session MemoryまたはFavorite Memoryの評価スナップショット。評価の履歴を残し、現在のMemoryと完全一致する最新レビューを現在評価として扱う。Memory本文が編集された場合、新しい本文は未評価となる。
 
 ```typescript
 type MemoryReview = {
   id: string;
-  sessionMemoryId: string;
-  locationId: string;
-  locationName: string;
-  sessionDate: string;
+  memoryType: "session" | "favorite";
   text: string;
   rating: "A" | "B" | "C" | "NG";
   memo?: string;
+  createdAt: string;
   reviewedAt: string;
+  sessionMemoryId?: string;
+  photoId?: string;
+  photoTitle?: string;
+  locationId?: string;
+  locationName?: string;
+  sessionDate?: string;
 };
 ```
 
-`memory-library.json` に保存する。評価対象のMemory本文をスナップショットとして保持し、レビュー履歴から月次集計と評価済みLibraryを作成する。
+`memory-library.json` に保存する。Favorite Memoryの基本項目は `id`、`text`、`rating`、`memo`、`createdAt`。`memoryType` と `photoId` などの任意コンテキストを加えてSession Memoryと区別する。評価対象の本文をスナップショットとして保持し、レビュー履歴から集計と検索可能なLibraryを作成する。
+
+Favorite Memoryの評価対象は `isFavorite: true` かつ `photoMemory` が設定された写真。評価変更は履歴として追記し、写真IDとMemory本文が一致する最新の評価を現在値として使う。Favoriteの評価をA / B / C / NGで記録しても、PhotoやFavorite Memory自体を自動変更しない。
+
+`docs/memory-style-guide.md` は人による評価の基準を定義する。Analyticsの統計やStyle Guideは評価を自動決定しない。
 
 ## MemoryCandidate
 

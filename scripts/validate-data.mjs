@@ -166,11 +166,10 @@ for (const memory of sessionMemories) {
     }
     if (reviewIds.has(review.id)) errors.push(`memory-library: 重複ID ${review.id}`);
     reviewIds.add(review.id);
-    if (!review.sessionMemoryId || !ID_PATTERN.test(review.sessionMemoryId)) {
-      errors.push(`memory-library: sessionMemoryId不正 ${review.id}`);
-    }
-    if (typeof review.locationName !== "string" || !review.locationName.trim()) {
-      errors.push(`memory-library: locationName不正 ${review.id}`);
+    const memoryType =
+      review.memoryType ?? (review.photoId ? "favorite" : "session");
+    if (!["session", "favorite"].includes(memoryType)) {
+      errors.push(`memory-library: memoryType不正 ${review.id}`);
     }
     if (!["A", "B", "C", "NG"].includes(review.rating)) {
       errors.push(`memory-library: rating不正 ${review.id}`);
@@ -185,11 +184,44 @@ for (const memory of sessionMemories) {
     if (review.memo !== undefined && (typeof review.memo !== "string" || [...review.memo].length > 500)) {
       errors.push(`memory-library: memo不正 ${review.id}`);
     }
-    if (Number.isNaN(Date.parse(review.reviewedAt))) {
+    if (
+      memoryType === "session" &&
+      (typeof review.locationName !== "string" || !review.locationName.trim())
+    ) {
+      errors.push(`memory-library: locationName不正 ${review.id}`);
+    }
+    if (
+      review.locationName !== undefined &&
+      (typeof review.locationName !== "string" || !review.locationName.trim())
+    ) {
+      errors.push(`memory-library: locationName不正 ${review.id}`);
+    }
+    if (Number.isNaN(Date.parse(review.reviewedAt ?? review.createdAt))) {
       errors.push(`memory-library: reviewedAt形式不正 ${review.id}`);
     }
-    if (!review.locationId || !/^\d{4}-\d{2}-\d{2}$/.test(review.sessionDate)) {
-      errors.push(`memory-library: セッション情報不正 ${review.id}`);
+    if (
+      review.createdAt !== undefined &&
+      Number.isNaN(Date.parse(review.createdAt))
+    ) {
+      errors.push(`memory-library: createdAt形式不正 ${review.id}`);
+    }
+    if (memoryType === "session") {
+      if (!review.sessionMemoryId || !ID_PATTERN.test(review.sessionMemoryId)) {
+        errors.push(`memory-library: sessionMemoryId不正 ${review.id}`);
+      }
+      if (!review.locationId || !/^\d{4}-\d{2}-\d{2}$/.test(review.sessionDate)) {
+        errors.push(`memory-library: セッション情報不正 ${review.id}`);
+      }
+    } else {
+      if (!review.photoId || !ID_PATTERN.test(review.photoId)) {
+        errors.push(`memory-library: photoId不正 ${review.id}`);
+      }
+      if (typeof review.createdAt !== "string" || Number.isNaN(Date.parse(review.createdAt))) {
+        errors.push(`memory-library: createdAt形式不正 ${review.id}`);
+      }
+      if (review.photoTitle !== undefined && typeof review.photoTitle !== "string") {
+        errors.push(`memory-library: photoTitle不正 ${review.id}`);
+      }
     }
   }
   const candidateTexts = new Set();

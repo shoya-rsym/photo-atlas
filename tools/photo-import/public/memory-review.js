@@ -78,6 +78,38 @@ async function saveReview(memory, rating, memo, button) {
   }
 }
 
+function memoryContextLabel(memory) {
+  return memory.memoryType === "favorite"
+    ? `Favorite / ${memory.locationName} / ${memory.photoTitle}`
+    : `${memory.locationName} / ${memory.sessionDate}`;
+}
+
+async function saveFavoriteReview(memory, rating, memo, button) {
+  if (!rating) {
+    setMessage("A・B・C・NGのいずれかを選択してください。", true);
+    return;
+  }
+  button.disabled = true;
+  try {
+    const result = await api("/api/favorite-memory-reviews/save", {
+      photoId: memory.photoId,
+      text: memory.text,
+      rating,
+      memo,
+    });
+    await loadReviewData();
+    setMessage(
+      result.unchanged
+        ? "この評価とコメントは保存済みです。"
+        : `${memory.photoTitle} のFavorite Memory評価を保存しました。`,
+    );
+  } catch (error) {
+    setMessage(error.message, true);
+  } finally {
+    button.disabled = false;
+  }
+}
+
 function renderReviewRows() {
   if (!reviewData) return;
   const filter = $("memoryReviewFilter").value;
@@ -160,16 +192,86 @@ function renderReviewRows() {
   );
 }
 
+function renderFavoriteReviewRows() {
+  if (!reviewData) return;
+  const filter = $("favoriteMemoryReviewFilter").value;
+  const memories = reviewData.favoriteMemories.filter((memory) => {
+    if (filter === "unreviewed") return !memory.review;
+    if (RATINGS.includes(filter)) return memory.review?.rating === filter;
+    return true;
+  });
+  $("favoriteMemoryReviewRows").replaceChildren(
+    ...(memories.length
+      ? memories.map((memory) => {
+          const rating = makeRatingSelect(
+            memory.review?.rating,
+            `${memory.photoTitle} の評価`,
+          );
+          const memo = element("textarea", {
+            rows: "2",
+            maxlength: "500",
+            placeholder: "任意コメント",
+            "aria-label": `${memory.photoTitle} のコメント`,
+          });
+          memo.value = memory.review?.memo ?? "";
+          const saveButton = element("button", { type: "button", class: "primary" }, "評価を保存");
+          saveButton.addEventListener("click", () =>
+            saveFavoriteReview(memory, rating.value, memo.value, saveButton),
+          );
+          return element(
+            "article",
+            { class: "memory-review-card" },
+            element(
+              "header",
+              { class: "memory-review-card-heading" },
+              element("strong", {}, memoryContextLabel(memory)),
+              element("span", { class: "muted" }, memory.sessionDate || "撮影日不明"),
+            ),
+            element(
+              "div",
+              { class: "favorite-memory-review-content" },
+              element("img", {
+                src: memory.thumbnail,
+                alt: memory.photoTitle,
+                loading: "lazy",
+              }),
+              element("blockquote", { class: "memory-review-text" }, memory.text),
+            ),
+            element(
+              "div",
+              { class: "memory-review-controls" },
+              element("label", {}, "評価", rating),
+              element("label", { class: "memory-review-memo" }, "コメント", memo),
+              saveButton,
+            ),
+          );
+        })
+      : [
+          reviewData.favoriteMemories.length
+            ? element("p", { class: "muted" }, "この条件に一致するFavorite Memoryはありません。")
+            : element(
+                "p",
+                { class: "muted" },
+                "評価できるFavorite Memoryがありません。お気に入り写真にMemoryを保存すると、ここで評価できます。",
+              ),
+        ]),
+  );
+}
+
 function renderLibraryRows() {
   if (!reviewData) return;
   const query = $("memoryLibrarySearch").value.trim().toLocaleLowerCase("ja");
+  const typeFilter = $("memoryLibraryType").value;
   const ratingFilter = $("memoryLibraryRating").value;
   const entries = reviewData.library.filter((review) => {
+    if (typeFilter && (review.memoryType ?? "session") !== typeFilter) return false;
     if (ratingFilter && review.rating !== ratingFilter) return false;
     const searchable = [
       review.text,
       review.locationName,
       review.sessionDate,
+      review.photoTitle ?? "",
+      review.photoId ?? "",
       review.memo ?? "",
     ]
       .join(" ")
@@ -185,7 +287,7 @@ function renderLibraryRows() {
             element(
               "header",
               { class: "memory-review-card-heading" },
-              element("strong", {}, `${review.locationName} / ${review.sessionDate}`),
+              element("strong", {}, memoryContextLabel(review)),
               element("span", { class: `memory-rating rating-${review.rating}` }, review.rating),
             ),
             element("blockquote", { class: "memory-review-text" }, review.text),
@@ -195,7 +297,7 @@ function renderLibraryRows() {
             element(
               "div",
               { class: "memory-review-card-footer" },
-              `レビュー: ${new Date(review.reviewedAt).toLocaleString("ja-JP")}`,
+              `レビュー: ${new Date(review.reviewedAt ?? review.createdAt).toLocaleString("ja-JP")}`,
               ["A", "B"].includes(review.rating)
                 ? element(
                     "button",
@@ -317,17 +419,17 @@ function renderAnalytics() {
   const best = renderMemorySummaryList(
     "ベストMemory TOP10（A評価）",
     analytics.bestMemories,
-    (row) => `${row.locationName} / ${row.sessionDate}`,
+    memoryContextLabel,
   );
   const ng = renderMemorySummaryList(
     "NG Memory",
     analytics.ngMemories,
-    (row) => `${row.locationName} / ${row.sessionDate}`,
+    memoryContextLabel,
   );
   const unreviewed = renderMemorySummaryList(
     "未評価Memory",
     analytics.unreviewedMemories,
-    (row) => `${row.locationName} / ${row.sessionDate}`,
+    memoryContextLabel,
   );
   $("memoryReviewAnalytics").replaceChildren(
     metricCards,
@@ -398,8 +500,9 @@ async function loadReviewData() {
   reviewData = await api("/api/memory-review");
   const analytics = reviewData.analytics;
   $("memoryReviewSummary").textContent =
-    `Session Memory ${analytics.totalMemoryCount}件 / 評価済み ${analytics.reviewedCount}件 / 未評価 ${analytics.unreviewedMemories.length}件 / 付与対象 ${reviewData.backfillCandidateCount}件`;
+    `Session ${reviewData.memories.length}件 / Favorite ${reviewData.favoriteMemories.length}件 / 評価済み ${analytics.reviewedCount}件 / 未評価 ${analytics.unreviewedMemories.length}件 / Session Memory付与対象 ${reviewData.backfillCandidateCount}件`;
   renderReviewRows();
+  renderFavoriteReviewRows();
   renderLibraryRows();
   renderAnalytics();
   renderCandidates();
@@ -430,7 +533,9 @@ for (const button of document.querySelectorAll("[data-memory-tab]")) {
   button.addEventListener("click", () => switchTab(button.dataset.memoryTab));
 }
 $("memoryReviewFilter").addEventListener("change", renderReviewRows);
+$("favoriteMemoryReviewFilter").addEventListener("change", renderFavoriteReviewRows);
 $("memoryLibrarySearch").addEventListener("input", renderLibraryRows);
+$("memoryLibraryType").addEventListener("change", renderLibraryRows);
 $("memoryLibraryRating").addEventListener("change", renderLibraryRows);
 $("memoryCandidateSearch").addEventListener("input", renderCandidates);
 $("memoryCandidateAdd").addEventListener("click", () => saveCandidate($("memoryCandidateText").value));

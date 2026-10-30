@@ -33,6 +33,7 @@ import {
   readImageFile,
   renumberPhotoTitles,
   saveMemoryReview,
+  saveFavoriteMemoryReview,
   updatePhoto,
   updateLocation,
   updateSessionMemory,
@@ -263,6 +264,19 @@ const server = createServer(async (req, res) => {
           res,
           200,
           await saveMemoryReview(body.sessionMemoryId, body.rating, body.memo),
+        );
+      }
+      if (path === "/api/favorite-memory-reviews/save") {
+        const body = await json();
+        return send(
+          res,
+          200,
+          await saveFavoriteMemoryReview(
+            body.photoId,
+            body.text,
+            body.rating,
+            body.memo,
+          ),
         );
       }
       if (path === "/api/memory-candidates/add") {
