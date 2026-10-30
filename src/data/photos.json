@@ -173,7 +173,9 @@
     "createdAt": "2026-10-28T12:37:08.493Z",
     "locationId": "location_013",
     "tags": ["ar_photo", "night_view", "tag_002", "tag_003", "tag_013"],
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "photoMemory": "1人でする兎の真似は、なんだか少し恥ずかしい",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo0030",
@@ -591,7 +593,9 @@
     "createdAt": "2026-10-28T12:55:52.902Z",
     "locationId": "osm_way_430014971",
     "tags": ["ar_photo", "tag_004", "tag_005"],
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "photoMemory": "ふわふわ～",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo0068",
@@ -888,7 +892,9 @@
     "createdAt": "2026-10-28T13:12:28.836Z",
     "locationId": "osm_way_754175469",
     "tags": ["ar_photo", "tag_003", "tag_007", "tag_014"],
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "photoMemory": "上だけじゃない傘模様。まるで雨上がりの空みたい",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo0095",
@@ -1097,7 +1103,9 @@
     "createdAt": "2026-10-28T13:22:51.796Z",
     "locationId": "location_002",
     "tags": ["ar_photo", "tag_008"],
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "photoMemory": "ふと見つめてしまう。北の方を。向こうにでも見えるだろうか",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo0114",
@@ -2153,7 +2161,9 @@
     "createdAt": "2026-10-28T13:29:36.116Z",
     "locationId": "location_149",
     "tags": ["ar_photo", "tag_009", "tag_010", "tag_014", "tag_038", "tag_028"],
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "photoMemory": "まるで雲みたいに、はらりと落ちて手の中に",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo0308",
@@ -2967,7 +2977,9 @@
     "createdAt": "2026-10-28T13:29:36.190Z",
     "locationId": "location_143",
     "tags": ["ar_photo", "tag_010", "tag_003", "tag_014"],
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "photoMemory": "奥の方まで歩いて行ってみませんか？",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo0382",
@@ -5057,7 +5069,9 @@
     "locationId": "location_138",
     "tags": ["ar_photo", "tag_001", "tag_031", "tag_002", "tag_017", "tag_018"],
     "characterIds": ["character_001"],
-    "date": "2024-11-15"
+    "date": "2024-11-15",
+    "photoMemory": "結構、ちゃんと選んで着てきてくれたんだろうな",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo0574",
@@ -5563,7 +5577,9 @@
     "locationId": "osm_way_554592146",
     "tags": ["ar_photo", "tag_003", "tag_001", "tag_002", "tag_017", "tag_018"],
     "characterIds": ["character_001"],
-    "date": "2024-11-16"
+    "date": "2024-11-16",
+    "photoMemory": "積み重ねた経験も、この時には無かったかのように",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo0620",
@@ -17662,7 +17678,9 @@
     "locationId": "location_077",
     "tags": ["ar_photo", "tag_011", "tag_008", "tag_007", "tag_014"],
     "date": "2024-09-25",
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "photoMemory": "潮の香りは、故郷のものと同じ匂いがする",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo2341",
@@ -20635,7 +20653,11 @@
     "locationId": "location_040",
     "tags": ["ar_photo", "tag_028", "tag_010", "tag_014"],
     "date": "2021-05-18",
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "isFavorite": true,
+    "photoMemory": "遠くの小さな気配まで、景色の中にゆっくり溶けていく。",
+    "photoMemorySource": "copilot",
+    "photoMemoryGeneratedAt": "2026-10-30T12:36:51.150Z"
   },
   {
     "id": "photo2617",
@@ -21020,7 +21042,10 @@
     "locationId": "location_036",
     "tags": ["ar_photo", "tag_031", "tag_010", "tag_014"],
     "date": "2021-05-10",
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "isFavorite": true,
+    "photoMemory": "花から君へ、視線が流れて、風も流れて",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo2652",
@@ -21658,7 +21683,11 @@
     "locationId": "location_031",
     "tags": ["ar_photo", "tag_014", "tag_008", "tag_007"],
     "date": "2021-08-19",
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "isFavorite": true,
+    "photoMemory": "水平線の向こうへ、今日の時間がまだ続いていくような余白。",
+    "photoMemorySource": "copilot",
+    "photoMemoryGeneratedAt": "2026-10-30T12:32:09.192Z"
   },
   {
     "id": "photo2710",
