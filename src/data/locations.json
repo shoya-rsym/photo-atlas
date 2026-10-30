@@ -613,10 +613,10 @@
   {
     "id": "location_083",
     "name": "城山公園",
-    "prefectureId": "ehime",
-    "address": "愛媛県松山市",
-    "lat": 33.8420321,
-    "lng": 132.7612
+    "prefectureId": "fukushima",
+    "address": "福島県白河市郭内１−６",
+    "lat": 37.130722,
+    "lng": 140.213318
   },
   {
     "id": "location_084",
