@@ -20,12 +20,36 @@ import type {
 } from "@/types";
 
 export const subregions: Subregion[] = subregionsJson as Subregion[];
-export const sessionMemories: SessionMemory[] = sessionMemoriesJson;
+function isSessionMemoryGenerator(
+  value: string,
+): value is SessionMemory["generatedBy"] {
+  return value === "template" || value === "ai" || value === "manual";
+}
+
+export const sessionMemories: SessionMemory[] = sessionMemoriesJson.map((memory) => {
+  if (!isSessionMemoryGenerator(memory.generatedBy)) {
+    throw new Error(`session-memories.json: 不正な生成元 ${memory.id}`);
+  }
+  return { ...memory, generatedBy: memory.generatedBy };
+});
+
+function isPhotoMemorySource(
+  value: string | undefined,
+): value is Photo["photoMemorySource"] {
+  return value === undefined || value === "copilot" || value === "manual";
+}
+
+function parsePhoto(photo: (typeof photosJson)[number]): Photo {
+  if (!isPhotoMemorySource(photo.photoMemorySource)) {
+    throw new Error(`photos.json: 不正なFavorite Memoryの設定元 ${photo.id}`);
+  }
+  return { ...photo, photoMemorySource: photo.photoMemorySource };
+}
 
 export const areas: Area[] = areasJson;
 export const prefectures: Prefecture[] = prefecturesJson;
 export const locations: Location[] = locationsJson;
 export const tags: Tag[] = tagsJson;
 export const characters: Character[] = charactersJson;
-export const photos: Photo[] = photosJson;
+export const photos: Photo[] = photosJson.map(parsePhoto);
 export const japanMapRegions: JapanMapRegion[] = japanMapRegionsJson;
