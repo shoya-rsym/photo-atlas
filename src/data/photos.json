@@ -19840,7 +19840,10 @@
     "locationId": "location_046",
     "tags": ["ar_photo", "tag_031", "tag_029", "tag_014", "tag_010"],
     "date": "2020-09-20",
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "isFavorite": true,
+    "photoMemory": "規則的に積まれたその先に、不思議と好奇心が起き上がる",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo2539",
@@ -21732,7 +21735,11 @@
     "locationId": "location_030",
     "tags": ["ar_photo", "tag_005", "tag_004"],
     "date": "2021-08-19",
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "isFavorite": true,
+    "photoMemory": "長い一日の途中に、時間がふと薄くなる頃",
+    "photoMemorySource": "copilot",
+    "photoMemoryGeneratedAt": "2026-10-30T07:57:27.795Z"
   },
   {
     "id": "photo2717",
@@ -22359,7 +22366,11 @@
     "locationId": "location_020",
     "tags": ["ar_photo", "tag_025", "tag_024", "tag_023", "tag_001", "tag_014"],
     "date": "2021-10-31",
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "isFavorite": true,
+    "photoMemory": "赤や黄の影が、緑の残る枝先に静かに重なっている",
+    "photoMemorySource": "copilot",
+    "photoMemoryGeneratedAt": "2026-10-30T07:24:18.234Z"
   },
   {
     "id": "photo2774",

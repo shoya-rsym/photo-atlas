@@ -189,22 +189,28 @@
 
     <dialog id="favoriteMemoryDialog" class="editor favorite-memory-dialog">
       <h2>Favorite Memory候補</h2>
-      <p class="muted">画像をCopilot Chatへ手動で添付し、下のプロンプトをコピーして候補を作成してください。ここから外部へ自動送信はしません。</p>
+      <p class="muted">プロンプトに対象画像のワークスペース内パスを含めます。photo-atlasを開いたCopilot Chatで実画像を確認し、表示された手がかりが写真と一致することを確かめてから候補を選んでください。画像を開けない場合のみ添付してください。</p>
       <div class="favorite-memory-preview">
         <img id="favoriteMemoryImage" alt="" />
         <p id="favoriteMemoryPhotoTitle"></p>
       </div>
+      <p id="favoriteMemoryImagePath" class="muted"></p>
       <label>Copilot Chat用プロンプト
-        <textarea id="favoriteMemoryPrompt" rows="9" readonly></textarea>
+        <textarea id="favoriteMemoryPrompt" rows="12" readonly></textarea>
       </label>
       <div class="row">
         <button id="favoriteMemoryCopyPrompt" type="button" class="primary">プロンプトをコピー</button>
         <button id="favoriteMemoryRegenerate" type="button">別案を作るため再生成</button>
       </div>
-      <label>Copilotの候補を3行で貼り付け
-        <textarea id="favoriteMemoryCandidateInput" rows="4" placeholder="候補1&#10;候補2&#10;候補3"></textarea>
+      <label>Copilotの出力を貼り付け
+        <textarea id="favoriteMemoryCandidateInput" rows="5" placeholder="視覚的な手がかり: ...&#10;候補1: ...&#10;候補2: ...&#10;候補3: ..."></textarea>
       </label>
       <button id="favoriteMemoryParse" type="button">候補を表示</button>
+      <section id="favoriteMemoryVisualEvidence" class="favorite-memory-evidence" hidden>
+        <strong>Copilotが確認した写真の手がかり</strong>
+        <p id="favoriteMemoryVisualEvidenceText"></p>
+        <small>写真に写っていない内容や、場所・タグからの推測が含まれていないか確認してください。</small>
+      </section>
       <p id="favoriteMemoryMessage" class="info" role="status" aria-live="polite"></p>
       <div id="favoriteMemoryCandidates" class="favorite-memory-candidates" hidden></div>
       <div class="row end">

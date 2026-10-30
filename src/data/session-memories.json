@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": "session_memory_001",
+    "locationId": "location_036",
+    "sessionDate": "2021-12-04",
+    "text": "日差しが傾き、普段の景色にやわらかな余白が生まれていた。",
+    "generatedBy": "template",
+    "createdAt": "2026-10-30T07:20:10.119Z",
+    "updatedAt": "2026-10-30T07:20:10.119Z"
+  },
+  {
+    "id": "session_memory_002",
+    "locationId": "location_149",
+    "sessionDate": "2025-04-05",
+    "text": "風が通り抜け、光の揺らぎが静かに残っている。",
+    "generatedBy": "template",
+    "createdAt": "2026-10-30T07:20:47.128Z",
+    "updatedAt": "2026-10-30T07:20:47.128Z"
+  }
+]

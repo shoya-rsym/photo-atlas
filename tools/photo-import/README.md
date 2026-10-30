@@ -62,7 +62,7 @@ npm run import      # http://127.0.0.1:4321 （PORT で変更可）
 - **ページ移動:** 最初・最後のページへ移動、ページ番号を指定した直接移動ができる
 - **キャラクター指定:** 写真ごとに複数選択でき、詳細編集・一括編集・登録画面から設定できる
 - **Session Memory:** 同一の撮影場所・撮影日で登録後10枚以上になると、登録確認時にテンプレート候補を表示。選択した短文を `src/data/session-memories.json` に保存する。撮影日不明の写真はセッションにまとめず、画像・外部AIサービスは使わない
-- **Favorite Memory:** Photo-Manageでお気に入りを共有管理。お気に入り登録後、画像・撮影日・タグ・地点・Session Memoryを含むCopilot Chat用プロンプトを表示する（自動送信なし）。Copilot Chatへ写真を手動で添付し、候補3件を貼り付けて1件選択した場合だけ保存する。再生成は新しいプロンプトを作るだけで、既存Memoryは選択確定まで上書きしない。候補はPhoto-Manageから編集・削除・再生成でき、検索にも対応。採用した候補は `photoMemory` に保存し、`photoMemorySource` と `photoMemoryGeneratedAt` を記録
+- **Favorite Memory:** Photo-Manageでお気に入りを共有管理。Copilot Chat用プロンプトに `public/photos/` 内の対象画像パスを含め、photo-atlasのワークスペースから実画像を開いて確認させる（自動送信なし）。場所やタグの一般的なイメージから写真内容を推測させず、時間・光/色/空気感・気配/余韻/距離感の異なる3方向から候補を作る。返された視覚的な手がかりが写真と一致することを確認してから候補3件のうち1件を選択した場合だけ保存する。ワークスペースから画像を開けない場合のみ添付を代替手段とし、手がかりが無い出力は候補として取り込まない。再生成は新しいプロンプトを作るだけで、既存Memoryは選択確定まで上書きしない。候補はPhoto-Manageから編集・削除・再生成でき、検索にも対応。採用した候補は `photoMemory` に保存し、`photoMemorySource` と `photoMemoryGeneratedAt` を記録
 - **Photo Memory:** Photo-Manageの個別編集から任意の一文（120文字以内）を設定・削除できる。写真一覧や詳細では右上の吹き出しアイコンを押した時だけ表示
 - **Memory表示設定:** サイトヘッダーのON/OFFをブラウザー内に保存する。OFFではSession MemoryとPhoto Memoryの両方を閲覧画面に表示しない
 - **Session Memory管理:** Photo-Manage上部から登録済みMemoryを編集・削除できる。編集したMemoryは `generatedBy: "manual"` として保存。撮影日あり・10枚以上・Memory未設定の既存セッションを一覧し、候補を確認・編集して一括付与できる。写真の再登録は不要で、保存対象は `session-memories.json` のみ。テンプレート候補をそのまま保存した場合は `generatedBy: "template"`、候補文を編集した場合は `"manual"` として記録され、付与操作はUndoできる
