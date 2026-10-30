@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 import { parseDateInput } from "./date.mjs";
+import { createSessionMemoryCandidates } from "./memory.mjs";
 import sharp from "sharp";
 import {
   LOCAL_DIR,
@@ -345,6 +346,165 @@ async function savePhotos(photos) {
 
 async function finish(photos, locations, extra = {}) {
   return { ...extra, orphanLocations: orphanLocationIds(photos, locations), validation: await runValidation() };
+}
+
+function buildSessionMemoryBackfillCandidates(photos, locations, tags, characters, memories) {
+  const sessions = new Map();
+  for (const photo of photos) {
+    if (!photo.locationId || !photo.date) continue;
+    const parsedDate = parseDateInput(photo.date);
+    if (!parsedDate.ok || parsedDate.value !== photo.date) continue;
+    const key = `${photo.locationId}|${photo.date}`;
+    const session = sessions.get(key) ?? {
+      locationId: photo.locationId,
+      sessionDate: photo.date,
+      photos: [],
+    };
+    session.photos.push(photo);
+    sessions.set(key, session);
+  }
+
+  const memoryKeys = new Set(
+    memories.map((memory) => `${memory.locationId}|${memory.sessionDate}`),
+  );
+  return [...sessions.values()]
+    .filter(
+      (session) =>
+        session.photos.length >= 10 &&
+        !memoryKeys.has(`${session.locationId}|${session.sessionDate}`),
+    )
+    .map((session) => {
+      const tagIds = new Set(session.photos.flatMap((photo) => photo.tags ?? []));
+      const characterIds = new Set(
+        session.photos.flatMap((photo) => photo.characterIds ?? (photo.characterId ? [photo.characterId] : [])),
+      );
+      const sessionTags = tags.filter((tag) => tagIds.has(tag.id));
+      const sessionCharacters = characters.filter((character) =>
+        characterIds.has(character.id),
+      );
+      const location = locations.find((item) => item.id === session.locationId);
+      return {
+        locationId: session.locationId,
+        locationName: location?.name ?? session.locationId,
+        sessionDate: session.sessionDate,
+        photoCount: session.photos.length,
+        candidates: createSessionMemoryCandidates({
+          locationId: session.locationId,
+          sessionDate: session.sessionDate,
+          tags: sessionTags,
+          characters: sessionCharacters,
+          photoCount: session.photos.length,
+        }),
+        previewPhotos: session.photos.slice(0, 3).map((photo) => ({
+          id: photo.id,
+          title: photo.title ?? photo.id,
+          thumbnail: photo.thumbnail,
+        })),
+      };
+    })
+    .sort(
+      (left, right) =>
+        right.photoCount - left.photoCount ||
+        left.locationName.localeCompare(right.locationName, "ja") ||
+        right.sessionDate.localeCompare(left.sessionDate),
+    );
+}
+
+export function getSessionMemoryBackfillCandidates() {
+  return exclusive(
+    async () => {
+      const [photos, locations, tags, characters, memories] = await Promise.all(
+        ["photos", "locations", "tags", "characters", "session-memories"].map((name) =>
+          readJson(dataFile(name), []),
+        ),
+      );
+      return buildSessionMemoryBackfillCandidates(
+        photos,
+        locations,
+        tags,
+        characters,
+        memories,
+      );
+    },
+    { trackUndo: false },
+  );
+}
+
+export function backfillSessionMemories(entries) {
+  return exclusive(
+    async () => {
+      if (!Array.isArray(entries) || entries.length === 0) {
+        throw new Error("Memoryを付与するセッションを選択してください");
+      }
+
+      const requested = entries.map((entry) => {
+        const locationId = String(entry?.locationId ?? "").trim();
+        const sessionDate = String(entry?.sessionDate ?? "").trim();
+        const text = String(entry?.text ?? "").trim();
+        if (!locationId || !sessionDate) {
+          throw new Error("セッションの撮影場所または撮影日が不正です");
+        }
+        if (!text || [...text].length > 120) {
+          throw new Error("Memoryは1〜120文字で入力してください");
+        }
+        return { locationId, sessionDate, text };
+      });
+      const requestedKeys = new Set();
+      for (const entry of requested) {
+        const key = `${entry.locationId}|${entry.sessionDate}`;
+        if (requestedKeys.has(key)) throw new Error("同じセッションが複数回選択されています");
+        requestedKeys.add(key);
+      }
+
+      const [photos, locations, tags, characters, memories] = await Promise.all(
+        ["photos", "locations", "tags", "characters", "session-memories"].map((name) =>
+          readJson(dataFile(name), []),
+        ),
+      );
+      const candidates = buildSessionMemoryBackfillCandidates(
+        photos,
+        locations,
+        tags,
+        characters,
+        memories,
+      );
+      const eligibleByKey = new Map(
+        candidates.map((candidate) => [
+          `${candidate.locationId}|${candidate.sessionDate}`,
+          candidate,
+        ]),
+      );
+      const usedIds = new Set(memories.map((memory) => memory.id));
+      const timestamp = new Date().toISOString();
+      const added = requested.map((entry) => {
+        const key = `${entry.locationId}|${entry.sessionDate}`;
+        const candidate = eligibleByKey.get(key);
+        if (!candidate) {
+          throw new Error(
+            `${entry.sessionDate} / ${entry.locationId} は既に付与済み、または付与条件を満たしません`,
+          );
+        }
+        return {
+          id: allocateId("session_memory", undefined, usedIds),
+          locationId: entry.locationId,
+          sessionDate: entry.sessionDate,
+          text: entry.text,
+          generatedBy: candidate.candidates.includes(entry.text) ? "template" : "manual",
+          createdAt: timestamp,
+          updatedAt: timestamp,
+        };
+      });
+      await writeAtomic(
+        dataFile("session-memories"),
+        formatJsonList([...memories, ...added], "expanded"),
+      );
+      return finish(photos, locations, {
+        addedSessionMemories: added,
+        addedCount: added.length,
+      });
+    },
+    { label: "既存セッションへのMemory一括付与" },
+  );
 }
 
 export function getUndoStatus() {

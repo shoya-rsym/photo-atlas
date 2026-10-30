@@ -93,6 +93,10 @@ body.manage-page { padding-bottom: 104px; }
 .session-memory-list { display: grid; gap: 12px; max-height: 60vh; overflow: auto; margin-top: 12px; }
 .session-memory-item { display: grid; gap: 6px; padding: 10px; border: 1px solid var(--border); border-radius: 6px; }
 .session-memory-item textarea { min-height: 64px; }
+.session-memory-previews { display: flex; gap: 8px; overflow-x: auto; }
+.session-memory-previews img { width: 88px; height: 66px; object-fit: cover; border-radius: 4px; background: #000; }
+.session-memory-backfill-item > label:first-child { font-weight: 600; }
+.session-memory-backfill-item select { margin-top: 4px; }
 .gallery.big { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
 .card { cursor: pointer; }
 .card.sel { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }

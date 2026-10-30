@@ -15,6 +15,7 @@ import {
 import { loadRecent } from "./lib/store.mjs";
 import {
   bulkUpdate,
+  backfillSessionMemories,
   createCharacter,
   createLocation,
   createTagAndApply,
@@ -22,6 +23,7 @@ import {
   deleteCharacter,
   deleteSessionMemory,
   findSimilarPhotos,
+  getSessionMemoryBackfillCandidates,
   getUndoStatus,
   loadPhotos,
   pruneLocations,
@@ -153,6 +155,9 @@ const server = createServer(async (req, res) => {
       if (path === "/api/master") {
         return send(res, 200, { ...(await loadMaster()), recent: await loadRecent() });
       }
+      if (path === "/api/session-memories/backfill-candidates") {
+        return send(res, 200, await getSessionMemoryBackfillCandidates());
+      }
       if (path === "/api/location-search") {
         const query = url.searchParams.get("q")?.trim() ?? "";
         if (!query || query.length > 200) {
@@ -238,6 +243,10 @@ const server = createServer(async (req, res) => {
           200,
           await updateSessionMemory(String(body.id), body.text),
         );
+      }
+      if (path === "/api/session-memories/backfill") {
+        const body = await json();
+        return send(res, 200, await backfillSessionMemories(body.entries));
       }
       if (path === "/api/session-memories/delete") {
         const body = await json();

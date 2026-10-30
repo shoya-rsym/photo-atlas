@@ -26,6 +26,7 @@ const state = {
   similarSelected: new Set(),
   similarAnalyzedCount: 0,
   similarSkipped: [],
+  sessionMemoryCandidates: [],
 };
 
 function h(tag, props = {}, ...children) {
@@ -66,11 +67,24 @@ function searchText(p) {
 function applyFilter() {
   const words = $("search").value.split(/[\s\u3000]+/).filter(Boolean).map(normalize);
   const filter = $("filter").value;
+  const sessionMemoryKeys = new Set(
+    (state.master.sessionMemories ?? []).map(
+      (memory) => `${memory.locationId}|${memory.sessionDate}`,
+    ),
+  );
   let list = state.photos.filter((p) => {
     if (filter === "nodate" && p.date) return false;
     if (filter === "notag" && (p.tags ?? []).length > 0) return false;
     if (filter === "nochar" && (p.characterIds ?? []).length > 0) return false;
     if (filter === "cover" && !p.isCover) return false;
+    const hasPhotoMemory = typeof p.photoMemory === "string" && p.photoMemory.trim().length > 0;
+    if (filter === "photoMemory" && !hasPhotoMemory) return false;
+    if (filter === "noPhotoMemory" && hasPhotoMemory) return false;
+    const hasSessionMemory = Boolean(
+      p.date && sessionMemoryKeys.has(`${p.locationId}|${p.date}`),
+    );
+    if (filter === "sessionMemory" && !hasSessionMemory) return false;
+    if (filter === "noSessionMemory" && hasSessionMemory) return false;
     if (words.length === 0) return true;
     const text = searchText(p);
     return words.every((w) => text.includes(w));
@@ -596,10 +610,144 @@ function renderSessionMemoryManager() {
   );
 }
 
+function updateSessionMemoryBackfillControls() {
+  const selectedCount = state.sessionMemoryCandidates.filter((candidate) => candidate.selected).length;
+  const candidateCount = state.sessionMemoryCandidates.length;
+  $("sessionMemoryBackfillSummary").textContent =
+    `${candidateCount} セッションが対象です（${selectedCount} 件選択中）`;
+  $("sessionMemoryBackfillApply").disabled = selectedCount === 0;
+  $("sessionMemoryBackfillSelectAll").textContent =
+    candidateCount > 0 && selectedCount === candidateCount ? "選択解除" : "すべて選択";
+}
+
+function renderSessionMemoryBackfill() {
+  const sessions = state.sessionMemoryCandidates;
+  $("sessionMemoryBackfillList").replaceChildren(
+    ...(sessions.length
+      ? sessions.map((session) => {
+          const checkbox = h("input", { type: "checkbox" });
+          checkbox.checked = session.selected;
+          checkbox.addEventListener("change", () => {
+            session.selected = checkbox.checked;
+            updateSessionMemoryBackfillControls();
+          });
+          const choice = h(
+            "select",
+            { "aria-label": `${session.locationName} ${session.sessionDate} の候補` },
+            ...session.candidates.map((text, index) =>
+              h("option", { value: String(index) }, `候補 ${index + 1}`),
+            ),
+          );
+          const textInput = h("textarea", {
+            maxlength: "120",
+            "aria-label": `${session.locationName} ${session.sessionDate} のMemory文`,
+          });
+          choice.value = String(session.selectedCandidate ?? 0);
+          textInput.value = session.draftText;
+          choice.addEventListener("change", () => {
+            session.selectedCandidate = Number(choice.value);
+            session.draftText = session.candidates[session.selectedCandidate] ?? "";
+            textInput.value = session.draftText;
+          });
+          textInput.addEventListener("input", () => {
+            session.draftText = textInput.value;
+          });
+          const previews = h(
+            "div",
+            { class: "session-memory-previews" },
+            ...session.previewPhotos.map((photo) =>
+              h("img", {
+                src: photo.thumbnail,
+                alt: photo.title,
+                loading: "lazy",
+              }),
+            ),
+          );
+          return h(
+            "article",
+            { class: "session-memory-item session-memory-backfill-item" },
+            h(
+              "label",
+              { class: "check" },
+              checkbox,
+              ` ${session.locationName} / ${session.sessionDate}（写真 ${session.photoCount} 枚）`,
+            ),
+            previews,
+            h("label", {}, "候補", choice),
+            textInput,
+          );
+        })
+      : [h("p", { class: "muted" }, "Memory未設定で付与条件を満たすセッションはありません")]),
+  );
+  updateSessionMemoryBackfillControls();
+}
+
+async function reloadSessionMemoryBackfillCandidates() {
+  const previous = new Map(
+    state.sessionMemoryCandidates.map((candidate) => [
+      `${candidate.locationId}|${candidate.sessionDate}`,
+      candidate,
+    ]),
+  );
+  const candidates = await api("/api/session-memories/backfill-candidates");
+  state.sessionMemoryCandidates = candidates.map((candidate) => {
+    const old = previous.get(`${candidate.locationId}|${candidate.sessionDate}`);
+    return {
+      ...candidate,
+      selected: old?.selected ?? false,
+      selectedCandidate: old?.selectedCandidate ?? 0,
+      draftText: old?.draftText ?? candidate.candidates[0] ?? "",
+    };
+  });
+  renderSessionMemoryBackfill();
+}
+
 function openSessionMemoryManager() {
   $("sessionMemoryError").hidden = true;
+  $("sessionMemoryManageSection").hidden = false;
+  $("sessionMemoryBackfillSection").hidden = true;
   renderSessionMemoryManager();
   $("sessionMemoryEditor").showModal();
+}
+
+async function openSessionMemoryBackfill() {
+  $("sessionMemoryError").hidden = true;
+  $("sessionMemoryManageSection").hidden = true;
+  $("sessionMemoryBackfillSection").hidden = false;
+  try {
+    await reloadSessionMemoryBackfillCandidates();
+  } catch (error) {
+    $("sessionMemoryError").textContent = error.message;
+    $("sessionMemoryError").hidden = false;
+  }
+}
+
+async function applySessionMemoryBackfill() {
+  const selected = state.sessionMemoryCandidates.filter((candidate) => candidate.selected);
+  if (selected.length === 0) return;
+  if (!confirm(`選択した ${selected.length} セッションにMemoryを付与します。写真データは変更しません。よろしいですか？`)) return;
+
+  const button = $("sessionMemoryBackfillApply");
+  button.disabled = true;
+  $("sessionMemoryError").hidden = true;
+  try {
+    const result = await api("/api/session-memories/backfill", {
+      entries: selected.map((candidate) => ({
+        locationId: candidate.locationId,
+        sessionDate: candidate.sessionDate,
+        text: candidate.draftText,
+      })),
+    });
+    await reload();
+    renderSessionMemoryManager();
+    await reloadSessionMemoryBackfillCandidates();
+    showResult(`${result.addedCount} セッションにMemoryを付与しました`, result);
+  } catch (error) {
+    $("sessionMemoryError").textContent = error.message;
+    $("sessionMemoryError").hidden = false;
+  } finally {
+    updateSessionMemoryBackfillControls();
+  }
 }
 
 async function saveSessionMemory(id, text) {
@@ -1057,6 +1205,27 @@ function bind() {
   $("manageLocations").addEventListener("click", openLocationEditor);
   $("manageSessionMemories").addEventListener("click", openSessionMemoryManager);
   $("sessionMemoryClose").addEventListener("click", () => $("sessionMemoryEditor").close());
+  $("sessionMemoryBackfillOpen").addEventListener("click", openSessionMemoryBackfill);
+  $("sessionMemoryBackfillBack").addEventListener("click", () => {
+    $("sessionMemoryBackfillSection").hidden = true;
+    $("sessionMemoryManageSection").hidden = false;
+    renderSessionMemoryManager();
+  });
+  $("sessionMemoryBackfillRefresh").addEventListener("click", async () => {
+    $("sessionMemoryError").hidden = true;
+    try {
+      await reloadSessionMemoryBackfillCandidates();
+    } catch (error) {
+      $("sessionMemoryError").textContent = error.message;
+      $("sessionMemoryError").hidden = false;
+    }
+  });
+  $("sessionMemoryBackfillSelectAll").addEventListener("click", () => {
+    const select = !state.sessionMemoryCandidates.every((candidate) => candidate.selected);
+    for (const candidate of state.sessionMemoryCandidates) candidate.selected = select;
+    renderSessionMemoryBackfill();
+  });
+  $("sessionMemoryBackfillApply").addEventListener("click", applySessionMemoryBackfill);
   $("edPhotoMemory").addEventListener("input", () => {
     $("edPhotoMemoryCount").textContent = `${[...$("edPhotoMemory").value].length} / 120`;
   });

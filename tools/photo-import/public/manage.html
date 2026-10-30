@@ -69,6 +69,14 @@
             <option value="notag">タグなし</option>
             <option value="nochar">キャラクターなし</option>
             <option value="cover">代表写真</option>
+            <optgroup label="Photo Memory">
+              <option value="photoMemory">あり</option>
+              <option value="noPhotoMemory">なし</option>
+            </optgroup>
+            <optgroup label="Session Memory">
+              <option value="sessionMemory">あり</option>
+              <option value="noSessionMemory">なし</option>
+            </optgroup>
           </select>
           <select id="sort">
             <option value="created">登録順（新しい順）</option>
@@ -210,7 +218,28 @@
     <dialog id="sessionMemoryEditor" class="editor">
       <h2>Session Memory管理</h2>
       <p class="muted">撮影場所と撮影日ごとのMemoryを編集・削除できます。</p>
-      <div id="sessionMemoryList" class="session-memory-list"></div>
+      <section id="sessionMemoryManageSection">
+        <button id="sessionMemoryBackfillOpen" type="button" class="primary">
+          既存セッションにMemoryを付与
+        </button>
+        <div id="sessionMemoryList" class="session-memory-list"></div>
+      </section>
+      <section id="sessionMemoryBackfillSection" hidden>
+        <button id="sessionMemoryBackfillBack" type="button">← Memory管理に戻る</button>
+        <p class="muted">
+          写真の再登録は行いません。撮影日があり、写真が10枚以上で、Memory未設定のセッションが対象です。
+          候補を確認・編集し、選択したものだけ保存できます。
+        </p>
+        <div class="row">
+          <button id="sessionMemoryBackfillRefresh" type="button">候補を再読み込み</button>
+          <button id="sessionMemoryBackfillSelectAll" type="button">すべて選択</button>
+          <button id="sessionMemoryBackfillApply" type="button" class="primary" disabled>
+            選択したセッションに付与
+          </button>
+        </div>
+        <p id="sessionMemoryBackfillSummary" class="info" role="status"></p>
+        <div id="sessionMemoryBackfillList" class="session-memory-list"></div>
+      </section>
       <p id="sessionMemoryError" class="error" hidden></p>
       <div class="row end">
         <button id="sessionMemoryClose" type="button">閉じる</button>

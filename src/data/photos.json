@@ -22557,7 +22557,8 @@
     "locationId": "location_018",
     "tags": ["ar_photo", "tag_020", "tag_021", "tag_022", "tag_014"],
     "date": "2021-12-27",
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "photoMemory": "部屋の中は、とても暖かい"
   },
   {
     "id": "photo2792",
@@ -22645,7 +22646,8 @@
     "locationId": "location_017",
     "tags": ["ar_photo", "tag_020", "tag_005", "tag_014", "tag_021"],
     "date": "2021-12-27",
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "photoMemory": "久しく忘れていた。痛いほど冷たい、でも気持ちの良い感触"
   },
   {
     "id": "photo2800",
@@ -22865,7 +22867,8 @@
     "locationId": "location_015",
     "tags": ["ar_photo", "tag_010", "tag_014", "tag_011"],
     "date": "2022-02-26",
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "photoMemory": "どこまでも美しく続いていくような気がした"
   },
   {
     "id": "photo2820",
@@ -23107,7 +23110,8 @@
     "locationId": "location_015",
     "tags": ["ar_photo", "tag_010", "tag_014", "tag_011"],
     "date": "2022-02-26",
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "photoMemory": "目に返る水の色は、青以外にも見える"
   },
   {
     "id": "photo2842",
@@ -23371,7 +23375,8 @@
     "locationId": "location_014",
     "tags": ["ar_photo", "tag_008", "tag_014", "tag_011"],
     "date": "2022-02-27",
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "photoMemory": "静かながらも、活気のある音が沸いていた"
   },
   {
     "id": "photo2866",
