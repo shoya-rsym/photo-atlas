@@ -7,6 +7,7 @@ import SummaryCards from "@/components/SummaryCards";
 import VisualHero from "@/components/VisualHero";
 import { photos, prefectures, subregions } from "@/lib/data";
 import { buildPreview } from "@/lib/preview";
+import { getSubregionIdForLocation } from "@/lib/subregions";
 import { getRepresentativePhoto } from "@/lib/photos";
 import {
   findArea,
@@ -77,13 +78,19 @@ export default async function PrefecturePage({ params }: Props) {
           ...prefectureSubregions.map((s) => ({
             id: s.id,
             name: s.name,
-            items: locations.filter((l) => l.subregionId === s.id),
+            items: locations.filter(
+              (location) => getSubregionIdForLocation(location) === s.id,
+            ),
           })),
           {
             id: "other",
             name: "その他",
             items: locations.filter(
-              (l) => !prefectureSubregions.some((s) => s.id === l.subregionId),
+              (location) =>
+                !prefectureSubregions.some(
+                  (subregion) =>
+                    subregion.id === getSubregionIdForLocation(location),
+                ),
             ),
           },
         ].filter((g) => g.id !== "other" || g.items.length > 0);

@@ -6,6 +6,7 @@ import {
   subregions,
 } from "@/lib/data";
 import { buildPreview, locationIdsOfPrefectures } from "@/lib/preview";
+import { getSubregionIdForLocation } from "@/lib/subregions";
 import type { MapUnit } from "@/types";
 
 function prefectureName(id: string): string {
@@ -66,7 +67,9 @@ export function getPrefectureUnits(areaId: string): MapUnit[] {
         members: [],
         preview: buildPreview(
           `${prefecture.name} ${sub.name}`,
-          locations.filter((l) => l.subregionId === sub.id).map((l) => l.id),
+          locations
+            .filter((location) => getSubregionIdForLocation(location) === sub.id)
+            .map((location) => location.id),
         ),
       }));
     });

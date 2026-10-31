@@ -152,6 +152,9 @@ type Subregion = {
 
   prefectureId: string;
 
+  /** 住所から該当区分を判定する市区町村名 */
+  addressKeywords?: string[];
+
   /** 都道府県の外接矩形を 0〜1 に正規化した地図上の描画範囲（多角形の頂点列） */
   mapClip?: [number, number][];
 };
@@ -171,6 +174,7 @@ type Subregion = {
 注意
 
 - Photo中心設計は変更しない。Subregion は Location の任意の分類である。
+- 北海道の区分は Location.prefectureId を `hokkaido` のまま保ち、住所中の市区町村名から判定する。明示的な Location.subregionId がある場合はそれを優先する。
 - mapClip は既存の都道府県SVGを切り抜く近似であり、実際の行政境界ではない。
 
 ---
