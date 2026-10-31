@@ -131,6 +131,7 @@ export default async function AreaPage({ params }: Props) {
             ariaLabel={`${area.name}の地図`}
             hint="都道府県を選ぶと、そこに残る写真がひらきます。"
             variant="home"
+            idPrefix="mobile"
           />
         </section>
         <section aria-labelledby="mobile-prefecture-list-title">
@@ -178,6 +179,7 @@ export default async function AreaPage({ params }: Props) {
             ariaLabel={`${area.name}の地図`}
             hint="都道府県にカーソルを重ねると写真がひらきます。選ぶと、その地域へ辿れます。"
             variant="home"
+            idPrefix="desktop"
           />
         </section>
 

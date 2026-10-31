@@ -63,6 +63,10 @@ function clipPathId(
   return `clip-${idPrefix ? `${idPrefix}-` : ""}${unitId}-${prefectureId}`;
 }
 
+function prefectureClipPathId(idPrefix: string, prefectureId: string): string {
+  return `clip-shape-${idPrefix ? `${idPrefix}-` : ""}${prefectureId}`;
+}
+
 type Offsets = Record<string, [number, number]>;
 
 function UnitShapes({
@@ -134,6 +138,47 @@ function Overlay({
         offsets={offsets}
         idPrefix={idPrefix}
       />
+    </g>
+  );
+}
+
+function SubregionBoundaries({
+  units,
+  map,
+  offsets,
+  idPrefix,
+}: {
+  units: MapUnit[];
+  map: MapShapes;
+  offsets: Offsets;
+  idPrefix: string;
+}) {
+  return (
+    <g
+      fill="none"
+      stroke="var(--map-stroke)"
+      strokeWidth={1}
+      pointerEvents="none"
+    >
+      {units.flatMap((unit) =>
+        unit.clip
+          ? unitShapes(unit, map).map((shape) => {
+              const offset = offsets[shape.prefectureId];
+              const transform = offset
+                ? `translate(${offset[0]} ${offset[1]}) ${shape.transform}`
+                : shape.transform;
+              return (
+                <g
+                  key={`${unit.id}-${shape.prefectureId}`}
+                  transform={transform || undefined}
+                  clipPath={`url(#${prefectureClipPathId(idPrefix, shape.prefectureId)})`}
+                >
+                  <polygon points={clipPoints(shape, unit.clip ?? [])} />
+                </g>
+              );
+            })
+          : [],
+      )}
     </g>
   );
 }
@@ -229,6 +274,27 @@ export default function JapanMap({
             }}
           >
             <defs>
+              {load.map.shapes
+                .filter((shape) =>
+                  units.some(
+                    (unit) =>
+                      unit.clip && unit.prefectureIds.includes(shape.prefectureId),
+                  ),
+                )
+                .map((shape) => (
+                  <clipPath
+                    key={shape.prefectureId}
+                    id={prefectureClipPathId(idPrefix, shape.prefectureId)}
+                  >
+                    {shape.elements.map((element, index) =>
+                      element.tag === "path" ? (
+                        <path key={index} d={element.value} />
+                      ) : (
+                        <polygon key={index} points={element.value} />
+                      ),
+                    )}
+                  </clipPath>
+                ))}
               {units.flatMap((unit) =>
                 unit.clip
                   ? unitShapes(unit, load.map).map((shape) => (
@@ -293,6 +359,12 @@ export default function JapanMap({
                   </g>
                 );
               })}
+              <SubregionBoundaries
+                units={units}
+                map={load.map}
+                offsets={offsets}
+                idPrefix={idPrefix}
+              />
               {selectedUnit ? (
                 <Overlay
                   unit={selectedUnit}
