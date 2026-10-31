@@ -1217,5 +1217,821 @@
     "address": "沖縄県国頭郡今帰仁村古宇利",
     "lat": 26.704348,
     "lng": 128.018097
+  },
+  {
+    "id": "osm_relation_2689476",
+    "name": "川崎市",
+    "prefectureId": "kanagawa",
+    "address": "神奈川県川崎市",
+    "lat": 35.5306639,
+    "lng": 139.7037668
+  },
+  {
+    "id": "osm_relation_963784",
+    "name": "盛岡市",
+    "prefectureId": "iwate",
+    "address": "岩手県盛岡市",
+    "lat": 39.7021331,
+    "lng": 141.1545397
+  },
+  {
+    "id": "osm_way_439668255",
+    "name": "長久寺",
+    "prefectureId": "saitama",
+    "address": "埼玉県所沢市久米411",
+    "lat": 35.779464,
+    "lng": 139.468995
+  },
+  {
+    "id": "osm_node_537509959",
+    "name": "北加賀屋",
+    "prefectureId": "osaka",
+    "address": "大阪府大阪市住之江区北加賀屋二丁目",
+    "lat": 34.6212875,
+    "lng": 135.4794184
+  },
+  {
+    "id": "osm_node_537509957",
+    "name": "アミューズメントパーク ウェアハウス入谷店",
+    "prefectureId": "tokyo",
+    "address": "東京都足立区入谷７丁目８−１１",
+    "lat": 35.80114,
+    "lng": 139.760873
+  },
+  {
+    "id": "osm_relation_17879464",
+    "name": "東京ディズニーリゾート",
+    "prefectureId": "chiba",
+    "address": "千葉県浦安市舞浜(大字)",
+    "lat": 35.6308121,
+    "lng": 139.881242
+  },
+  {
+    "id": "osm_way_574483668",
+    "name": "ニューヨークランプミュージアム&フラワーガーデン",
+    "prefectureId": "shizuoka",
+    "address": "静岡県伊東市841-1",
+    "lat": 34.8856649,
+    "lng": 139.1329446
+  },
+  {
+    "id": "osm_way_57448",
+    "name": "みなとみらいトリックアート・ストリート",
+    "prefectureId": "kanagawa",
+    "address": "神奈川県横浜市西区みなとみらい３丁目５−１ MARK IS みなとみらい 4階",
+    "lat": 35.457701,
+    "lng": 139.631772
+  },
+  {
+    "id": "osm_way_36805734",
+    "name": "臨港パーク",
+    "prefectureId": "kanagawa",
+    "address": "神奈川県横浜市西区",
+    "lat": 35.4608838,
+    "lng": 139.6369336
+  },
+  {
+    "id": "osm_node_355843942",
+    "name": "みなとみらい",
+    "prefectureId": "kanagawa",
+    "address": "神奈川県横浜市西区MinatoMirai高島",
+    "lat": 35.457215,
+    "lng": 139.6328222
+  },
+  {
+    "id": "osm_way_1417147676",
+    "name": "おきなわワールド",
+    "prefectureId": "okinawa",
+    "address": "沖縄県南城市玉城前川",
+    "lat": 26.1394397,
+    "lng": 127.7504286
+  },
+  {
+    "id": "osm_way_188840517",
+    "name": "残波ビーチ",
+    "prefectureId": "okinawa",
+    "address": "沖縄県中頭郡読谷村宇座",
+    "lat": 26.4353402,
+    "lng": 127.7159846
+  },
+  {
+    "id": "osm_node_8308111609",
+    "name": "瀬長島",
+    "prefectureId": "okinawa",
+    "address": "沖縄県豊見城市",
+    "lat": 26.1753131,
+    "lng": 127.6423895
+  },
+  {
+    "id": "osm_relation_15036966",
+    "name": "瀬底ビーチ",
+    "prefectureId": "okinawa",
+    "address": "沖縄県国頭郡本部町",
+    "lat": 26.6488043,
+    "lng": 127.8550143
+  },
+  {
+    "id": "osm_node_8308034166",
+    "name": "知念岬",
+    "prefectureId": "okinawa",
+    "address": "沖縄県南城市",
+    "lat": 26.1662233,
+    "lng": 127.8305304
+  },
+  {
+    "id": "osm_way_541344321",
+    "name": "オリオンECO美らSUNビーチ",
+    "prefectureId": "okinawa",
+    "address": "沖縄県豊見城市与根",
+    "lat": 26.156378,
+    "lng": 127.6472273
+  },
+  {
+    "id": "osm_node_1997920514",
+    "name": "琉球ガラス村",
+    "prefectureId": "okinawa",
+    "address": "沖縄県糸満市福地１６９糸満市糸洲",
+    "lat": 26.0975433,
+    "lng": 127.6777668
+  },
+  {
+    "id": "osm_way_396210563",
+    "name": "琉球村",
+    "prefectureId": "okinawa",
+    "address": "沖縄県国頭郡恩納村1130山田",
+    "lat": 26.4296258,
+    "lng": 127.7753141
+  },
+  {
+    "id": "osm_way_439826065",
+    "name": "河津バガテル公園 (フランス式庭園)",
+    "prefectureId": "shizuoka",
+    "address": "静岡県賀茂郡河津町1073",
+    "lat": 34.7527599,
+    "lng": 138.9817873
+  },
+  {
+    "id": "osm_node_5775510855",
+    "name": "花巻温泉",
+    "prefectureId": "iwate",
+    "address": "岩手県花巻市西大通り一丁目愛宕沢",
+    "lat": 39.3930827,
+    "lng": 141.1104516
+  },
+  {
+    "id": "osm_way_961017086",
+    "name": "花巻温泉バラ園",
+    "prefectureId": "iwate",
+    "address": "岩手県花巻市台",
+    "lat": 39.4532215,
+    "lng": 141.0699963
+  },
+  {
+    "id": "osm_node_7894395983",
+    "name": "釜淵の滝",
+    "prefectureId": "iwate",
+    "address": "岩手県花巻市湯本第１地割",
+    "lat": 39.455622,
+    "lng": 141.066055
+  },
+  {
+    "id": "osm_node_1423733597",
+    "name": "花桃の里",
+    "prefectureId": "nagano",
+    "address": "長野県下伊那郡阿智村智里",
+    "lat": 35.443806,
+    "lng": 137.66194
+  },
+  {
+    "id": "osm_way_495904855",
+    "name": "モザイクタイルミュージアム",
+    "prefectureId": "gifu",
+    "address": "岐阜県多治見市滝呂町十四丁目笠原町",
+    "lat": 35.2990845,
+    "lng": 137.159421
+  },
+  {
+    "id": "osm_way_562241668",
+    "name": "関ケ原ウォーランド",
+    "prefectureId": "gifu",
+    "address": "岐阜県不破郡関ケ原町大字玉",
+    "lat": 35.3689566,
+    "lng": 136.4526327
+  },
+  {
+    "id": "osm_node_4317821122",
+    "name": "デレミリ衣装展",
+    "prefectureId": "kyoto",
+    "address": "京都府京都市左京区岡崎最勝寺町",
+    "lat": 35.0135045,
+    "lng": 135.7806502
+  },
+  {
+    "id": "osm_way_1151898785",
+    "name": "城南宮",
+    "prefectureId": "kyoto",
+    "address": "京都府京都市伏見区中島鳥羽離宮町",
+    "lat": 34.9505959,
+    "lng": 135.7469948
+  },
+  {
+    "id": "osm_way_359896810",
+    "name": "東寺",
+    "prefectureId": "kyoto",
+    "address": "京都府京都市南区西九条比永城町",
+    "lat": 34.9806311,
+    "lng": 135.7477192
+  },
+  {
+    "id": "osm_node_3914881285",
+    "name": "巾着田",
+    "prefectureId": "saitama",
+    "address": "埼玉県日高市日向梅原",
+    "lat": 35.8831866,
+    "lng": 139.3110516
+  },
+  {
+    "id": "osm_way_929031490",
+    "name": "金沢駅",
+    "prefectureId": "ishikawa",
+    "address": "石川県金沢市本町二丁目日吉町",
+    "lat": 36.5773191,
+    "lng": 136.6472778
+  },
+  {
+    "id": "osm_way_50288147",
+    "name": "兼六園",
+    "prefectureId": "ishikawa",
+    "address": "石川県金沢市",
+    "lat": 36.5624267,
+    "lng": 136.6623546
+  },
+  {
+    "id": "osm_node_2146147848",
+    "name": "ひがし茶屋街",
+    "prefectureId": "ishikawa",
+    "address": "石川県金沢市観音町二丁目八幡町",
+    "lat": 36.5725559,
+    "lng": 136.6666756
+  },
+  {
+    "id": "osm_way_929035663",
+    "name": "金沢蓄音器館",
+    "prefectureId": "ishikawa",
+    "address": "石川県金沢市尾張町一丁目下新町",
+    "lat": 36.5711961,
+    "lng": 136.662636
+  },
+  {
+    "id": "osm_way_92903",
+    "name": "加賀友禅ミュージアムそめりあ",
+    "prefectureId": "ishikawa",
+    "address": "石川県金沢市小将町８−８",
+    "lat": 36.563836,
+    "lng": 136.664354
+  },
+  {
+    "id": "osm_way_929364826",
+    "name": "自遊花人水引ミュージアム",
+    "prefectureId": "ishikawa",
+    "address": "石川県金沢市清川町7-9",
+    "lat": 36.551028,
+    "lng": 136.657465
+  },
+  {
+    "id": "osm_way_197980653",
+    "name": "金沢21世紀美術館",
+    "prefectureId": "ishikawa",
+    "address": "石川県金沢市広坂一丁目柿木畠",
+    "lat": 36.5608382,
+    "lng": 136.6582097
+  },
+  {
+    "id": "osm_way_876150436",
+    "name": "国立工芸館",
+    "prefectureId": "ishikawa",
+    "address": "石川県金沢市本多町三丁目出羽町",
+    "lat": 36.559067,
+    "lng": 136.661807
+  },
+  {
+    "id": "osm_way_1352442122",
+    "name": "石川県立図書館",
+    "prefectureId": "ishikawa",
+    "address": "石川県金沢市小立野二丁目笠舞町1号",
+    "lat": 36.5486923,
+    "lng": 136.6803683
+  },
+  {
+    "id": "osm_way_1443438835",
+    "name": "白鬚神社",
+    "prefectureId": "shiga",
+    "address": "滋賀県高島市鵜川",
+    "lat": 35.2745787,
+    "lng": 136.0111351
+  },
+  {
+    "id": "osm_node_4796184322",
+    "name": "西教寺",
+    "prefectureId": "shiga",
+    "address": "滋賀県大津市坂本八丁目",
+    "lat": 35.0811304,
+    "lng": 135.8663773
+  },
+  {
+    "id": "osm_relation_63499",
+    "name": "琵琶湖",
+    "prefectureId": "shiga",
+    "address": "滋賀県",
+    "lat": 35.2486461,
+    "lng": 136.0825575
+  },
+  {
+    "id": "osm_way_941820450",
+    "name": "豊公園",
+    "prefectureId": "niigata",
+    "address": "新潟県新潟市東区もえぎ野",
+    "lat": 37.8935238,
+    "lng": 139.0986403
+  },
+  {
+    "id": "osm_node_298348191",
+    "name": "長浜城歴史博物館",
+    "prefectureId": "shiga",
+    "address": "滋賀県長浜市公園町",
+    "lat": 35.377657,
+    "lng": 136.261281
+  },
+  {
+    "id": "osm_node_13463494951",
+    "name": "長浜市街地案内図 黒壁スクエア案内図",
+    "prefectureId": "shiga",
+    "address": "滋賀県長浜市南呉服町",
+    "lat": 35.3804909,
+    "lng": 136.2660509
+  },
+  {
+    "id": "osm_node_6246392177",
+    "name": "修善寺虹の郷",
+    "prefectureId": "shizuoka",
+    "address": "静岡県伊豆市修善寺4279-3",
+    "lat": 34.9743345,
+    "lng": 138.9099213
+  },
+  {
+    "id": "osm_node_624636437",
+    "name": "小野池あじさい公園",
+    "prefectureId": "gunma",
+    "address": "群馬県渋川市渋川２９７９",
+    "lat": 36.498561,
+    "lng": 138.989806
+  },
+  {
+    "id": "osm_node_14273010361",
+    "name": "笹川流れ",
+    "prefectureId": "niigata",
+    "address": "新潟県村上市桑川",
+    "lat": 38.3699957,
+    "lng": 139.4547261
+  },
+  {
+    "id": "osm_way_154083968",
+    "name": "新潟駅",
+    "prefectureId": "niigata",
+    "address": "新潟県新潟市中央区花園一丁目天神",
+    "lat": 37.9119681,
+    "lng": 139.0614003
+  },
+  {
+    "id": "osm_node_4595589961",
+    "name": "万代シテイバスセンター",
+    "prefectureId": "niigata",
+    "address": "新潟県新潟市中央区万代",
+    "lat": 37.9163588,
+    "lng": 139.0556451
+  },
+  {
+    "id": "osm_way_560495239",
+    "name": "萬代橋",
+    "prefectureId": "niigata",
+    "address": "新潟県新潟市中央区下大川前通二ノ町八千代",
+    "lat": 37.9195684,
+    "lng": 139.0531308
+  },
+  {
+    "id": "osm_node_13694492100",
+    "name": "新潟港",
+    "prefectureId": "niigata",
+    "address": "新潟県新潟市中央区万代島",
+    "lat": 37.929907,
+    "lng": 139.062007
+  },
+  {
+    "id": "osm_node_13694412134",
+    "name": "Befcoばかうけ展望室",
+    "prefectureId": "niigata",
+    "address": "新潟県新潟市中央区万代島6番地1",
+    "lat": 37.9253,
+    "lng": 139.0598
+  },
+  {
+    "id": "osm_node_7555097105",
+    "name": "万代島",
+    "prefectureId": "niigata",
+    "address": "新潟県新潟市中央区万代島沼垂西",
+    "lat": 37.9255984,
+    "lng": 139.0608118
+  },
+  {
+    "id": "osm_node_5694147943",
+    "name": "田中屋本店",
+    "prefectureId": "niigata",
+    "address": "新潟県新潟市中央区花園1-1-1",
+    "lat": 37.912089,
+    "lng": 139.061276
+  },
+  {
+    "id": "osm_way_351085658",
+    "name": "新潟市歴史博物館みなとぴあ",
+    "prefectureId": "niigata",
+    "address": "新潟県新潟市中央区西湊町通四ノ町沼垂西",
+    "lat": 37.9302763,
+    "lng": 139.0575209
+  },
+  {
+    "id": "osm_node_12277882814",
+    "name": "大坂屋",
+    "prefectureId": "niigata",
+    "address": "新潟県新潟市中央区古町通7番町1006-1",
+    "lat": 37.923338,
+    "lng": 139.045185
+  },
+  {
+    "id": "osm_way_81050878",
+    "name": "新潟市水族館マリンピア日本海",
+    "prefectureId": "niigata",
+    "address": "新潟県新潟市中央区水道町二丁目",
+    "lat": 37.923621,
+    "lng": 139.0279991
+  },
+  {
+    "id": "osm_way_422603794",
+    "name": "新潟グランドホテル",
+    "prefectureId": "niigata",
+    "address": "新潟県新潟市中央区下大川前通二ノ町万代",
+    "lat": 37.921632,
+    "lng": 139.0525618
+  },
+  {
+    "id": "osm_node_4448575180",
+    "name": "新潟市マンガ・アニメ情報館",
+    "prefectureId": "niigata",
+    "address": "新潟県新潟市中央区八千代7",
+    "lat": 37.916071,
+    "lng": 139.0531746
+  },
+  {
+    "id": "osm_way_449619613",
+    "name": "新潟市新津鉄道資料館",
+    "prefectureId": "niigata",
+    "address": "新潟県新潟市秋葉区新津東町一丁目",
+    "lat": 37.8017671,
+    "lng": 139.1418354
+  },
+  {
+    "id": "osm_way_744674936",
+    "name": "北方文化博物館",
+    "prefectureId": "niigata",
+    "address": "新潟県新潟市江南区沢海二丁目",
+    "lat": 37.8295379,
+    "lng": 139.1520675
+  },
+  {
+    "id": "osm_way_387175789",
+    "name": "新潟せんべい王国",
+    "prefectureId": "niigata",
+    "address": "新潟県新潟市北区新崎三丁目",
+    "lat": 37.9292433,
+    "lng": 139.1638698
+  },
+  {
+    "id": "osm_way_256223124",
+    "name": "道の駅新潟ふるさと村",
+    "prefectureId": "niigata",
+    "address": "新潟県新潟市西区山田2307",
+    "lat": 37.8663369,
+    "lng": 139.0202365
+  },
+  {
+    "id": "osm_node_11730800647",
+    "name": "新潟市マンガの家",
+    "prefectureId": "niigata",
+    "address": "新潟県新潟市中央区古町通6番町971-7",
+    "lat": 37.920583,
+    "lng": 139.04475
+  },
+  {
+    "id": "osm_node_1173032224",
+    "name": "峰村醸造直売所",
+    "prefectureId": "niigata",
+    "address": "新潟県新潟市中央区明石2丁目3-44",
+    "lat": 37.91724,
+    "lng": 139.069768
+  },
+  {
+    "id": "osm_way_57007660",
+    "name": "新潟空港",
+    "prefectureId": "niigata",
+    "address": "新潟県新潟市東区根室新町下山",
+    "lat": 37.9544234,
+    "lng": 139.1138427
+  },
+  {
+    "id": "osm_relation_10341225",
+    "name": "西武園ゆうえんち",
+    "prefectureId": "saitama",
+    "address": "埼玉県",
+    "lat": 35.769024,
+    "lng": 139.4426543
+  },
+  {
+    "id": "osm_way_1040428833",
+    "name": "松本市美術館",
+    "prefectureId": "nagano",
+    "address": "長野県松本市中央四丁目女鳥羽葭町",
+    "lat": 36.2315567,
+    "lng": 137.9766471
+  },
+  {
+    "id": "osm_node_2291926846",
+    "name": "長野駅",
+    "prefectureId": "nagano",
+    "address": "長野県長野市南千歳一丁目中御所南石堂町",
+    "lat": 36.6441032,
+    "lng": 138.1879029
+  },
+  {
+    "id": "osm_way_220401982",
+    "name": "善光寺",
+    "prefectureId": "nagano",
+    "address": "長野県長野市箱清水二丁目大字三輪伊勢町",
+    "lat": 36.6614233,
+    "lng": 138.1876577
+  },
+  {
+    "id": "osm_way_300077872",
+    "name": "松本城",
+    "prefectureId": "nagano",
+    "address": "長野県松本市城西二丁目丸の内葭町",
+    "lat": 36.2386353,
+    "lng": 137.9688709
+  },
+  {
+    "id": "osm_way_149397097",
+    "name": "縄手通り",
+    "prefectureId": "nagano",
+    "address": "長野県松本市大手四丁目丸の内葭町",
+    "lat": 36.2346128,
+    "lng": 137.9719918
+  },
+  {
+    "id": "osm_node_7177668185",
+    "name": "ヘブンスそのはら",
+    "prefectureId": "nagano",
+    "address": "長野県下伊那郡阿智村園原智里",
+    "lat": 35.4552749,
+    "lng": 137.6686338
+  },
+  {
+    "id": "osm_node_8207895833",
+    "name": "昼神温泉",
+    "prefectureId": "nagano",
+    "address": "長野県下伊那郡阿智村昼神温泉伏谷",
+    "lat": 35.4562619,
+    "lng": 137.7146019
+  },
+  {
+    "id": "osm_node_12020203527",
+    "name": "南沢あじさい山",
+    "prefectureId": "tokyo",
+    "address": "東京都あきる野市深沢",
+    "lat": 35.7419706,
+    "lng": 139.2081355
+  },
+  {
+    "id": "osm_way_523178334",
+    "name": "のとじま臨海公園水族館",
+    "prefectureId": "ishikawa",
+    "address": "石川県七尾市能登島南町",
+    "lat": 37.148723,
+    "lng": 136.9821597
+  },
+  {
+    "id": "osm_node_1420933547",
+    "name": "石川県能登島ガラス美術館",
+    "prefectureId": "ishikawa",
+    "address": "石川県七尾市能登島南町",
+    "lat": 37.1371238,
+    "lng": 136.996581
+  },
+  {
+    "id": "osm_node_2458664748",
+    "name": "八戸駅",
+    "prefectureId": "aomori",
+    "address": "青森県八戸市一番町一丁目",
+    "lat": 40.508344,
+    "lng": 141.431604
+  },
+  {
+    "id": "osm_way_238007288",
+    "name": "ユートリー",
+    "prefectureId": "aomori",
+    "address": "青森県八戸市一番町一丁目",
+    "lat": 40.5081077,
+    "lng": 141.4312842
+  },
+  {
+    "id": "osm_node_12069264071",
+    "name": "「八戸市史跡根城の広場」総合案内板",
+    "prefectureId": "aomori",
+    "address": "青森県八戸市根城八丁目",
+    "lat": 40.5078573,
+    "lng": 141.4642542
+  },
+  {
+    "id": "osm_way_751202911",
+    "name": "八食センター",
+    "prefectureId": "aomori",
+    "address": "青森県八戸市長苗代",
+    "lat": 40.5264009,
+    "lng": 141.4534949
+  },
+  {
+    "id": "osm_way_550010220",
+    "name": "八戸酒造",
+    "prefectureId": "aomori",
+    "address": "青森県八戸市湊町字本町9番地",
+    "lat": 40.524317,
+    "lng": 141.523098
+  },
+  {
+    "id": "osm_node_5409447622",
+    "name": "八戸ポータルミュージアム はっち",
+    "prefectureId": "aomori",
+    "address": "青森県八戸市内丸三丁目三日町",
+    "lat": 40.5099057,
+    "lng": 141.4905917
+  },
+  {
+    "id": "osm_way_560902679",
+    "name": "三日町にぎわい拠点 マチニワ",
+    "prefectureId": "aomori",
+    "address": "青森県八戸市内丸三丁目三日町",
+    "lat": 40.509578,
+    "lng": 141.4911857
+  },
+  {
+    "id": "osm_node_7682007438",
+    "name": "八戸市営魚菜小売市場",
+    "prefectureId": "aomori",
+    "address": "青森県八戸市新湊二丁目湊町",
+    "lat": 40.5236491,
+    "lng": 141.5270999
+  },
+  {
+    "id": "osm_way_557052452",
+    "name": "館鼻公園",
+    "prefectureId": "aomori",
+    "address": "青森県八戸市湊町",
+    "lat": 40.527636,
+    "lng": 141.5218312
+  },
+  {
+    "id": "osm_way_555012891",
+    "name": "種差海岸インフォメーションセンター",
+    "prefectureId": "aomori",
+    "address": "青森県",
+    "lat": 40.5087081,
+    "lng": 141.6083986
+  },
+  {
+    "id": "osm_node_264226195",
+    "name": "種差海岸",
+    "prefectureId": "aomori",
+    "address": "青森県八戸市八戸階上線",
+    "lat": 40.5070498,
+    "lng": 141.6072643
+  },
+  {
+    "id": "osm_node_262311854",
+    "name": "葦毛崎展望台",
+    "prefectureId": "aomori",
+    "address": "青森県八戸市鮫町",
+    "lat": 40.5391058,
+    "lng": 141.580317
+  },
+  {
+    "id": "osm_way_361739159",
+    "name": "八戸市水産科学館マリエント",
+    "prefectureId": "aomori",
+    "address": "青森県八戸市鮫町",
+    "lat": 40.5396437,
+    "lng": 141.5627763
+  },
+  {
+    "id": "osm_node_2417938988",
+    "name": "蕪嶋神社",
+    "prefectureId": "aomori",
+    "address": "青森県",
+    "lat": 40.5386334,
+    "lng": 141.5576229
+  },
+  {
+    "id": "osm_way_1479329564",
+    "name": "かぶーにゃ",
+    "prefectureId": "aomori",
+    "address": "青森県八戸市かぶーにゃ;駐車場",
+    "lat": 40.5367439,
+    "lng": 141.5589388
+  },
+  {
+    "id": "osm_way_1479329569",
+    "name": "鮫駅",
+    "prefectureId": "aomori",
+    "address": "青森県八戸市築港街第一ふ頭",
+    "lat": 40.5302181,
+    "lng": 141.5553656
+  },
+  {
+    "id": "osm_way_1479321855",
+    "name": "本八戸駅",
+    "prefectureId": "aomori",
+    "address": "青森県八戸市内丸一丁目堀端町",
+    "lat": 40.5162896,
+    "lng": 141.4890027
+  },
+  {
+    "id": "osm_way_579849930",
+    "name": "館鼻岸壁朝市",
+    "prefectureId": "aomori",
+    "address": "青森県八戸市新湊3丁目",
+    "lat": 40.528011,
+    "lng": 141.529439
+  },
+  {
+    "id": "osm_node_1420949543",
+    "name": "福井県立恐竜博物館",
+    "prefectureId": "fukui",
+    "address": "福井県",
+    "lat": 36.0823042,
+    "lng": 136.5065708
+  },
+  {
+    "id": "osm_relation_8273220",
+    "name": "雄島",
+    "prefectureId": "fukui",
+    "address": "福井県坂井市",
+    "lat": 36.2517537,
+    "lng": 136.1190402
+  },
+  {
+    "id": "osm_node_1401927618",
+    "name": "東尋坊",
+    "prefectureId": "tokyo",
+    "address": "東京都台東区上野六丁目",
+    "lat": 35.7107939,
+    "lng": 139.7751562
+  },
+  {
+    "id": "osm_way_772670439",
+    "name": "福岡タワー",
+    "prefectureId": "fukuoka",
+    "address": "福岡県福岡市早良区百道浜二丁目26",
+    "lat": 33.5932744,
+    "lng": 130.3514862
+  },
+  {
+    "id": "osm_way_23344558",
+    "name": "大濠公園",
+    "prefectureId": "fukuoka",
+    "address": "福岡県福岡市中央区2",
+    "lat": 33.5861214,
+    "lng": 130.3763612
+  },
+  {
+    "id": "osm_way_705639494",
+    "name": "のこのしまアイランドパーク",
+    "prefectureId": "fukuoka",
+    "address": "福岡県福岡市西区",
+    "lat": 33.6325208,
+    "lng": 130.3010797
+  },
+  {
+    "id": "osm_way_476016290",
+    "name": "偕楽園",
+    "prefectureId": "ibaraki",
+    "address": "茨城県水戸市3",
+    "lat": 36.375135,
+    "lng": 140.453545
   }
 ]

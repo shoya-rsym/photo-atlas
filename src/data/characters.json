@@ -2,5 +2,7 @@
   { "id": "hatsune_miku", "name": "初音ミク", "series": "VOCALOID" },
   { "id": "kagamine_rin", "name": "鏡音リン", "series": "VOCALOID" },
   { "id": "character_001", "name": "水本ゆかり" },
-  { "id": "character_002", "name": "渋谷凛" }
+  { "id": "character_002", "name": "渋谷凛" },
+  { "id": "character_003", "name": "小早川紗枝" },
+  { "id": "character_004", "name": "塩見周子" }
 ]
