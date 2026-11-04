@@ -21,10 +21,10 @@
     "id": "session_memory_004",
     "locationId": "osm_node_537509959",
     "sessionDate": "2026-07-06",
-    "text": "明かりが広がり、通りの輪郭が静かに浮かんでいた。",
-    "generatedBy": "template",
+    "text": "線に誘われ、街の歩幅まで少し変わった気がする。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T01:43:00.893Z",
-    "updatedAt": "2026-10-31T01:43:00.893Z"
+    "updatedAt": "2026-11-04T07:45:53.531Z"
   },
   {
     "id": "session_memory_005",
@@ -138,10 +138,10 @@
     "id": "session_memory_017",
     "locationId": "osm_node_8308034166",
     "sessionDate": "2025-07-27",
-    "text": "人の流れが落ち着き、周囲に静かな間が生まれていた。",
-    "generatedBy": "template",
+    "text": "赤の強さに触れたあと、青の遠さだけが最後まで測れなかった。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T05:02:26.888Z",
-    "updatedAt": "2026-10-31T05:02:26.888Z"
+    "updatedAt": "2026-11-04T08:06:53.870Z"
   },
   {
     "id": "session_memory_018",
@@ -336,10 +336,10 @@
     "id": "session_memory_039",
     "locationId": "osm_node_14273010361",
     "sessionDate": "2026-08-22",
-    "text": "風が通り抜け、光の揺らぎが静かに残っている。",
-    "generatedBy": "template",
+    "text": "石の影まで透ける青に、沖の線を見失いそうになる。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T06:37:48.768Z",
-    "updatedAt": "2026-10-31T06:37:48.768Z"
+    "updatedAt": "2026-11-04T08:01:13.996Z"
   },
   {
     "id": "session_memory_040",
@@ -516,10 +516,10 @@
     "id": "session_memory_059",
     "locationId": "osm_way_476016290",
     "sessionDate": "2026-03-06",
-    "text": "色づいた景色の輪郭がやわらぎ、静かな間が広がっていた。",
-    "generatedBy": "template",
+    "text": "遠くへ引き込まれるほど、足元の線が妙に近く感じられた。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T09:29:12.189Z",
-    "updatedAt": "2026-10-31T09:29:12.189Z"
+    "updatedAt": "2026-11-04T07:51:50.980Z"
   },
   {
     "id": "session_memory_001",
@@ -745,5 +745,23 @@
     "generatedBy": "copilot",
     "createdAt": "2026-11-04T07:06:47.422Z",
     "updatedAt": "2026-11-04T07:06:47.422Z"
+  },
+  {
+    "id": "session_memory_084",
+    "locationId": "location_085",
+    "sessionDate": "2023-11-21",
+    "text": "赤の鮮やかさを越えた先でも、青い深みだけは近づかなかった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-04T07:40:42.457Z",
+    "updatedAt": "2026-11-04T07:40:42.457Z"
+  },
+  {
+    "id": "session_memory_085",
+    "locationId": "location_041",
+    "sessionDate": "2020-12-05",
+    "text": "紫のにぎわいを離れたあとも、金の明るさが目の裏に灯る。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-04T07:57:25.080Z",
+    "updatedAt": "2026-11-04T07:57:25.080Z"
   }
 ]
