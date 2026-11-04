@@ -263,7 +263,6 @@ const server = createServer(async (req, res) => {
           await createSessionMemoryPrompt(
             String(body.locationId ?? ""),
             String(body.sessionDate ?? ""),
-            body.previousPhotoIds,
             body.provider,
           ),
         );

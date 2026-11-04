@@ -298,9 +298,10 @@ type SessionMemory = {
 
 - セッションキーは `locationId + sessionDate`。同じ組み合わせにつき最大1件。
 - 撮影日が既知で、同じセッションに写真が1枚以上あれば管理画面から生成できる。撮影日不明の写真は対象にしない。
-- Session Memory v2は写真群を根拠にする。10枚未満は全画像、10枚以上は毎回ランダムに10〜15枚を選び、Copilot Chatに視覚確認を依頼する。タグや場所名から画像内容を推測しない。
+- Session Memory v3はセッションの全画像をCopilot Chatに視覚確認させ、最大公約数ではなく他セッションと区別できる視覚的特徴を抽出する。画像を確認できない場合は生成しない。タグや場所名から画像内容を推測しない。
+- Session Summaryは分析結果として非公開の解析情報に保存する。Summary内で同一特徴を可能な限り繰り返さず、`memorySeeds`には異なる要素を2つ以上含める。Session Memoryは`memorySeeds`を優先し、`uniqueFeatures`、`dominantPatterns`の順に参照する。各Memoryは異なる`memorySeeds`を最低2項目使い、候補間で同じ種を中心として繰り返さない。`uniqueFeatures`単独には依存せず、時間・記憶だけで成立するMemoryや、別セッションでも成立するMemoryは作り直す。
 - Copilotへ画像や情報を自動送信しない。管理者がプロンプトをコピーし、Summaryと3候補を含む応答を貼り付ける。候補を確認して人が1件を選び、明示的に保存する。既存Memoryも選択・保存後に置き換える。
-- Session Summary、解析対象画像ID、Vision Provider、解析件数は `.local/session-memory-analysis.json` に保存する。公開される `session-memories.json` にはMemory本文と生成元だけを保存する。
+- Session Summaryは `dominantPatterns`、`uniqueFeatures`、`visualRhythm`、`colorCharacter`、`spaceCharacter`、`memorySeeds` で構成する。解析対象画像ID、Vision Provider、解析件数とともに `.local/session-memory-analysis.json` に保存する。公開される `session-memories.json` にはMemory本文と生成元だけを保存する。
 - `generatedBy` は既存データとの互換性のため `template` / `ai` / `copilot` / `manual` を許容する。管理画面で本文を編集すると `manual` になる。
 - 生成文は20〜40文字程度を目安とし、場所名・キャラクター名・撮影行為・ストーリーを含めない。
 

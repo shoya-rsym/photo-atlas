@@ -285,8 +285,17 @@ OpenGraph
 
 - Session Memoryは `locationId + sessionDate` ごとに最大1件である
 - 撮影日が既知で写真が1枚以上の全セッションを管理画面で生成・再生成対象にできる
-- Session Memory v2は10枚未満なら全画像、10枚以上ならランダムな10〜15枚を視覚確認に使う
-- 写真群を根拠とするSession Summaryと異なる視点の候補3件を表示し、人が1件を選択して明示的に保存できる
+- Session Memory v3はセッションの全画像を視覚確認し、他セッションと区別できる特徴をSession Summaryに含める
+- Session Summaryは `dominantPatterns`、`uniqueFeatures`、`visualRhythm`、`colorCharacter`、`spaceCharacter`、`memorySeeds` を含む
+- Session MemoryはSession Summaryの分析結果を直接書かず、特徴から得た印象を見終わったあとに残る短い断片として出力する
+- 色・光・距離感・視線の流れ・反復要素から生じる印象は利用できるが、構図などの説明や分析用語、特徴の列挙を避ける
+- 時間表現は補助要素とし、時間や感情だけで成立する文、画像に根拠のない抽象概念だけで成立する文を避ける
+- Memoryの根拠は `memorySeeds`、`uniqueFeatures`、`dominantPatterns` の優先順とし、`uniqueFeatures`だけに依存しない
+- Session Summary内では、可能な限り同一特徴を繰り返し参照しない。`memorySeeds`には重複しない要素を2つ以上含める
+- 各候補は異なる `memorySeeds` を最低2項目使い、単一特徴だけを膨らませない
+- 3候補で同じ `memorySeed` を中心として繰り返さず、それぞれ別の種または組み合わせを軸にする
+- 候補を、単一特徴への依存、時間・記憶だけの成立、他セッションへの流用可能性、複数 `memorySeeds` の反映について自己確認し、該当する場合は作り直す
+- Summaryと異なる視点の候補3件を表示し、人が1件を選択して明示的に保存できる
 - 既存Memoryも生成対象とし、再生成結果で置き換えられる
 - 画像や情報をCopilot Chatへ自動送信せず、場所・タグから写真内容を推測しない
 - 完全一致や高い表現類似度のSession Memoryは保存を拒否する

@@ -473,7 +473,6 @@ function getSessionMemoryProvider(providerId) {
 export function createSessionMemoryPrompt(
   locationId,
   sessionDate,
-  previousPhotoIds = [],
   providerId = DEFAULT_SESSION_MEMORY_VISION_PROVIDER,
 ) {
   return exclusive(
@@ -487,7 +486,7 @@ export function createSessionMemoryPrompt(
       );
       if (sessionPhotos.length === 0) throw new Error("対象セッションの写真がありません");
       const provider = getSessionMemoryProvider(providerId);
-      const selectedPhotos = selectSessionPhotos(sessionPhotos, previousPhotoIds);
+      const selectedPhotos = selectSessionPhotos(sessionPhotos);
       return {
         provider: provider.id,
         photoCount: sessionPhotos.length,
@@ -553,13 +552,8 @@ export function saveGeneratedSessionMemory(payload) {
     if (selectedPhotos.length !== photoIds.length) {
       throw new Error("解析画像に対象セッション以外の写真が含まれています");
     }
-    const expectedMin = Math.min(10, sessionPhotos.length);
-    const expectedMax = Math.min(15, sessionPhotos.length);
-    if (photoIds.length < expectedMin || photoIds.length > expectedMax) {
-      throw new Error(`解析画像は${expectedMin}〜${expectedMax}枚である必要があります`);
-    }
-    if (sessionPhotos.length < 10 && photoIds.length !== sessionPhotos.length) {
-      throw new Error("写真が10枚未満のセッションは全画像を解析対象にしてください");
+    if (photoIds.length !== sessionPhotos.length) {
+      throw new Error("Session Memory v3ではセッションの全画像を解析対象にしてください");
     }
     const duplicate = findSimilarSessionMemory(
       text,
@@ -586,7 +580,7 @@ export function saveGeneratedSessionMemory(payload) {
       sessionMemoryId: memory.id,
       locationId,
       sessionDate,
-      version: 2,
+      version: 3,
       provider: provider.id,
       photoCount: sessionPhotos.length,
       analyzedPhotoCount: photoIds.length,

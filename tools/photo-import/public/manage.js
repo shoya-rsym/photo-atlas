@@ -635,13 +635,12 @@ function renderSessionMemoryDuplicateBadge(duplicateMemory) {
 async function createSessionMemoryPrompt(session) {
   const button = session.promptButton;
   button.disabled = true;
-  session.status = "画像サンプルとプロンプトを準備しています。";
+  session.status = "セッションの全画像とプロンプトを準備しています。";
   renderSessionMemoryBackfill();
   try {
     const result = await api("/api/session-memories/prompt", {
       locationId: session.locationId,
       sessionDate: session.sessionDate,
-      previousPhotoIds: session.photoIds ?? [],
     });
     Object.assign(session, result, {
       rawResponse: "",
@@ -724,7 +723,7 @@ function renderSessionMemoryBackfill() {
           const promptButton = h(
             "button",
             { type: "button", class: "primary" },
-            session.prompt ? "画像サンプルを選び直す" : session.hasMemory ? "既存Memoryを再生成" : "Copilot用プロンプトを作成",
+            session.prompt ? "プロンプトを再生成" : session.hasMemory ? "既存Memoryを再生成" : "Copilot用プロンプトを作成",
           );
           session.promptButton = promptButton;
           promptButton.addEventListener("click", () => createSessionMemoryPrompt(session));
@@ -784,7 +783,7 @@ function renderSessionMemoryBackfill() {
             );
             parseButton.addEventListener("click", () => parseSessionMemoryCandidates(session));
             children.push(
-              h("p", { class: "muted" }, `Copilotが確認する画像 ${session.analyzedPhotoCount} / ${session.photoCount} 枚`),
+              h("p", { class: "muted" }, `Copilotが確認する画像 ${session.analyzedPhotoCount} 枚（全 ${session.photoCount} 枚）`),
               previews,
               promptInput,
               copyButton,
