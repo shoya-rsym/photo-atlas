@@ -243,7 +243,7 @@ Photo Import Toolで写真を登録
 
 ↓
 
-Photo-ManageでMemory未設定のセッションを選択
+Photo-Manageで対象セッションを選択（既存Memoryの再生成も可能）
 
 ↓
 
@@ -251,11 +251,11 @@ Photo-ManageでMemory未設定のセッションを選択
 
 ↓
 
-Session Summaryと異なる視点の候補3件を確認し、人が1件を選択
+Session Summaryと候補3件を確認し、人が候補を1件選択して保存
 
 ↓
 
-Session Memoryと非公開の解析情報を保存
+Session Memoryと非公開の解析情報を保存（既存Memoryは置き換え）
 
 ↓
 

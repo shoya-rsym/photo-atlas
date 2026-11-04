@@ -397,22 +397,42 @@ function buildSessionMemoryBackfillCandidates(photos, locations, memories) {
     sessions.set(key, session);
   }
 
-  const memoryKeys = new Set(
-    memories.map((memory) => `${memory.locationId}|${memory.sessionDate}`),
+  const memoriesByKey = new Map(
+    memories.map((memory) => [`${memory.locationId}|${memory.sessionDate}`, memory]),
   );
   return [...sessions.values()]
-    .filter(
-      (session) =>
-        session.photos.length > 0 &&
-        !memoryKeys.has(`${session.locationId}|${session.sessionDate}`),
-    )
+    .filter((session) => session.photos.length > 0)
     .map((session) => {
       const location = locations.find((item) => item.id === session.locationId);
+      const memory = memoriesByKey.get(`${session.locationId}|${session.sessionDate}`);
+      const otherMemories = memory
+        ? memories.filter((item) => item.id !== memory.id)
+        : [];
+      const duplicate = memory
+        ? findSimilarSessionMemory(memory.text, otherMemories.map((item) => item.text))
+        : null;
+      const duplicateMemory = duplicate
+        ? otherMemories.find((item) => item.text === duplicate.text)
+        : null;
+      const duplicateLocation = duplicateMemory
+        ? locations.find((item) => item.id === duplicateMemory.locationId)
+        : null;
       return {
         locationId: session.locationId,
         locationName: location?.name ?? session.locationId,
         sessionDate: session.sessionDate,
         photoCount: session.photos.length,
+        hasMemory: Boolean(memory),
+        memoryId: memory?.id ?? null,
+        memoryText: memory?.text ?? "",
+        duplicateMemory: duplicateMemory
+          ? {
+              locationName: duplicateLocation?.name ?? duplicateMemory.locationId,
+              sessionDate: duplicateMemory.sessionDate,
+              reason: duplicate.reason,
+              text: duplicateMemory.text,
+            }
+          : null,
         previewPhotos: session.photos.slice(0, 3).map((photo) => ({
           id: photo.id,
           title: photo.title ?? photo.id,
@@ -466,9 +486,6 @@ export function createSessionMemoryPrompt(
         (photo) => photo.locationId === locationId && photo.date === sessionDate,
       );
       if (sessionPhotos.length === 0) throw new Error("対象セッションの写真がありません");
-      if (memories.some((memory) => memory.locationId === locationId && memory.sessionDate === sessionDate)) {
-        throw new Error("このセッションには既にSession Memoryがあります");
-      }
       const provider = getSessionMemoryProvider(providerId);
       const selectedPhotos = selectSessionPhotos(sessionPhotos, previousPhotoIds);
       return {
@@ -529,9 +546,9 @@ export function saveGeneratedSessionMemory(payload) {
       (photo) => photo.locationId === locationId && photo.date === sessionDate,
     );
     if (sessionPhotos.length === 0) throw new Error("対象セッションの写真がありません");
-    if (memories.some((memory) => memory.locationId === locationId && memory.sessionDate === sessionDate)) {
-      throw new Error("このセッションには既にSession Memoryがあります。既存のMemoryは上書きしません");
-    }
+    const existingMemory = memories.find(
+      (memory) => memory.locationId === locationId && memory.sessionDate === sessionDate,
+    );
     const selectedPhotos = sessionPhotos.filter((photo) => photoIds.includes(photo.id));
     if (selectedPhotos.length !== photoIds.length) {
       throw new Error("解析画像に対象セッション以外の写真が含まれています");
@@ -552,17 +569,19 @@ export function saveGeneratedSessionMemory(payload) {
       throw new Error(`過去のSession Memoryと${duplicate.reason}です: 「${duplicate.text}」`);
     }
 
-    const usedIds = new Set(memories.map((memory) => memory.id));
     const timestamp = new Date().toISOString();
     const memory = {
-      id: allocateId("session_memory", undefined, usedIds),
+      id: existingMemory?.id ?? allocateId("session_memory", undefined, new Set(memories.map((item) => item.id))),
       locationId,
       sessionDate,
       text,
       generatedBy: provider.id === copilotVisionProvider.id ? "copilot" : "ai",
-      createdAt: timestamp,
+      createdAt: existingMemory?.createdAt ?? timestamp,
       updatedAt: timestamp,
     };
+    const nextMemories = existingMemory
+      ? memories.map((item) => item.id === existingMemory.id ? memory : item)
+      : [...memories, memory];
     const analysis = {
       sessionMemoryId: memory.id,
       locationId,
@@ -575,13 +594,17 @@ export function saveGeneratedSessionMemory(payload) {
       summary,
       generatedAt: timestamp,
     };
+    const nextAnalyses = [
+      ...analyses.filter((item) => item.sessionMemoryId !== memory.id),
+      analysis,
+    ];
     const memoryFile = dataFile("session-memories");
     const analysisFile = SESSION_MEMORY_ANALYSIS_FILE;
     const memoryBefore = await readFile(memoryFile, "utf8");
     const analysisBefore = `${JSON.stringify(analyses, null, 2)}\n`;
     try {
-      await writeAtomic(memoryFile, formatJsonList([...memories, memory], "expanded"));
-      await writeAtomic(analysisFile, `${JSON.stringify([...analyses, analysis], null, 2)}\n`);
+      await writeAtomic(memoryFile, formatJsonList(nextMemories, "expanded"));
+      await writeAtomic(analysisFile, `${JSON.stringify(nextAnalyses, null, 2)}\n`);
     } catch (error) {
       try {
         await writeAtomic(memoryFile, memoryBefore);
@@ -591,8 +614,12 @@ export function saveGeneratedSessionMemory(payload) {
       }
       throw error;
     }
-    return finish(photos, locations, { sessionMemory: memory, analysis });
-  }, { label: "Vision解析によるSession Memory保存" });
+    return finish(photos, locations, {
+      sessionMemory: memory,
+      analysis,
+      replaced: Boolean(existingMemory),
+    });
+  }, { label: "Vision解析によるSession Memory保存・再付与" });
 }
 
 export function getMemoryReviewData() {

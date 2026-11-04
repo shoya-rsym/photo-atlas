@@ -299,7 +299,7 @@ type SessionMemory = {
 - セッションキーは `locationId + sessionDate`。同じ組み合わせにつき最大1件。
 - 撮影日が既知で、同じセッションに写真が1枚以上あれば管理画面から生成できる。撮影日不明の写真は対象にしない。
 - Session Memory v2は写真群を根拠にする。10枚未満は全画像、10枚以上は毎回ランダムに10〜15枚を選び、Copilot Chatに視覚確認を依頼する。タグや場所名から画像内容を推測しない。
-- Copilotへ画像や情報を自動送信しない。管理者がプロンプトをコピーし、応答からSession Summaryと3候補を確認して1件を選択する。既存のSession Memoryは自動上書きしない。
+- Copilotへ画像や情報を自動送信しない。管理者がプロンプトをコピーし、Summaryと3候補を含む応答を貼り付ける。候補を確認して人が1件を選び、明示的に保存する。既存Memoryも選択・保存後に置き換える。
 - Session Summary、解析対象画像ID、Vision Provider、解析件数は `.local/session-memory-analysis.json` に保存する。公開される `session-memories.json` にはMemory本文と生成元だけを保存する。
 - `generatedBy` は既存データとの互換性のため `template` / `ai` / `copilot` / `manual` を許容する。管理画面で本文を編集すると `manual` になる。
 - 生成文は20〜40文字程度を目安とし、場所名・キャラクター名・撮影行為・ストーリーを含めない。

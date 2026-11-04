@@ -113,6 +113,10 @@ body.manage-page { padding-bottom: 104px; }
 .session-memory-summary { max-height: 240px; overflow: auto; padding: 8px; border-radius: 6px; background: var(--panel); white-space: pre-wrap; overflow-wrap: anywhere; }
 .session-memory-backfill-item > label:first-child { font-weight: 600; }
 .session-memory-backfill-item select { margin-top: 4px; }
+.session-memory-candidates { display: grid; gap: 8px; }
+.session-memory-candidate { display: grid; grid-template-columns: auto 1fr; gap: 8px; align-items: start; padding: 8px; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; }
+.session-memory-candidate input[type="radio"] { width: auto; margin: 4px 0 0; }
+.session-memory-candidate p { margin: 2px 0 0; }
 .memory-review-editor { max-height: 92vh; overflow-y: auto; }
 .memory-review-tabs .active { border-color: var(--accent); color: var(--accent); }
 .memory-review-pane { margin-top: 12px; }

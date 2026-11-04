@@ -85,8 +85,8 @@ export async function discardStaged(tokens) {
 }
 
 export async function loadMaster() {
-  const [prefectures, locations, tags, characters, photos] = await Promise.all(
-    ["prefectures", "locations", "tags", "characters", "photos"].map((n) =>
+  const [prefectures, locations, tags, characters, photos, sessionMemories] = await Promise.all(
+    ["prefectures", "locations", "tags", "characters", "photos", "session-memories"].map((n) =>
       readJson(dataFile(n), []),
     ),
   );
@@ -97,6 +97,7 @@ export async function loadMaster() {
     locations,
     tags,
     characters,
+    sessionMemories,
     photoCounts: counts,
     photoTotal: photos.length,
   };

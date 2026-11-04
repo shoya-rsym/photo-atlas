@@ -264,15 +264,15 @@
       <p class="muted">撮影場所と撮影日ごとのMemoryを編集・削除できます。</p>
       <section id="sessionMemoryManageSection">
         <button id="sessionMemoryBackfillOpen" type="button" class="primary">
-          既存セッションにMemoryを付与
+          全セッションを生成・再付与
         </button>
         <div id="sessionMemoryList" class="session-memory-list"></div>
       </section>
       <section id="sessionMemoryBackfillSection" hidden>
         <button id="sessionMemoryBackfillBack" type="button">← Memory管理に戻る</button>
         <p class="muted">
-          撮影日があり、写真が1枚以上のMemory未設定セッションが対象です。
-          Copilot Chatにプロンプトを渡して画像を確認し、Session Summaryと3候補を人が確認してから保存します。
+          撮影日があり、写真が1枚以上の全セッションが対象です。既存のSession Memoryも置き換えます。
+          Copilot Chatにプロンプトを渡して画像を確認し、Summaryと3候補の応答を貼り付けます。候補を確認して1件を選択し、保存してください。既存Memoryは選択して保存した場合に置き換わります。
           画像や情報は自動送信されません。10枚未満は全画像、10枚以上は毎回異なる10〜15枚を選びます。
         </p>
         <div class="row">

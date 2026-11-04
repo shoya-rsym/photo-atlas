@@ -576,6 +576,9 @@ function renderSessionMemoryManager() {
   $("sessionMemoryList").replaceChildren(
     ...(memories.length
       ? memories.map((memory) => {
+          const candidate = state.sessionMemoryCandidates.find(
+            (session) => session.memoryId === memory.id,
+          );
           const textInput = h(
             "textarea",
             { maxlength: "120", "aria-label": "Session Memory" },
@@ -586,6 +589,7 @@ function renderSessionMemoryManager() {
             { class: "session-memory-item" },
             h("strong", {}, `${locName(memory.locationId)} / ${memory.sessionDate}`),
             h("span", { class: "muted" }, `作成方法: ${memory.generatedBy}`),
+            renderSessionMemoryDuplicateBadge(candidate?.duplicateMemory),
             textInput,
             h(
               "div",
@@ -615,6 +619,19 @@ function renderSessionMemoryManager() {
   );
 }
 
+function renderSessionMemoryDuplicateBadge(duplicateMemory) {
+  if (!duplicateMemory) return null;
+  return h(
+    "span",
+    {
+      class: "session-memory-duplicate",
+      role: "status",
+      title: `${duplicateMemory.locationName} / ${duplicateMemory.sessionDate}: ${duplicateMemory.text}`,
+    },
+    `重複・類似するMemoryあり（${duplicateMemory.reason}）`,
+  );
+}
+
 async function createSessionMemoryPrompt(session) {
   const button = session.promptButton;
   button.disabled = true;
@@ -639,37 +656,56 @@ async function createSessionMemoryPrompt(session) {
 }
 
 async function parseSessionMemoryCandidates(session) {
+  if (session.saving) return;
+  session.saving = true;
   try {
     session.parsed = await api("/api/session-memories/parse", {
       rawResponse: session.rawResponse,
       provider: session.provider,
     });
     session.selectedCandidate = 0;
-    session.status = "3候補を読み込みました。Summaryと候補を確認して1件選んでください。";
+    session.status = "候補を3件読み込みました。内容を確認して保存する候補を選んでください。";
   } catch (error) {
     session.parsed = null;
     session.status = error.message;
+  } finally {
+    session.saving = false;
   }
   renderSessionMemoryBackfill();
 }
 
 async function saveGeneratedSessionMemory(session) {
-  if (!session.parsed) return;
+  if (!session.parsed || session.saving) return;
+  const candidateIndex = session.selectedCandidate ?? 0;
+  session.saving = true;
+  session.status = "選択した候補を保存しています。";
+  renderSessionMemoryBackfill();
   try {
     const result = await api("/api/session-memories/save-generated", {
       locationId: session.locationId,
       sessionDate: session.sessionDate,
       photoIds: session.photoIds,
       rawResponse: session.rawResponse,
-      candidateIndex: session.selectedCandidate,
+      candidateIndex,
       provider: session.provider,
     });
+    session.status = `候補${candidateIndex + 1}を${result.replaced ? "既存Memoryに再付与" : "保存"}しました。`;
+    session.savedMemory = result.sessionMemory;
+    session.prompt = "";
+    session.photoIds = [];
+    session.previewPhotos = [];
+    session.rawResponse = "";
+    session.parsed = null;
+    session.selectedCandidate = 0;
+    session.analyzedPhotoCount = 0;
     await reload();
-    renderSessionMemoryManager();
     await reloadSessionMemoryBackfillCandidates();
+    renderSessionMemoryManager();
     showResult(`${session.locationName} / ${session.sessionDate} のSession Memoryを保存しました`, result);
   } catch (error) {
     session.status = error.message;
+  } finally {
+    session.saving = false;
     renderSessionMemoryBackfill();
   }
 }
@@ -679,18 +715,30 @@ function renderSessionMemoryBackfill() {
   const sessions = state.sessionMemoryCandidates.filter((session) =>
     !query || normalize(`${session.locationName} ${session.sessionDate}`).includes(query),
   );
+  const savedCount = state.sessionMemoryCandidates.filter((session) => session.hasMemory).length;
   $("sessionMemoryBackfillSummary").textContent =
-    `${sessions.length} / ${state.sessionMemoryCandidates.length} セッション（撮影日あり・写真1枚以上・Memory未設定）`;
+    `${sessions.length} / ${state.sessionMemoryCandidates.length} セッション（設定済み ${savedCount} / 未設定 ${state.sessionMemoryCandidates.length - savedCount}）`;
   $("sessionMemoryBackfillList").replaceChildren(
     ...(sessions.length
       ? sessions.map((session) => {
-          const promptButton = h("button", { type: "button", class: "primary" }, session.prompt ? "画像サンプルを選び直す" : "Copilot用プロンプトを作成");
+          const promptButton = h(
+            "button",
+            { type: "button", class: "primary" },
+            session.prompt ? "画像サンプルを選び直す" : session.hasMemory ? "既存Memoryを再生成" : "Copilot用プロンプトを作成",
+          );
           session.promptButton = promptButton;
           promptButton.addEventListener("click", () => createSessionMemoryPrompt(session));
           const children = [
             h("strong", {}, `${session.locationName} / ${session.sessionDate}（写真 ${session.photoCount} 枚）`),
             promptButton,
           ];
+          if (session.hasMemory && session.memoryText) {
+            children.push(renderSessionMemoryDuplicateBadge(session.duplicateMemory));
+            children.push(
+              h("p", { class: "muted" }, "現在のSession Memory（保存時に置き換え）"),
+              h("blockquote", { class: "memory-review-text" }, session.memoryText),
+            );
+          }
           if (session.prompt) {
             const previews = h(
               "div",
@@ -729,7 +777,11 @@ function renderSessionMemoryBackfill() {
             responseInput.addEventListener("input", () => {
               session.rawResponse = responseInput.value;
             });
-            const parseButton = h("button", { type: "button" }, "Summaryと候補を確認");
+            const parseButton = h(
+              "button",
+              { type: "button", class: "primary", disabled: session.saving },
+              session.saving ? "候補を解析中…" : "候補を読み込む",
+            );
             parseButton.addEventListener("click", () => parseSessionMemoryCandidates(session));
             children.push(
               h("p", { class: "muted" }, `Copilotが確認する画像 ${session.analyzedPhotoCount} / ${session.photoCount} 枚`),
@@ -740,17 +792,47 @@ function renderSessionMemoryBackfill() {
               parseButton,
             );
             if (session.parsed) {
-              const candidate = h("select", { "aria-label": "保存するSession Memory候補" },
-                ...session.parsed.candidates.map((text, index) => h("option", { value: String(index) }, `候補${index + 1}: ${text}`)),
+              const candidatePreviews = h(
+                "div",
+                { class: "session-memory-candidates" },
+                ...session.parsed.candidates.map((text, index) =>
+                  h(
+                    "label",
+                    { class: "session-memory-candidate" },
+                    h("input", {
+                      type: "radio",
+                      name: `session-memory-${session.locationId}-${session.sessionDate}`,
+                      value: String(index),
+                      checked: index === session.selectedCandidate,
+                      disabled: session.saving,
+                    }),
+                    h("div", {},
+                      h("strong", {}, `候補${index + 1}`),
+                      h("p", {}, text),
+                    ),
+                  ),
+                ),
               );
-              candidate.value = String(session.selectedCandidate);
-              candidate.addEventListener("change", () => {
-                session.selectedCandidate = Number(candidate.value);
+              candidatePreviews.addEventListener("change", (event) => {
+                const target = event.target;
+                if (target instanceof HTMLInputElement && target.checked) {
+                  session.selectedCandidate = Number(target.value);
+                }
               });
               const summary = h("pre", { class: "session-memory-summary" }, JSON.stringify(session.parsed.summary, null, 2));
-              const saveButton = h("button", { type: "button", class: "primary" }, "選択した候補を保存");
+              const saveButton = h(
+                "button",
+                { type: "button", class: "primary", disabled: session.saving },
+                session.saving ? "保存中…" : "選択した候補を保存",
+              );
               saveButton.addEventListener("click", () => saveGeneratedSessionMemory(session));
-              children.push(h("h4", {}, "Session Summary（確認用）"), summary, candidate, saveButton);
+              children.push(
+                h("h4", {}, "Session Summary（確認用）"),
+                summary,
+                h("h4", {}, "保存する候補を選択"),
+                candidatePreviews,
+                saveButton,
+              );
             }
           }
           if (session.status) children.push(h("p", { class: "info", role: "status" }, session.status));
@@ -788,10 +870,16 @@ async function reloadSessionMemoryBackfillCandidates() {
   renderSessionMemoryBackfill();
 }
 
-function openSessionMemoryManager() {
+async function openSessionMemoryManager() {
   $("sessionMemoryError").hidden = true;
   $("sessionMemoryManageSection").hidden = false;
   $("sessionMemoryBackfillSection").hidden = true;
+  try {
+    await reloadSessionMemoryBackfillCandidates();
+  } catch (error) {
+    $("sessionMemoryError").textContent = error.message;
+    $("sessionMemoryError").hidden = false;
+  }
   renderSessionMemoryManager();
   $("sessionMemoryEditor").showModal();
 }
@@ -812,6 +900,7 @@ async function saveSessionMemory(id, text) {
   try {
     const result = await api("/api/session-memories/update", { id, text });
     await reload();
+    await reloadSessionMemoryBackfillCandidates();
     renderSessionMemoryManager();
     showResult(`${locName(result.sessionMemory.locationId)} のSession Memoryを保存しました`, result);
   } catch (error) {
@@ -825,6 +914,7 @@ async function removeSessionMemory(memory) {
   try {
     const result = await api("/api/session-memories/delete", { id: memory.id });
     await reload();
+    await reloadSessionMemoryBackfillCandidates();
     renderSessionMemoryManager();
     showResult(`${locName(memory.locationId)} のSession Memoryを削除しました`, result);
   } catch (error) {

@@ -1,14 +1,5 @@
 [
   {
-    "id": "session_memory_001",
-    "locationId": "location_036",
-    "sessionDate": "2021-12-04",
-    "text": "日差しが傾き、普段の景色にやわらかな余白が生まれていた。",
-    "generatedBy": "template",
-    "createdAt": "2026-10-30T07:20:10.119Z",
-    "updatedAt": "2026-10-30T07:20:10.119Z"
-  },
-  {
     "id": "session_memory_002",
     "locationId": "location_149",
     "sessionDate": "2025-04-05",
@@ -21,10 +12,10 @@
     "id": "session_memory_003",
     "locationId": "osm_relation_963784",
     "sessionDate": "2026-06-17",
-    "text": "遠くのざわめきが薄れ、周囲の音も少しずつ落ち着いていた。",
-    "generatedBy": "template",
+    "text": "青い空と濃い緑に、石の明るさがまっすぐ差し込む",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T01:36:00.756Z",
-    "updatedAt": "2026-10-31T01:36:00.756Z"
+    "updatedAt": "2026-11-04T02:48:06.231Z"
   },
   {
     "id": "session_memory_004",
@@ -39,19 +30,19 @@
     "id": "session_memory_005",
     "locationId": "location_125",
     "sessionDate": "2025-10-31",
-    "text": "光がやわらぎ、景色の色合いが穏やかに見える時間帯だった。",
-    "generatedBy": "template",
+    "text": "夜の暗さが深まるほど、足元の灯りが景色の幅をひらく",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T01:50:26.230Z",
-    "updatedAt": "2026-10-31T01:50:26.230Z"
+    "updatedAt": "2026-11-04T02:54:30.192Z"
   },
   {
     "id": "session_memory_006",
     "locationId": "location_046",
     "sessionDate": "2026-06-08",
-    "text": "人の流れが落ち着き、周囲に静かな間が生まれていた。",
-    "generatedBy": "template",
+    "text": "赤や桃色の重なりに、葉の深い緑が輪郭を添える",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T01:52:30.511Z",
-    "updatedAt": "2026-10-31T01:52:30.511Z"
+    "updatedAt": "2026-11-04T01:52:14.796Z"
   },
   {
     "id": "session_memory_007",
@@ -66,10 +57,10 @@
     "id": "session_memory_008",
     "locationId": "osm_way_574483668",
     "sessionDate": "2026-05-17",
-    "text": "遠くのざわめきが薄れ、周囲の音も少しずつ落ち着いていた。",
-    "generatedBy": "template",
+    "text": "青空の余白と灯りの夜が、別々の速さで流れていく",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T02:04:34.871Z",
-    "updatedAt": "2026-10-31T02:04:34.871Z"
+    "updatedAt": "2026-11-04T01:57:00.217Z"
   },
   {
     "id": "session_memory_009",
@@ -84,10 +75,10 @@
     "id": "session_memory_010",
     "locationId": "location_104",
     "sessionDate": "2022-09-03",
-    "text": "日差しが傾き、普段の景色にやわらかな余白が生まれていた。",
-    "generatedBy": "template",
+    "text": "装飾の密度がほどける場所ごとに、視線の距離が変わっていく",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T02:12:39.439Z",
-    "updatedAt": "2026-10-31T02:12:39.439Z"
+    "updatedAt": "2026-11-04T03:55:19.687Z"
   },
   {
     "id": "session_memory_011",
@@ -102,10 +93,10 @@
     "id": "session_memory_012",
     "locationId": "location_004",
     "sessionDate": "2025-07-28",
-    "text": "日差しが傾き、普段の景色にやわらかな余白が生まれていた。",
-    "generatedBy": "template",
+    "text": "飾りの多い景色の奥に、ふと視線を休める隙間がある",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T02:45:49.808Z",
-    "updatedAt": "2026-10-31T02:45:49.808Z"
+    "updatedAt": "2026-11-04T02:35:44.159Z"
   },
   {
     "id": "session_memory_013",
@@ -156,10 +147,10 @@
     "id": "session_memory_018",
     "locationId": "osm_node_1997920514",
     "sessionDate": "2025-07-26",
-    "text": "人影がまばらになり、周囲の明るさが少しずつ変わっていた。",
-    "generatedBy": "template",
+    "text": "見渡すほどに細部が増え、視線の落ち着き先が移っていく",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T05:04:12.679Z",
-    "updatedAt": "2026-10-31T05:04:12.679Z"
+    "updatedAt": "2026-11-04T02:37:06.189Z"
   },
   {
     "id": "session_memory_019",
@@ -183,19 +174,19 @@
     "id": "session_memory_021",
     "locationId": "osm_way_961017086",
     "sessionDate": "2026-06-25",
-    "text": "風が通り抜け、光の揺らぎが静かに残っている。",
-    "generatedBy": "template",
+    "text": "陽の明るさが遠のくにつれ、別の明るさが景色に満ちていく",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T05:12:52.119Z",
-    "updatedAt": "2026-10-31T05:12:52.119Z"
+    "updatedAt": "2026-11-04T01:40:42.111Z"
   },
   {
     "id": "session_memory_022",
     "locationId": "osm_node_1423733597",
     "sessionDate": "2026-04-20",
-    "text": "色づいた景色の輪郭がやわらぎ、静かな間が広がっていた。",
-    "generatedBy": "template",
+    "text": "日差しの高い時間が続き、花影にだけゆるい間が生まれる",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T05:19:45.864Z",
-    "updatedAt": "2026-10-31T05:19:45.864Z"
+    "updatedAt": "2026-11-04T02:33:50.130Z"
   },
   {
     "id": "session_memory_023",
@@ -300,10 +291,10 @@
     "id": "session_memory_034",
     "locationId": "location_110",
     "sessionDate": "2025-06-12",
-    "text": "風が通り抜け、光の揺らぎが静かに残っている。",
-    "generatedBy": "template",
+    "text": "木陰の明暗を抜けるうち、昼の長さがゆるやかにほどける",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T05:45:29.833Z",
-    "updatedAt": "2026-10-31T05:45:29.833Z"
+    "updatedAt": "2026-11-04T02:51:32.480Z"
   },
   {
     "id": "session_memory_035",
@@ -327,19 +318,19 @@
     "id": "session_memory_037",
     "locationId": "osm_node_6246392177",
     "sessionDate": "2026-06-01",
-    "text": "日差しが傾き、普段の景色にやわらかな余白が生まれていた。",
-    "generatedBy": "template",
+    "text": "長い昼の手触りが、花影のあいだに静かにほどける",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T05:54:55.367Z",
-    "updatedAt": "2026-10-31T05:54:55.367Z"
+    "updatedAt": "2026-11-04T01:59:00.848Z"
   },
   {
     "id": "session_memory_038",
     "locationId": "osm_node_624636437",
     "sessionDate": "2026-06-29",
-    "text": "風が通り抜け、光の揺らぎが静かに残っている。",
-    "generatedBy": "template",
+    "text": "昼の青が引き、灯りの輪だけが濃くなる頃。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T05:58:18.676Z",
-    "updatedAt": "2026-10-31T05:58:18.676Z"
+    "updatedAt": "2026-11-04T01:50:07.818Z"
   },
   {
     "id": "session_memory_039",
@@ -381,10 +372,10 @@
     "id": "session_memory_043",
     "locationId": "osm_way_1040428833",
     "sessionDate": "2026-02-20",
-    "text": "光がやわらぎ、景色の色合いが穏やかに見える時間帯だった。",
-    "generatedBy": "template",
+    "text": "一度は見たことのあるなじみの深いその人たちに、思わず送る熱い視線",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T08:00:29.669Z",
-    "updatedAt": "2026-10-31T08:00:29.669Z"
+    "updatedAt": "2026-11-04T03:58:57.602Z"
   },
   {
     "id": "session_memory_044",
@@ -435,10 +426,10 @@
     "id": "session_memory_049",
     "locationId": "osm_node_5409447622",
     "sessionDate": "2026-02-06",
-    "text": "日差しが傾き、普段の景色にやわらかな余白が生まれていた。",
-    "generatedBy": "template",
+    "text": "手前の鮮やかさを過ぎると、奥にはひかえめな気配が残る",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T08:56:34.410Z",
-    "updatedAt": "2026-10-31T08:56:34.410Z"
+    "updatedAt": "2026-11-04T02:04:12.846Z"
   },
   {
     "id": "session_memory_050",
@@ -507,10 +498,10 @@
     "id": "session_memory_057",
     "locationId": "osm_way_705639494",
     "sessionDate": "2025-06-30",
-    "text": "風が通り抜け、光の揺らぎが静かに残っている。",
-    "generatedBy": "template",
+    "text": "黄や朱の明るさに青が差し、色の境目がくっきり残る",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T09:25:50.148Z",
-    "updatedAt": "2026-10-31T09:25:50.148Z"
+    "updatedAt": "2026-11-04T02:01:02.684Z"
   },
   {
     "id": "session_memory_058",
@@ -529,5 +520,140 @@
     "generatedBy": "template",
     "createdAt": "2026-10-31T09:29:12.189Z",
     "updatedAt": "2026-10-31T09:29:12.189Z"
+  },
+  {
+    "id": "session_memory_001",
+    "locationId": "location_143",
+    "sessionDate": "2025-04-03",
+    "text": "昼の青さと夜の灯りが交差し、時間の境目がほどける",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-04T01:34:49.296Z",
+    "updatedAt": "2026-11-04T01:34:49.296Z"
+  },
+  {
+    "id": "session_memory_060",
+    "locationId": "location_036",
+    "sessionDate": "2021-12-04",
+    "text": "夕方の名残から夜の灯りへ、景色の境目がゆるやかに移る",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-04T01:37:29.591Z",
+    "updatedAt": "2026-11-04T01:37:29.591Z"
+  },
+  {
+    "id": "session_memory_061",
+    "locationId": "osm_way_554592146",
+    "sessionDate": "2024-11-16",
+    "text": "近くの輪郭を離れるほど、光の景色が深く続いていく",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-04T01:42:44.020Z",
+    "updatedAt": "2026-11-04T01:42:44.020Z"
+  },
+  {
+    "id": "session_memory_062",
+    "locationId": "location_138",
+    "sessionDate": "2024-11-15",
+    "text": "夕空が薄れても、明るさの粒は景色の奥に残っている",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-04T01:44:27.048Z",
+    "updatedAt": "2026-11-04T01:44:27.048Z"
+  },
+  {
+    "id": "session_memory_063",
+    "locationId": "location_015",
+    "sessionDate": "2022-02-26",
+    "text": "手前の枝先から水辺の向こうまで、景色が遠くつながる",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-04T01:45:58.831Z",
+    "updatedAt": "2026-11-04T01:45:58.831Z"
+  },
+  {
+    "id": "session_memory_064",
+    "locationId": "location_036",
+    "sessionDate": "2022-11-28",
+    "text": "白い光の縁に青や桃色が重なり、夜の色がゆるやかに変わる",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-04T01:47:42.256Z",
+    "updatedAt": "2026-11-04T01:47:42.256Z"
+  },
+  {
+    "id": "session_memory_065",
+    "locationId": "location_036",
+    "sessionDate": "2023-12-15",
+    "text": "近くの光を越えた先まで、きらめきの層が折り重なる",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-04T01:55:09.682Z",
+    "updatedAt": "2026-11-04T01:55:09.682Z"
+  },
+  {
+    "id": "session_memory_066",
+    "locationId": "location_036",
+    "sessionDate": "2021-05-10",
+    "text": "日差しの手触りが消えたあとも、庭の明るさは別の形で続く",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-04T02:38:35.656Z",
+    "updatedAt": "2026-11-04T02:38:35.656Z"
+  },
+  {
+    "id": "session_memory_067",
+    "locationId": "location_120",
+    "sessionDate": "2024-12-10",
+    "text": "若葉の緑に淡い紫や鮮やかな朱が差し、視界の明度が揺れる",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-04T02:40:17.173Z",
+    "updatedAt": "2026-11-04T02:40:17.173Z"
+  },
+  {
+    "id": "session_memory_068",
+    "locationId": "location_103",
+    "sessionDate": "2022-10-06",
+    "text": "明るい庭の時間と、灯りに満ちた室内の時間が交互に続く",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-04T02:45:32.274Z",
+    "updatedAt": "2026-11-04T02:45:32.274Z"
+  },
+  {
+    "id": "session_memory_069",
+    "locationId": "location_042",
+    "sessionDate": "2023-01-10",
+    "text": "雪の青白さから赤い展示の熱まで、色温度が大きく揺れる",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-04T02:49:54.885Z",
+    "updatedAt": "2026-11-04T02:49:54.885Z"
+  },
+  {
+    "id": "session_memory_070",
+    "locationId": "location_105",
+    "sessionDate": "2022-09-13",
+    "text": "青空の明るさと室内の灯りが並び、昼と夕べの気配が重なる",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-04T02:52:48.323Z",
+    "updatedAt": "2026-11-04T02:52:48.323Z"
+  },
+  {
+    "id": "session_memory_071",
+    "locationId": "location_134",
+    "sessionDate": "2020-05-06",
+    "text": "深い緑に曇天の青白さが混じり、岩肌まで柔らかく見える",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-04T03:51:45.677Z",
+    "updatedAt": "2026-11-04T03:51:45.677Z"
+  },
+  {
+    "id": "session_memory_072",
+    "locationId": "location_013",
+    "sessionDate": "2025-04-30",
+    "text": "青紫の光に金色が混ざり、暗がりの輪郭が鮮やかにほどける",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-04T03:54:03.002Z",
+    "updatedAt": "2026-11-04T03:54:03.002Z"
+  },
+  {
+    "id": "session_memory_073",
+    "locationId": "osm_way_430014971",
+    "sessionDate": "2025-04-30",
+    "text": "いつの時もどんな事態も、気が付けば君は隣にいたのかもしれない",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-04T04:02:15.815Z",
+    "updatedAt": "2026-11-04T04:02:15.815Z"
   }
 ]
