@@ -271,15 +271,13 @@
       <section id="sessionMemoryBackfillSection" hidden>
         <button id="sessionMemoryBackfillBack" type="button">← Memory管理に戻る</button>
         <p class="muted">
-          写真の再登録は行いません。撮影日があり、写真が10枚以上で、Memory未設定のセッションが対象です。
-          候補を確認・編集し、選択したものだけ保存できます。
+          撮影日があり、写真が1枚以上のMemory未設定セッションが対象です。
+          Copilot Chatにプロンプトを渡して画像を確認し、Session Summaryと3候補を人が確認してから保存します。
+          画像や情報は自動送信されません。10枚未満は全画像、10枚以上は毎回異なる10〜15枚を選びます。
         </p>
         <div class="row">
+          <input id="sessionMemoryBackfillSearch" type="search" placeholder="地点・撮影日で検索" />
           <button id="sessionMemoryBackfillRefresh" type="button">候補を再読み込み</button>
-          <button id="sessionMemoryBackfillSelectAll" type="button">すべて選択</button>
-          <button id="sessionMemoryBackfillApply" type="button" class="primary" disabled>
-            選択したセッションに付与
-          </button>
         </div>
         <p id="sessionMemoryBackfillSummary" class="info" role="status"></p>
         <div id="sessionMemoryBackfillList" class="session-memory-list"></div>

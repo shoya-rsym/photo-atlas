@@ -101,11 +101,11 @@
     <dialog id="confirm">
       <h2>登録前確認</h2>
       <dl id="confirmBody" class="confirm"></dl>
-      <fieldset id="sessionMemoryField" class="memory-candidates" hidden>
+      <fieldset class="memory-candidates">
         <legend>Session Memory</legend>
-        <p id="sessionMemoryHint" class="muted"></p>
-        <label for="sessionMemoryCandidate">登録時に保存する候補</label>
-        <select id="sessionMemoryCandidate"></select>
+        <p class="muted">
+          写真の登録時には自動生成しません。登録後、Photo Management Toolで写真群を視覚的に確認し、候補を選んで保存できます。
+        </p>
       </fieldset>
       <p id="confirmError" class="error" hidden></p>
       <div class="row end">

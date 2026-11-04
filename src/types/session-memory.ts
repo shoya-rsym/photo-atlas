@@ -3,7 +3,7 @@ export type SessionMemory = {
   locationId: string;
   sessionDate: string;
   text: string;
-  generatedBy: "template" | "ai" | "manual";
+  generatedBy: "template" | "ai" | "copilot" | "manual";
   createdAt: string;
   updatedAt: string;
 };

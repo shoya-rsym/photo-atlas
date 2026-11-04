@@ -14,6 +14,7 @@ const TOOL_DIR = join(ROOT, "tools", "photo-import");
 const HASHES_FILE = join(TOOL_DIR, "data", "hashes.json");
 /** 個人環境の作業領域（Git管理外） */
 export const LOCAL_DIR = join(TOOL_DIR, ".local");
+export const SESSION_MEMORY_ANALYSIS_FILE = join(LOCAL_DIR, "session-memory-analysis.json");
 const RECENT_FILE = join(LOCAL_DIR, "recent.json");
 const RECENT_LIMIT = 10;
 export const ID_PATTERN = /^[a-z0-9_]+$/;

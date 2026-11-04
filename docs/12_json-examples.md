@@ -225,7 +225,7 @@ subregionId は任意。
     "locationId": "yokohama_station",
     "sessionDate": "2026-10-27",
     "text": "人の流れが落ち着き、周囲に静かな間が生まれていた。",
-    "generatedBy": "template",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-27T12:00:00+09:00",
     "updatedAt": "2026-10-27T12:00:00+09:00"
   }

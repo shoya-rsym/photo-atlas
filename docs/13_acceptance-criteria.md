@@ -284,8 +284,12 @@ OpenGraph
 # Memory System
 
 - Session Memoryは `locationId + sessionDate` ごとに最大1件である
-- 撮影日が既知で、登録後に同一セッションが10枚以上になった場合のみ登録時に候補を生成・保存する
-- MVPでは画像解析・AI API・外部サービスを使わない
+- 撮影日が既知で写真が1枚以上のMemory未設定セッションを管理画面で生成対象にできる
+- Session Memory v2は10枚未満なら全画像、10枚以上ならランダムな10〜15枚を視覚確認に使う
+- 写真群を根拠とするSession Summaryを確認した後、異なる視点の候補3件から人が1件選んで保存する
+- 画像や情報をCopilot Chatへ自動送信せず、場所・タグから写真内容を推測しない
+- 完全一致や高い表現類似度のSession Memoryは保存を拒否する
+- 生成元、解析画像数、代表画像、Session Summaryを管理画面で確認でき、解析情報は一般公開しない
 - Session Memoryは地点ページの該当日付の写真一覧より前に、控えめに表示する
 - Photo MemoryはPhoto-Manageで編集・削除でき、120文字を超える内容は保存できない
 - Photo Memoryは写真右上のアイコンを押した場合だけ表示される

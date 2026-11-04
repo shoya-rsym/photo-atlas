@@ -315,7 +315,7 @@ session-memories.json
 - sessionDate は YYYY-MM-DD 形式
 - 同じ locationId + sessionDate は最大1件
 - text は必須、120文字以内
-- generatedBy は template / ai / manual のいずれか
+- generatedBy は template / ai / copilot / manual のいずれか
 - createdAt と updatedAt は ISO8601 形式
 
 ---

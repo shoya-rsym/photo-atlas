@@ -290,16 +290,18 @@ type SessionMemory = {
   locationId: string;
   sessionDate: string;
   text: string;
-  generatedBy: "template" | "ai" | "manual";
+  generatedBy: "template" | "ai" | "copilot" | "manual";
   createdAt: string;
   updatedAt: string;
 };
 ```
 
 - セッションキーは `locationId + sessionDate`。同じ組み合わせにつき最大1件。
-- 既知の撮影日で同じセッションの写真が10枚以上になった登録時のみ、テンプレート候補を生成・保存する。条件未達なら作成しない。
-- MVPの生成方法はタグ等に応じた候補文テンプレート。画像は参照せず、AI APIや外部サービスへ送信しない。
-- 管理画面で編集すると `generatedBy` は `manual` になる。将来のローカルAIは `ai` として識別できる。
+- 撮影日が既知で、同じセッションに写真が1枚以上あれば管理画面から生成できる。撮影日不明の写真は対象にしない。
+- Session Memory v2は写真群を根拠にする。10枚未満は全画像、10枚以上は毎回ランダムに10〜15枚を選び、Copilot Chatに視覚確認を依頼する。タグや場所名から画像内容を推測しない。
+- Copilotへ画像や情報を自動送信しない。管理者がプロンプトをコピーし、応答からSession Summaryと3候補を確認して1件を選択する。既存のSession Memoryは自動上書きしない。
+- Session Summary、解析対象画像ID、Vision Provider、解析件数は `.local/session-memory-analysis.json` に保存する。公開される `session-memories.json` にはMemory本文と生成元だけを保存する。
+- `generatedBy` は既存データとの互換性のため `template` / `ai` / `copilot` / `manual` を許容する。管理画面で本文を編集すると `manual` になる。
 - 生成文は20〜40文字程度を目安とし、場所名・キャラクター名・撮影行為・ストーリーを含めない。
 
 ## MemoryReview
@@ -333,7 +335,7 @@ Favorite Memoryの評価対象は `isFavorite: true` かつ `photoMemory` が設
 ## MemoryCandidate
 
 将来の候補選定・生成支援に使うMemory文の辞書。`memory-candidates.json` は重複のない120文字以内の文字列配列とし、画像や外部サービスは利用しない。
-将来AIへ接続する場合は、Candidate PoolとA / B評価を正例、C / NG評価を抑制例として渡すGenerator層を追加し、SessionMemoryの保存形式とは分離する。生成元は既存の `generatedBy: "ai"` で識別し、画像を入力へ含めない。
+将来Copilot Chat以外へ接続する場合は、Vision Provider層を差し替え、Session Summary構造とSessionMemoryの保存形式は維持する。A / B評価は参考例、C / NG評価は避ける例として扱い、人による選択と保存を必須にする。
 
 ---
 

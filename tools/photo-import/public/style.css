@@ -108,6 +108,9 @@ body.manage-page { padding-bottom: 104px; }
 .session-memory-item textarea { min-height: 64px; }
 .session-memory-previews { display: flex; gap: 8px; overflow-x: auto; }
 .session-memory-previews img { width: 88px; height: 66px; object-fit: cover; border-radius: 4px; background: #000; }
+.session-memory-previews figure { flex: 0 0 auto; margin: 0; }
+.session-memory-previews figcaption { max-width: 120px; overflow: hidden; color: var(--muted); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.session-memory-summary { max-height: 240px; overflow: auto; padding: 8px; border-radius: 6px; background: var(--panel); white-space: pre-wrap; overflow-wrap: anywhere; }
 .session-memory-backfill-item > label:first-child { font-weight: 600; }
 .session-memory-backfill-item select { margin-top: 4px; }
 .memory-review-editor { max-height: 92vh; overflow-y: auto; }

@@ -23,7 +23,7 @@ export const subregions: Subregion[] = subregionsJson as Subregion[];
 function isSessionMemoryGenerator(
   value: string,
 ): value is SessionMemory["generatedBy"] {
-  return value === "template" || value === "ai" || value === "manual";
+  return value === "template" || value === "ai" || value === "copilot" || value === "manual";
 }
 
 export const sessionMemories: SessionMemory[] = sessionMemoriesJson.map((memory) => {

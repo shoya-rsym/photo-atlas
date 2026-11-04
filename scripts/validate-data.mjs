@@ -146,7 +146,7 @@ for (const memory of sessionMemories) {
   ) {
     errors.push(`session-memories: text不正 ${memory.id}`);
   }
-  if (!["template", "ai", "manual"].includes(memory.generatedBy)) {
+  if (!["template", "ai", "copilot", "manual"].includes(memory.generatedBy)) {
     errors.push(`session-memories: generatedBy不正 ${memory.id}`);
   }
   if (Number.isNaN(Date.parse(memory.createdAt))) {

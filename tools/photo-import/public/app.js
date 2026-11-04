@@ -3,7 +3,6 @@ import { formatJapaneseAddress } from "/lib/address.mjs";
 import { locationIdFromResult, prefectureIdFromResult } from "/lib/location.mjs";
 import { findExactName, searchByName } from "/lib/search.mjs";
 import { parseFolderName } from "/lib/folder-name.mjs";
-import { createSessionMemoryCandidates } from "/lib/memory.mjs";
 
 const $ = (id) => document.getElementById(id);
 const IMAGE_EXT = /\.(jpe?g|png|webp)$/i;
@@ -18,7 +17,6 @@ const state = {
   newTags: [],
   characterIds: new Set(),
   newCharacters: [],
-  sessionMemoryDraft: "",
   suggestIndex: 0,
   busy: 0,
 };
@@ -490,7 +488,6 @@ function buildPayload() {
     locationId: loc && !loc.isNew ? loc.id : undefined,
     newLocation: loc?.isNew ? state.newLocation : undefined,
     date: $("dateInput").value,
-    sessionMemoryText: state.sessionMemoryDraft,
     tagIds: [...state.tagIds],
     newTags: state.newTags,
     characterIds: [...state.characterIds],
@@ -511,48 +508,6 @@ function openConfirm() {
   ];
   const dupCount = payload.items.filter((i) => i.allowDuplicate).length;
   const cover = state.files.find((f) => f.isCover && f.include);
-  const sessionMemoryField = $("sessionMemoryField");
-  const sessionDate = date.value;
-  const sessionLocationId = loc.id ?? loc.name;
-  const sessionCount =
-    sessionDate && loc.id
-      ? state.master.sessionPhotoCounts[`${loc.id}|${sessionDate}`] ?? 0
-      : 0;
-  const hasSessionMemory = state.master.sessionMemories.some(
-    (memory) =>
-      memory.locationId === loc.id && memory.sessionDate === sessionDate,
-  );
-  const needsMemory =
-    Boolean(sessionDate) &&
-    sessionCount + payload.items.length >= 10 &&
-    !hasSessionMemory;
-  state.sessionMemoryDraft = "";
-  sessionMemoryField.hidden = !needsMemory;
-  if (needsMemory) {
-    const candidates = createSessionMemoryCandidates({
-      locationId: sessionLocationId,
-      sessionDate,
-      tags: [
-        ...[...state.tagIds].map((id) => state.master.tags.find((tag) => tag.id === id)),
-        ...state.newTags,
-      ].filter(Boolean),
-      characters: [
-        ...[...state.characterIds].map((id) =>
-          state.master.characters.find((character) => character.id === id),
-        ),
-        ...state.newCharacters,
-      ].filter(Boolean),
-      photoCount: sessionCount + payload.items.length,
-    });
-    state.sessionMemoryDraft = candidates[0];
-    $("sessionMemoryCandidate").replaceChildren(
-      ...candidates.map((candidate) =>
-        h("option", { value: candidate }, candidate),
-      ),
-    );
-    $("sessionMemoryHint").textContent =
-      `同じ撮影地・撮影日の写真が ${sessionCount + payload.items.length} 枚になります。候補から1つ選び、登録時に保存します。`;
-  }
   const rows = [
     ["対象画像", `${payload.items.length} 枚${dupCount ? `（うち重複を承知で登録 ${dupCount} 枚）` : ""}`],
     ["撮影地", `${loc.name}${loc.isNew ? "（新規）" : ""} / ${prefName(loc.prefectureId)} ${loc.address ?? ""}`],
@@ -562,7 +517,12 @@ function openConfirm() {
     ["タイトル", payload.title.trim() || `${loc.name}${payload.items.length > 1 ? " 01…" : ""}`],
     ["コメント", payload.comment.trim() || "なし"],
     ["代表写真", cover ? cover.name : "指定なし"],
-    ...(hasSessionMemory ? [["Session Memory", "既存のMemoryを維持"]] : []),
+    [
+      "Session Memory",
+      date.value
+        ? "登録後、Photo Management Toolで写真群を確認して作成します"
+        : "撮影日が不明のため、セッションMemoryは作成できません",
+    ],
   ];
   $("confirmBody").replaceChildren(...rows.flatMap(([k, v]) => [h("dt", {}, k), h("dd", {}, v)]));
   $("confirmError").hidden = true;
@@ -586,7 +546,9 @@ async function commit() {
       res.newTags.length ? `新規タグ: ${res.newTags.map((t) => t.name).join("、")}` : "",
       res.newCharacters.length ? `新規キャラクター: ${res.newCharacters.map((c) => c.name).join("、")}` : "",
       res.newLocations.length ? `新規撮影地点: ${res.newLocations.map((l) => l.name).join("、")}` : "",
-      res.sessionMemory ? `Session Memoryを保存しました: ${res.sessionMemory.text}` : "",
+      res.sessionMemoryPending
+        ? "Session Memoryの作成対象です。Photo Management Toolから写真群を見て候補を作成してください。"
+        : "",
       `データ検証: ${res.validation.ok ? "OK" : "NG"} ${res.validation.output}`,
       "設定は保持しています。次の画像をドラッグしてください。",
     ].filter(Boolean);
@@ -771,9 +733,6 @@ function bind() {
   });
 
   $("reviewBtn").addEventListener("click", openConfirm);
-  $("sessionMemoryCandidate").addEventListener("change", (event) => {
-    state.sessionMemoryDraft = event.target.value;
-  });
   $("confirmCancel").addEventListener("click", () => $("confirm").close());
   $("confirmOk").addEventListener("click", commit);
 }

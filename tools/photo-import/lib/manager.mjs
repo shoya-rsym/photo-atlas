@@ -4,7 +4,13 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 import { parseDateInput } from "./date.mjs";
-import { createSessionMemoryCandidates } from "./memory.mjs";
+import {
+  copilotVisionProvider,
+  DEFAULT_SESSION_MEMORY_VISION_PROVIDER,
+  findSimilarSessionMemory,
+  selectSessionPhotos,
+  sessionMemoryVisionProviders,
+} from "./session-memory-v2.mjs";
 import {
   buildMemoryAnalytics,
   favoriteMemoryReviewKey,
@@ -19,6 +25,7 @@ import {
   PHOTOS_DIR,
   ROOT,
   THUMBNAILS_DIR,
+  SESSION_MEMORY_ANALYSIS_FILE,
   dataFile,
   allocateId,
   formatJsonList,
@@ -37,6 +44,7 @@ const UNDO_DATA_FILES = [
   "tags",
   "characters",
   "session-memories",
+  "session-memory-analysis",
   "memory-library",
   "memory-candidates",
 ];
@@ -55,9 +63,19 @@ let queue = Promise.resolve();
 
 async function readUndoSnapshot() {
   const entries = await Promise.all(
-    UNDO_DATA_FILES.map(async (name) => [name, await readFile(dataFile(name), "utf8")]),
+    UNDO_DATA_FILES.map(async (name) => {
+      const file = undoDataFile(name);
+      if (name === "session-memory-analysis") {
+        return [name, `${JSON.stringify(await readJson(file, []), null, 2)}\n`];
+      }
+      return [name, await readFile(file, "utf8")];
+    }),
   );
   return Object.fromEntries(entries);
+}
+
+function undoDataFile(name) {
+  return name === "session-memory-analysis" ? SESSION_MEMORY_ANALYSIS_FILE : dataFile(name);
 }
 
 function hashSnapshot(snapshot) {
@@ -104,7 +122,7 @@ async function readUndoRecord() {
 
 async function writeUndoSnapshot(snapshot) {
   for (const name of UNDO_DATA_FILES) {
-    await writeAtomic(dataFile(name), snapshot[name]);
+    await writeAtomic(undoDataFile(name), snapshot[name]);
   }
 }
 
@@ -363,7 +381,7 @@ async function finish(photos, locations, extra = {}) {
   return { ...extra, orphanLocations: orphanLocationIds(photos, locations), validation: await runValidation() };
 }
 
-function buildSessionMemoryBackfillCandidates(photos, locations, tags, characters, memories) {
+function buildSessionMemoryBackfillCandidates(photos, locations, memories) {
   const sessions = new Map();
   for (const photo of photos) {
     if (!photo.locationId || !photo.date) continue;
@@ -385,31 +403,16 @@ function buildSessionMemoryBackfillCandidates(photos, locations, tags, character
   return [...sessions.values()]
     .filter(
       (session) =>
-        session.photos.length >= 10 &&
+        session.photos.length > 0 &&
         !memoryKeys.has(`${session.locationId}|${session.sessionDate}`),
     )
     .map((session) => {
-      const tagIds = new Set(session.photos.flatMap((photo) => photo.tags ?? []));
-      const characterIds = new Set(
-        session.photos.flatMap((photo) => photo.characterIds ?? (photo.characterId ? [photo.characterId] : [])),
-      );
-      const sessionTags = tags.filter((tag) => tagIds.has(tag.id));
-      const sessionCharacters = characters.filter((character) =>
-        characterIds.has(character.id),
-      );
       const location = locations.find((item) => item.id === session.locationId);
       return {
         locationId: session.locationId,
         locationName: location?.name ?? session.locationId,
         sessionDate: session.sessionDate,
         photoCount: session.photos.length,
-        candidates: createSessionMemoryCandidates({
-          locationId: session.locationId,
-          sessionDate: session.sessionDate,
-          tags: sessionTags,
-          characters: sessionCharacters,
-          photoCount: session.photos.length,
-        }),
         previewPhotos: session.photos.slice(0, 3).map((photo) => ({
           id: photo.id,
           title: photo.title ?? photo.id,
@@ -428,98 +431,168 @@ function buildSessionMemoryBackfillCandidates(photos, locations, tags, character
 export function getSessionMemoryBackfillCandidates() {
   return exclusive(
     async () => {
-      const [photos, locations, tags, characters, memories] = await Promise.all(
-        ["photos", "locations", "tags", "characters", "session-memories"].map((name) =>
+      const [photos, locations, memories] = await Promise.all(
+        ["photos", "locations", "session-memories"].map((name) =>
           readJson(dataFile(name), []),
         ),
       );
-      return buildSessionMemoryBackfillCandidates(
-        photos,
-        locations,
-        tags,
-        characters,
-        memories,
-      );
+      return buildSessionMemoryBackfillCandidates(photos, locations, memories);
     },
     { trackUndo: false },
   );
 }
 
-export function backfillSessionMemories(entries) {
+function getSessionMemoryProvider(providerId) {
+  const provider = sessionMemoryVisionProviders.get(
+    String(providerId ?? DEFAULT_SESSION_MEMORY_VISION_PROVIDER),
+  );
+  if (!provider) throw new Error(`Vision Providerが登録されていません: ${providerId}`);
+  return provider;
+}
+
+export function createSessionMemoryPrompt(
+  locationId,
+  sessionDate,
+  previousPhotoIds = [],
+  providerId = DEFAULT_SESSION_MEMORY_VISION_PROVIDER,
+) {
   return exclusive(
     async () => {
-      if (!Array.isArray(entries) || entries.length === 0) {
-        throw new Error("Memoryを付与するセッションを選択してください");
+      const [photos, memories] = await Promise.all([
+        readJson(dataFile("photos"), []),
+        readJson(dataFile("session-memories"), []),
+      ]);
+      const sessionPhotos = photos.filter(
+        (photo) => photo.locationId === locationId && photo.date === sessionDate,
+      );
+      if (sessionPhotos.length === 0) throw new Error("対象セッションの写真がありません");
+      if (memories.some((memory) => memory.locationId === locationId && memory.sessionDate === sessionDate)) {
+        throw new Error("このセッションには既にSession Memoryがあります");
       }
-
-      const requested = entries.map((entry) => {
-        const locationId = String(entry?.locationId ?? "").trim();
-        const sessionDate = String(entry?.sessionDate ?? "").trim();
-        const text = String(entry?.text ?? "").trim();
-        if (!locationId || !sessionDate) {
-          throw new Error("セッションの撮影場所または撮影日が不正です");
-        }
-        if (!text || [...text].length > 120) {
-          throw new Error("Memoryは1〜120文字で入力してください");
-        }
-        return { locationId, sessionDate, text };
-      });
-      const requestedKeys = new Set();
-      for (const entry of requested) {
-        const key = `${entry.locationId}|${entry.sessionDate}`;
-        if (requestedKeys.has(key)) throw new Error("同じセッションが複数回選択されています");
-        requestedKeys.add(key);
-      }
-
-      const [photos, locations, tags, characters, memories] = await Promise.all(
-        ["photos", "locations", "tags", "characters", "session-memories"].map((name) =>
-          readJson(dataFile(name), []),
-        ),
-      );
-      const candidates = buildSessionMemoryBackfillCandidates(
-        photos,
-        locations,
-        tags,
-        characters,
-        memories,
-      );
-      const eligibleByKey = new Map(
-        candidates.map((candidate) => [
-          `${candidate.locationId}|${candidate.sessionDate}`,
-          candidate,
-        ]),
-      );
-      const usedIds = new Set(memories.map((memory) => memory.id));
-      const timestamp = new Date().toISOString();
-      const added = requested.map((entry) => {
-        const key = `${entry.locationId}|${entry.sessionDate}`;
-        const candidate = eligibleByKey.get(key);
-        if (!candidate) {
-          throw new Error(
-            `${entry.sessionDate} / ${entry.locationId} は既に付与済み、または付与条件を満たしません`,
-          );
-        }
-        return {
-          id: allocateId("session_memory", undefined, usedIds),
-          locationId: entry.locationId,
-          sessionDate: entry.sessionDate,
-          text: entry.text,
-          generatedBy: candidate.candidates.includes(entry.text) ? "template" : "manual",
-          createdAt: timestamp,
-          updatedAt: timestamp,
-        };
-      });
-      await writeAtomic(
-        dataFile("session-memories"),
-        formatJsonList([...memories, ...added], "expanded"),
-      );
-      return finish(photos, locations, {
-        addedSessionMemories: added,
-        addedCount: added.length,
-      });
+      const provider = getSessionMemoryProvider(providerId);
+      const selectedPhotos = selectSessionPhotos(sessionPhotos, previousPhotoIds);
+      return {
+        provider: provider.id,
+        photoCount: sessionPhotos.length,
+        analyzedPhotoCount: selectedPhotos.length,
+        photoIds: selectedPhotos.map((photo) => photo.id),
+        prompt: provider.createPrompt({
+          sessionDate,
+          selectedPhotos,
+          previousMemories: memories.map((memory) => memory.text),
+        }),
+        previewPhotos: selectedPhotos.map((photo) => ({
+          id: photo.id,
+          title: photo.title ?? photo.id,
+          thumbnail: photo.thumbnail,
+        })),
+      };
     },
-    { label: "既存セッションへのMemory一括付与" },
+    { trackUndo: false },
   );
+}
+
+export function parseSessionMemoryResponse(rawResponse, providerId) {
+  return getSessionMemoryProvider(providerId).parseResponse(rawResponse);
+}
+
+export function saveGeneratedSessionMemory(payload) {
+  return exclusive(async () => {
+    const locationId = String(payload?.locationId ?? "").trim();
+    const sessionDate = String(payload?.sessionDate ?? "").trim();
+    const requestedPhotoIds = Array.isArray(payload?.photoIds)
+      ? payload.photoIds.map((id) => String(id))
+      : [];
+    const photoIds = [...new Set(requestedPhotoIds)];
+    const rawResponse = String(payload?.rawResponse ?? "");
+    const candidateIndex = Number(payload?.candidateIndex);
+    const provider = getSessionMemoryProvider(payload?.provider);
+    if (!locationId || !/^\d{4}-\d{2}-\d{2}$/u.test(sessionDate)) {
+      throw new Error("セッションの撮影場所または撮影日が不正です");
+    }
+    if (!Number.isInteger(candidateIndex) || candidateIndex < 0 || candidateIndex > 2) {
+      throw new Error("保存する候補を選択してください");
+    }
+    if (requestedPhotoIds.length !== photoIds.length) {
+      throw new Error("解析画像IDが重複しています");
+    }
+    if (rawResponse.length > 100_000) throw new Error("Copilotの応答が長すぎます");
+    const { summary, candidates } = provider.parseResponse(rawResponse);
+    const text = candidates[candidateIndex];
+    const [photos, locations, memories, analyses] = await Promise.all([
+      readJson(dataFile("photos"), []),
+      readJson(dataFile("locations"), []),
+      readJson(dataFile("session-memories"), []),
+      readJson(SESSION_MEMORY_ANALYSIS_FILE, []),
+    ]);
+    const sessionPhotos = photos.filter(
+      (photo) => photo.locationId === locationId && photo.date === sessionDate,
+    );
+    if (sessionPhotos.length === 0) throw new Error("対象セッションの写真がありません");
+    if (memories.some((memory) => memory.locationId === locationId && memory.sessionDate === sessionDate)) {
+      throw new Error("このセッションには既にSession Memoryがあります。既存のMemoryは上書きしません");
+    }
+    const selectedPhotos = sessionPhotos.filter((photo) => photoIds.includes(photo.id));
+    if (selectedPhotos.length !== photoIds.length) {
+      throw new Error("解析画像に対象セッション以外の写真が含まれています");
+    }
+    const expectedMin = Math.min(10, sessionPhotos.length);
+    const expectedMax = Math.min(15, sessionPhotos.length);
+    if (photoIds.length < expectedMin || photoIds.length > expectedMax) {
+      throw new Error(`解析画像は${expectedMin}〜${expectedMax}枚である必要があります`);
+    }
+    if (sessionPhotos.length < 10 && photoIds.length !== sessionPhotos.length) {
+      throw new Error("写真が10枚未満のセッションは全画像を解析対象にしてください");
+    }
+    const duplicate = findSimilarSessionMemory(
+      text,
+      memories.map((memory) => memory.text),
+    );
+    if (duplicate) {
+      throw new Error(`過去のSession Memoryと${duplicate.reason}です: 「${duplicate.text}」`);
+    }
+
+    const usedIds = new Set(memories.map((memory) => memory.id));
+    const timestamp = new Date().toISOString();
+    const memory = {
+      id: allocateId("session_memory", undefined, usedIds),
+      locationId,
+      sessionDate,
+      text,
+      generatedBy: provider.id === copilotVisionProvider.id ? "copilot" : "ai",
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    };
+    const analysis = {
+      sessionMemoryId: memory.id,
+      locationId,
+      sessionDate,
+      version: 2,
+      provider: provider.id,
+      photoCount: sessionPhotos.length,
+      analyzedPhotoCount: photoIds.length,
+      photoIds,
+      summary,
+      generatedAt: timestamp,
+    };
+    const memoryFile = dataFile("session-memories");
+    const analysisFile = SESSION_MEMORY_ANALYSIS_FILE;
+    const memoryBefore = await readFile(memoryFile, "utf8");
+    const analysisBefore = `${JSON.stringify(analyses, null, 2)}\n`;
+    try {
+      await writeAtomic(memoryFile, formatJsonList([...memories, memory], "expanded"));
+      await writeAtomic(analysisFile, `${JSON.stringify([...analyses, analysis], null, 2)}\n`);
+    } catch (error) {
+      try {
+        await writeAtomic(memoryFile, memoryBefore);
+        await writeAtomic(analysisFile, analysisBefore);
+      } catch (rollbackError) {
+        throw new AggregateError([error, rollbackError], "Session Memoryの保存に失敗し、変更前のデータへ復元できませんでした");
+      }
+      throw error;
+    }
+    return finish(photos, locations, { sessionMemory: memory, analysis });
+  }, { label: "Vision解析によるSession Memory保存" });
 }
 
 export function getMemoryReviewData() {
@@ -527,22 +600,23 @@ export function getMemoryReviewData() {
     async () => {
       const [
         sessionMemories,
+        sessionAnalyses,
         library,
         candidates,
         locations,
         photos,
-        tags,
-        characters,
       ] = await Promise.all([
         readJson(dataFile("session-memories"), []),
+        readJson(SESSION_MEMORY_ANALYSIS_FILE, []),
         readJson(dataFile("memory-library"), []),
         readJson(dataFile("memory-candidates"), []),
         readJson(dataFile("locations"), []),
         readJson(dataFile("photos"), []),
-        readJson(dataFile("tags"), []),
-        readJson(dataFile("characters"), []),
       ]);
       const latestReviews = getLatestMemoryReviews(library);
+      const analysesByMemoryId = new Map(
+        sessionAnalyses.map((analysis) => [analysis.sessionMemoryId, analysis]),
+      );
       const sessionPhotoCounts = new Map();
       for (const photo of photos) {
         if (!photo.date) continue;
@@ -554,11 +628,26 @@ export function getMemoryReviewData() {
           const locationName =
             locations.find((location) => location.id === memory.locationId)?.name ??
             memory.locationId;
+          const analysis = analysesByMemoryId.get(memory.id) ?? null;
           return {
             ...memory,
             memoryType: "session",
             locationName,
             session: `${locationName} / ${memory.sessionDate}`,
+            generation: analysis
+              ? {
+                  ...analysis,
+                  representativePhotos: analysis.photoIds
+                    .map((photoId) => photos.find((photo) => photo.id === photoId))
+                    .filter(Boolean)
+                    .slice(0, 5)
+                    .map((photo) => ({
+                      id: photo.id,
+                      title: photo.title ?? photo.id,
+                      thumbnail: photo.thumbnail,
+                    })),
+                }
+              : null,
             photoCount:
               sessionPhotoCounts.get(`${memory.locationId}|${memory.sessionDate}`) ?? 0,
             review:
@@ -611,8 +700,6 @@ export function getMemoryReviewData() {
       const backfillCandidateCount = buildSessionMemoryBackfillCandidates(
         photos,
         locations,
-        tags,
-        characters,
         sessionMemories,
       ).length;
       return {
@@ -1010,21 +1097,37 @@ export function updateSessionMemory(id, rawText) {
 
 export function deleteSessionMemory(id) {
   return exclusive(async () => {
-    const [photos, locations, memories] = await Promise.all([
+    const [photos, locations, memories, analyses] = await Promise.all([
       readJson(dataFile("photos"), []),
       readJson(dataFile("locations"), []),
       readJson(dataFile("session-memories"), []),
+      readJson(SESSION_MEMORY_ANALYSIS_FILE, []),
     ]);
     const memory = memories.find((item) => item.id === id);
     if (!memory) throw new Error(`Session Memoryが見つかりません: ${id}`);
 
-    await writeAtomic(
-      dataFile("session-memories"),
-      formatJsonList(
-        memories.filter((item) => item.id !== id),
-        "expanded",
-      ),
-    );
+    const memoryFile = dataFile("session-memories");
+    const analysisFile = SESSION_MEMORY_ANALYSIS_FILE;
+    const memoryBefore = await readFile(memoryFile, "utf8");
+    const analysisBefore = `${JSON.stringify(analyses, null, 2)}\n`;
+    try {
+      await writeAtomic(
+        memoryFile,
+        formatJsonList(memories.filter((item) => item.id !== id), "expanded"),
+      );
+      await writeAtomic(
+        analysisFile,
+        `${JSON.stringify(analyses.filter((analysis) => analysis.sessionMemoryId !== id), null, 2)}\n`,
+      );
+    } catch (error) {
+      try {
+        await writeAtomic(memoryFile, memoryBefore);
+        await writeAtomic(analysisFile, analysisBefore);
+      } catch (rollbackError) {
+        throw new AggregateError([error, rollbackError], "Session Memoryの削除に失敗し、変更前のデータへ復元できませんでした");
+      }
+      throw error;
+    }
     return finish(photos, locations, { deletedSessionMemory: memory });
   }, { label: "Session Memoryの削除" });
 }

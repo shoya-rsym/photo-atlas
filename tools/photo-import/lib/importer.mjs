@@ -5,7 +5,6 @@ import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import sharp from "sharp";
 import { parseDateInput } from "./date.mjs";
-import { createSessionMemoryCandidates } from "./memory.mjs";
 import { findExactName } from "./search.mjs";
 import {
   LOCAL_DIR,
@@ -86,19 +85,13 @@ export async function discardStaged(tokens) {
 }
 
 export async function loadMaster() {
-  const [prefectures, locations, tags, characters, photos, sessionMemories] = await Promise.all(
-    ["prefectures", "locations", "tags", "characters", "photos", "session-memories"].map((n) =>
+  const [prefectures, locations, tags, characters, photos] = await Promise.all(
+    ["prefectures", "locations", "tags", "characters", "photos"].map((n) =>
       readJson(dataFile(n), []),
     ),
   );
   const counts = {};
   for (const p of photos) counts[p.locationId] = (counts[p.locationId] ?? 0) + 1;
-  const sessionPhotoCounts = {};
-  for (const photo of photos) {
-    if (!photo.date) continue;
-    const key = `${photo.locationId}|${photo.date}`;
-    sessionPhotoCounts[key] = (sessionPhotoCounts[key] ?? 0) + 1;
-  }
   return {
     prefectures,
     locations,
@@ -106,8 +99,6 @@ export async function loadMaster() {
     characters,
     photoCounts: counts,
     photoTotal: photos.length,
-    sessionPhotoCounts,
-    sessionMemories,
   };
 }
 
@@ -267,7 +258,7 @@ export async function commitImport(payload) {
   const createdFiles = [];
   const newPhotos = [];
   const newHashes = {};
-  let sessionMemory;
+  let sessionMemoryPending = false;
   await mkdir(PHOTOS_DIR, { recursive: true });
   await mkdir(THUMBNAILS_DIR, { recursive: true });
 
@@ -296,43 +287,15 @@ export async function commitImport(payload) {
       });
       newHashes[info.hash] ??= id;
     }
-
     const sessionPhotoCount = sessionDate
-      ? photos.filter(
-          (photo) => photo.locationId === location.id && photo.date === sessionDate,
-        ).length + newPhotos.length
+      ? photos.filter((photo) => photo.locationId === location.id && photo.date === sessionDate).length +
+        newPhotos.length
       : 0;
-    const hasSessionMemory = sessionMemories.some(
-      (memory) =>
-        memory.locationId === location.id && memory.sessionDate === sessionDate,
-    );
-    if (sessionDate && sessionPhotoCount >= 10 && !hasSessionMemory) {
-      const candidates = createSessionMemoryCandidates({
-        locationId: location.id,
-        sessionDate,
-        tags: finalTags.map((id) => allTags.find((tag) => tag.id === id)).filter(Boolean),
-        characters: finalCharacterIds
-          .map((id) => allCharacters.find((character) => character.id === id))
-          .filter(Boolean),
-        photoCount: sessionPhotoCount,
-      });
-      const requestedText = String(payload.sessionMemoryText ?? "").trim();
-      const text =
-        requestedText.length > 0 && [...requestedText].length <= 120
-          ? requestedText
-          : candidates[0];
-      const usedIds = new Set(sessionMemories.map((memory) => memory.id));
-      const timestamp = new Date(now).toISOString();
-      sessionMemory = {
-        id: allocateId("session_memory", undefined, usedIds),
-        locationId: location.id,
-        sessionDate,
-        text,
-        generatedBy: "template",
-        createdAt: timestamp,
-        updatedAt: timestamp,
-      };
-    }
+    sessionMemoryPending =
+      sessionPhotoCount > 0 &&
+      !sessionMemories.some(
+        (memory) => memory.locationId === location.id && memory.sessionDate === sessionDate,
+      );
 
     // JSON更新（画像がすべて書けてから）
     const backups = [];
@@ -354,9 +317,6 @@ export async function commitImport(payload) {
           })
         : photos;
       await write("photos", [...existing, ...newPhotos], "expanded");
-      if (sessionMemory) {
-        await write("session-memories", [...sessionMemories, sessionMemory], "expanded");
-      }
     } catch (error) {
       for (const b of backups.reverse()) await writeAtomic(b.file, b.before);
       throw error;
@@ -378,7 +338,7 @@ export async function commitImport(payload) {
     newTags,
     newCharacters,
     newLocations,
-    sessionMemory: sessionMemory ?? null,
+    sessionMemoryPending,
     validation,
   };
 }

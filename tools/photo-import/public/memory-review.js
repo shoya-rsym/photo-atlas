@@ -136,6 +136,27 @@ function renderReviewRows() {
           saveButton.addEventListener("click", () =>
             saveReview(memory, rating.value, memo.value, saveButton),
           );
+          const generation = memory.generation;
+          const representativePhotos = generation?.representativePhotos?.length
+            ? element(
+                "div",
+                { class: "session-memory-previews" },
+                ...generation.representativePhotos.map((photo) =>
+                  element("figure", {},
+                    element("img", { src: photo.thumbnail, alt: photo.title, loading: "lazy" }),
+                    element("figcaption", {}, photo.title),
+                  ),
+                ),
+              )
+            : null;
+          const summaryDetails = generation
+            ? element(
+                "details",
+                {},
+                element("summary", {}, `Session Summary / ${generation.provider} / 解析画像 ${generation.analyzedPhotoCount}枚`),
+                element("pre", { class: "session-memory-summary" }, JSON.stringify(generation.summary, null, 2)),
+              )
+            : null;
           return element(
             "article",
             { class: "memory-review-card" },
@@ -146,9 +167,11 @@ function renderReviewRows() {
               element(
                 "span",
                 { class: "muted" },
-                `Session ${memory.id} / ${memory.photoCount}枚`,
+                `Session ${memory.id} / 生成元 ${memory.generatedBy} / 写真 ${memory.photoCount}枚${generation ? `（解析 ${generation.analyzedPhotoCount}枚）` : "（解析情報なし）"}`,
               ),
             ),
+            representativePhotos,
+            summaryDetails,
             element("blockquote", { class: "memory-review-text" }, memory.text),
             element(
               "div",

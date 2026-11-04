@@ -243,11 +243,19 @@ Photo Import Toolで写真を登録
 
 ↓
 
-同一セッションが10枚以上ならテンプレート候補を選択
+Photo-ManageでMemory未設定のセッションを選択
 
 ↓
 
-Session MemoryをJSONへ保存
+全画像またはランダムに選ばれた画像をCopilot Chatで視覚確認
+
+↓
+
+Session Summaryと異なる視点の候補3件を確認し、人が1件を選択
+
+↓
+
+Session Memoryと非公開の解析情報を保存
 
 ↓
 

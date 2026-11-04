@@ -15,7 +15,6 @@ import {
 import { loadRecent } from "./lib/store.mjs";
 import {
   bulkUpdate,
-  backfillSessionMemories,
   createCharacter,
   createLocation,
   createTagAndApply,
@@ -26,6 +25,9 @@ import {
   deleteSessionMemory,
   findSimilarPhotos,
   getSessionMemoryBackfillCandidates,
+  createSessionMemoryPrompt,
+  parseSessionMemoryResponse,
+  saveGeneratedSessionMemory,
   getMemoryReviewData,
   getUndoStatus,
   loadPhotos,
@@ -58,7 +60,6 @@ const STATIC = {
   "/lib/location.mjs": ["lib/location.mjs", "text/javascript; charset=utf-8"],
   "/lib/search.mjs": ["lib/search.mjs", "text/javascript; charset=utf-8"],
   "/lib/folder-name.mjs": ["lib/folder-name.mjs", "text/javascript; charset=utf-8"],
-  "/lib/memory.mjs": ["lib/memory.mjs", "text/javascript; charset=utf-8"],
   "/manage": ["public/manage.html", "text/html; charset=utf-8"],
   "/manage.js": ["public/manage.js", "text/javascript; charset=utf-8"],
   "/memory-review.js": ["public/memory-review.js", "text/javascript; charset=utf-8"],
@@ -254,9 +255,25 @@ const server = createServer(async (req, res) => {
           await updateSessionMemory(String(body.id), body.text),
         );
       }
-      if (path === "/api/session-memories/backfill") {
+      if (path === "/api/session-memories/prompt") {
         const body = await json();
-        return send(res, 200, await backfillSessionMemories(body.entries));
+        return send(
+          res,
+          200,
+          await createSessionMemoryPrompt(
+            String(body.locationId ?? ""),
+            String(body.sessionDate ?? ""),
+            body.previousPhotoIds,
+            body.provider,
+          ),
+        );
+      }
+      if (path === "/api/session-memories/parse") {
+        const body = await json();
+        return send(res, 200, parseSessionMemoryResponse(body.rawResponse, body.provider));
+      }
+      if (path === "/api/session-memories/save-generated") {
+        return send(res, 200, await saveGeneratedSessionMemory(await json()));
       }
       if (path === "/api/memory-reviews/save") {
         const body = await json();
