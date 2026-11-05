@@ -1,8 +1,12 @@
 import Link from "next/link";
+import { photos } from "@/lib/data";
 import { MemorySetting } from "@/components/MemoryPreferenceProvider";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import RandomDestinationButton from "@/components/RandomDestinationButton";
 
 export default function Header() {
+  const locationIds = Array.from(new Set(photos.map((photo) => photo.locationId)));
+
   return (
     <>
       <header className="sticky top-0 z-30 hidden border-b border-white/10 bg-[#0b111a]/90 text-white backdrop-blur-xl md:block">
@@ -35,6 +39,7 @@ export default function Header() {
             className="flex items-center gap-3 text-xs sm:gap-6 sm:text-sm"
           >
             <MemorySetting />
+            <RandomDestinationButton locationIds={locationIds} />
             <Link href="/#desktop-explore" className="hidden text-white/75 hover:text-white sm:inline">
               地図を辿る
             </Link>
@@ -63,6 +68,9 @@ export default function Header() {
               写真を辿る
             </Link>
           </div>
+        </div>
+        <div className="flex justify-end px-4 pb-2">
+          <RandomDestinationButton locationIds={locationIds} compact />
         </div>
       </header>
       <MobileBottomNav />
