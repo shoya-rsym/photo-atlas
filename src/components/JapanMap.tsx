@@ -21,7 +21,7 @@ type Props = {
   fit?: "all" | "units";
   ariaLabel: string;
   hint?: string;
-  variant?: "default" | "home";
+  variant?: "default" | "home" | "area";
   idPrefix?: string;
 };
 
@@ -68,6 +68,17 @@ function prefectureClipPathId(idPrefix: string, prefectureId: string): string {
 }
 
 type Offsets = Record<string, [number, number]>;
+type PreviewPosition = {
+  left: number;
+  top: number;
+  width: number;
+  maxHeight: number;
+};
+
+const PREVIEW_CARD_WIDTH = 256;
+const PREVIEW_CARD_HEIGHT = 320;
+const PREVIEW_GAP = 12;
+const PREVIEW_MARGIN = 8;
 
 function UnitShapes({
   unit,
@@ -198,7 +209,13 @@ export default function JapanMap({
   const [shown, setShown] = useState<{ id: string; photos: PreviewPhoto[] } | null>(
     null,
   );
+  const [previewPosition, setPreviewPosition] =
+    useState<PreviewPosition | null>(null);
+  const mapSurfaceRef = useRef<HTMLDivElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
   const pointerType = useRef<string>("mouse");
+  const previewPhotoCount =
+    variant === "home" ? 2 : PREVIEW_PHOTO_COUNT;
 
   useEffect(() => {
     let cancelled = false;
@@ -225,16 +242,51 @@ export default function JapanMap({
   const activeId = hoveredId ?? selectedId;
   const activeUnit = units.find((u) => u.id === activeId);
 
+  const updatePreviewPosition = (clientX: number, clientY: number) => {
+    const surface = mapSurfaceRef.current?.getBoundingClientRect();
+    if (!surface) return;
+
+    const width = Math.min(
+      PREVIEW_CARD_WIDTH,
+      Math.max(surface.width - PREVIEW_MARGIN * 2, 0),
+    );
+    const height = Math.min(
+      PREVIEW_CARD_HEIGHT,
+      Math.max(surface.height - PREVIEW_MARGIN * 2, 0),
+    );
+    const x = clientX - surface.left;
+    const y = clientY - surface.top;
+    const fitsRight =
+      x + PREVIEW_GAP + width <= surface.width - PREVIEW_MARGIN;
+    const fitsBelow =
+      y + PREVIEW_GAP + height <= surface.height - PREVIEW_MARGIN;
+    const left = fitsRight ? x + PREVIEW_GAP : x - PREVIEW_GAP - width;
+    const top = fitsBelow ? y + PREVIEW_GAP : y - PREVIEW_GAP - height;
+
+    setPreviewPosition({
+      left: Math.max(
+        PREVIEW_MARGIN,
+        Math.min(left, surface.width - width - PREVIEW_MARGIN),
+      ),
+      top: Math.max(
+        PREVIEW_MARGIN,
+        Math.min(top, surface.height - height - PREVIEW_MARGIN),
+      ),
+      width,
+      maxHeight: height,
+    });
+  };
+
   const reveal = (id: string | null) => {
     const unit = units.find((u) => u.id === id);
     setShown(
       unit
-        ? { id: unit.id, photos: pickRandom(unit.preview.photos, PREVIEW_PHOTO_COUNT) }
+        ? { id: unit.id, photos: pickRandom(unit.preview.photos, previewPhotoCount) }
         : null,
     );
   };
 
-  const handleClick = (unit: MapUnit) => {
+  const handleClick = (unit: MapUnit, clientX: number, clientY: number) => {
     if (pointerType.current === "mouse") {
       router.push(unit.href);
       return;
@@ -245,6 +297,7 @@ export default function JapanMap({
     } else {
       setSelectedId(unit.id);
       reveal(unit.id);
+      if (variant === "home") updatePreviewPosition(clientX, clientY);
     }
   };
 
@@ -252,27 +305,34 @@ export default function JapanMap({
 
   return (
     <div
-      className={`grid gap-4 ${variant === "home" ? "md:grid-cols-[minmax(0,1.45fr)_minmax(230px,0.9fr)]" : "md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]"}`}
+      className={
+        variant === "home"
+          ? ""
+          : variant === "area"
+            ? "grid items-start gap-4 md:grid-cols-[minmax(0,1.45fr)_minmax(230px,0.9fr)]"
+            : "grid items-start gap-4 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]"
+      }
     >
       <div className="rounded-lg border border-border bg-card p-2 sm:p-4">
-        {load.status === "loading" ? (
-          <p className="py-16 text-center text-muted">地図をひらいています…</p>
-        ) : null}
-        {load.status === "error" ? (
-          <p role="alert" className="py-16 text-center text-muted">
-            日本地図を表示できませんでした
-          </p>
-        ) : null}
-        {load.status === "ready" ? (
-          <svg
-            viewBox={viewBox}
-            role="group"
-            aria-label={ariaLabel}
-            className={`mx-auto h-auto w-full ${variant === "home" ? "max-h-[34rem] max-w-3xl" : "max-h-[70vh] max-w-xl"}`}
-            onPointerDown={(e) => {
-              pointerType.current = e.pointerType;
-            }}
-          >
+        <div ref={mapSurfaceRef} className="relative">
+          {load.status === "loading" ? (
+            <p className="py-16 text-center text-muted">地図をひらいています…</p>
+          ) : null}
+          {load.status === "error" ? (
+            <p role="alert" className="py-16 text-center text-muted">
+              日本地図を表示できませんでした
+            </p>
+          ) : null}
+          {load.status === "ready" ? (
+            <svg
+              viewBox={viewBox}
+              role="group"
+              aria-label={ariaLabel}
+              className={`mx-auto h-auto w-full ${variant === "home" ? "max-h-[42rem] max-w-none" : variant === "area" ? "max-h-[34rem] max-w-3xl" : "max-h-[70vh] max-w-xl"}`}
+              onPointerDown={(e) => {
+                pointerType.current = e.pointerType;
+              }}
+            >
             <defs>
               {load.map.shapes
                 .filter((shape) =>
@@ -334,17 +394,36 @@ export default function JapanMap({
                       if (e.pointerType !== "mouse") return;
                       setHoveredId(unit.id);
                       reveal(unit.id);
+                      if (variant === "home") {
+                        updatePreviewPosition(e.clientX, e.clientY);
+                      }
                     }}
                     onPointerLeave={(e) => {
                       if (e.pointerType !== "mouse") return;
+                      if (
+                        variant === "home" &&
+                        e.relatedTarget instanceof Node &&
+                        previewRef.current?.contains(e.relatedTarget)
+                      ) {
+                        return;
+                      }
                       setHoveredId(null);
                       reveal(selectedId);
                     }}
-                    onFocus={() => {
+                    onFocus={(e) => {
                       setSelectedId(unit.id);
                       reveal(unit.id);
+                      if (variant === "home") {
+                        const bounds = e.currentTarget.getBoundingClientRect();
+                        updatePreviewPosition(
+                          bounds.left + bounds.width / 2,
+                          bounds.top + bounds.height / 2,
+                        );
+                      }
                     }}
-                    onClick={() => handleClick(unit)}
+                    onClick={(e) =>
+                      handleClick(unit, e.clientX, e.clientY)
+                    }
                     onKeyDown={(e) => {
                       if (e.key === "Enter") router.push(unit.href);
                     }}
@@ -384,9 +463,64 @@ export default function JapanMap({
                 />
               ) : null}
             </g>
-          </svg>
-        ) : null}
-        {variant === "home" && load.status === "ready" ? (
+            </svg>
+          ) : null}
+          {variant === "home" &&
+          activeUnit &&
+          shown?.id === activeUnit.id &&
+          previewPosition ? (
+            <div
+              ref={previewRef}
+              aria-live="polite"
+              className="pointer-events-auto absolute z-20 hidden overflow-y-auto rounded-lg border border-border bg-card/95 p-3 shadow-xl backdrop-blur-sm md:block"
+              style={{
+                left: previewPosition.left,
+                top: previewPosition.top,
+                width: previewPosition.width,
+                maxHeight: previewPosition.maxHeight,
+              }}
+              onPointerLeave={(e) => {
+                if (e.pointerType !== "mouse") return;
+                const nextTarget = e.relatedTarget;
+                if (
+                  nextTarget instanceof Element &&
+                  nextTarget.closest(".map-unit[role='link']")
+                ) {
+                  return;
+                }
+                setHoveredId(null);
+                reveal(selectedId);
+              }}
+            >
+              <PreviewCard
+                preview={activeUnit.preview}
+                photos={shown.photos}
+                showLocationCount={false}
+                className="space-y-1"
+              />
+              {activeUnit.members.length > 0 ? (
+                <ul className="mt-2 flex flex-wrap gap-1.5 text-xs">
+                  {activeUnit.members.map((name) => (
+                    <li
+                      key={name}
+                      className="rounded border border-border px-2 py-0.5"
+                    >
+                      {name}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+              <Link
+                href={activeUnit.href}
+                className="mt-2 inline-block text-sm font-semibold text-accent underline underline-offset-4"
+              >
+                {activeUnit.name}を辿る
+              </Link>
+            </div>
+          ) : null}
+        </div>
+        {(variant === "home" || variant === "area") &&
+        load.status === "ready" ? (
           <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 px-2 text-xs text-muted">
             <span>
               <span
@@ -410,61 +544,79 @@ export default function JapanMap({
         ) : null}
       </div>
 
-      <aside
-        aria-live="polite"
-        className={`rounded-lg border border-border bg-card p-4 ${variant === "home" ? "min-h-64 md:p-5" : ""}`}
-      >
-        {activeUnit && shown && shown.id === activeUnit.id ? (
-          <div>
-            <PreviewCard
-              preview={activeUnit.preview}
-              photos={shown.photos}
-              className={variant === "home" ? "space-y-1" : undefined}
-            />
-            {activeUnit.members.length > 0 ? (
-              <ul className={`mt-3 flex flex-wrap gap-2 text-sm ${variant === "home" ? "text-xs" : ""}`}>
-                {activeUnit.members.map((name) => (
-                  <li
-                    key={name}
-                    className="rounded border border-border px-2 py-0.5"
-                  >
-                    {name}
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-            <Link
-              href={activeUnit.href}
-              className="mt-4 inline-block font-semibold text-accent underline underline-offset-4"
-            >
-              {activeUnit.name}を辿る
-            </Link>
-          </div>
-        ) : (
-          <div className="flex h-full flex-col justify-center">
-            {variant === "home" ? (
-              <>
-                <p className="text-lg font-bold">地図から写真を辿る</p>
-                <p className="mt-2 hidden text-sm leading-6 text-muted md:block">
-                  地域にカーソルを重ねると、そこに残る写真がひらきます。
-                  選ぶと、その地域へ辿れます。
-                </p>
-                <p className="mt-2 text-sm leading-6 text-muted md:hidden">
-                  地域をタップすると写真がひらきます。もう一度タップすると地域へ進みます。
-                </p>
-                <p className="mt-4 hidden text-xs text-muted md:block">{hint}</p>
-              </>
-            ) : (
-              <>
-                <p className="hidden text-muted md:block">{hint}</p>
-                <p className="text-sm leading-6 text-muted md:hidden">
-                  地図をタップすると写真がひらきます。もう一度タップすると場所へ進みます。
-                </p>
-              </>
-            )}
-          </div>
-        )}
-      </aside>
+      {variant === "home" &&
+      activeUnit &&
+      shown?.id === activeUnit.id ? (
+        <aside
+          aria-live="polite"
+          className="mt-3 rounded-lg border border-border bg-card p-3 md:hidden"
+        >
+          <PreviewCard
+            preview={activeUnit.preview}
+            photos={shown.photos}
+            showLocationCount={false}
+          />
+          {activeUnit.members.length > 0 ? (
+            <ul className="mt-2 flex flex-wrap gap-1.5 text-xs">
+              {activeUnit.members.map((name) => (
+                <li
+                  key={name}
+                  className="rounded border border-border px-2 py-0.5"
+                >
+                  {name}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          <Link
+            href={activeUnit.href}
+            className="mt-2 inline-block text-sm font-semibold text-accent underline underline-offset-4"
+          >
+            {activeUnit.name}を辿る
+          </Link>
+        </aside>
+      ) : null}
+
+      {variant !== "home" ? (
+        <aside
+          aria-live="polite"
+          className="rounded-lg border border-border bg-card p-4"
+        >
+          {activeUnit && shown?.id === activeUnit.id ? (
+            <div>
+              <PreviewCard
+                preview={activeUnit.preview}
+                photos={shown.photos}
+              />
+              {activeUnit.members.length > 0 ? (
+                <ul className="mt-3 flex flex-wrap gap-2 text-sm">
+                  {activeUnit.members.map((name) => (
+                    <li
+                      key={name}
+                      className="rounded border border-border px-2 py-0.5"
+                    >
+                      {name}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+              <Link
+                href={activeUnit.href}
+                className="mt-4 inline-block font-semibold text-accent underline underline-offset-4"
+              >
+                {activeUnit.name}を辿る
+              </Link>
+            </div>
+          ) : (
+            <div className="flex h-full flex-col justify-center">
+              <p className="hidden text-muted md:block">{hint}</p>
+              <p className="text-sm leading-6 text-muted md:hidden">
+                地図をタップすると写真がひらきます。もう一度タップすると場所へ進みます。
+              </p>
+            </div>
+          )}
+        </aside>
+      ) : null}
     </div>
   );
 }

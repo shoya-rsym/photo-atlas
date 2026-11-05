@@ -38,7 +38,7 @@ type Props = { items: LocationPreview[] };
 
 export default function PrefectureMap({ items }: Props) {
   return (
-    <div className="mt-6 h-64 overflow-hidden rounded-lg border border-border bg-card sm:h-96">
+    <div className="mt-6 h-80 overflow-hidden rounded-lg border border-border bg-card sm:h-[32rem]">
       <MapErrorBoundary>
         <LeafletMap items={items} />
       </MapErrorBoundary>

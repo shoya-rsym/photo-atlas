@@ -54,6 +54,7 @@ export default function LeafletMap({ items }: Props) {
     [Math.min(...lats), Math.min(...lngs)],
     [Math.max(...lats), Math.max(...lngs)],
   ];
+  const latitudeRange = bounds[1][0] - bounds[0][0];
 
   const reshuffle = (item: LocationPreview) =>
     setShown((prev) => ({
@@ -85,26 +86,36 @@ export default function LeafletMap({ items }: Props) {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {positioned.map((item) => (
-        <CircleMarker
-          key={item.location.id}
-          center={[item.location.lat, item.location.lng]}
-          radius={10}
-          pathOptions={{ color: "#ffffff", weight: 2, fillColor: "#0ea5e9", fillOpacity: 0.9 }}
-          eventHandlers={{
-            mouseover: () => reshuffle(item),
-            click: (e) => handleClick(item, e),
-          }}
-        >
-          <Tooltip className="photo-preview-tooltip" direction="top" offset={[0, -8]}>
-            <PreviewCard
-              preview={item.preview}
-              photos={shown[item.location.id] ?? []}
-              showLocationCount={false}
-            />
-          </Tooltip>
-        </CircleMarker>
-      ))}
+      {positioned.map((item) => {
+        const isNearNorthEdge =
+          latitudeRange > 0 &&
+          item.location.lat >= bounds[1][0] - latitudeRange * 0.2;
+
+        return (
+          <CircleMarker
+            key={item.location.id}
+            center={[item.location.lat, item.location.lng]}
+            radius={10}
+            pathOptions={{ color: "#ffffff", weight: 2, fillColor: "#0ea5e9", fillOpacity: 0.9 }}
+            eventHandlers={{
+              mouseover: () => reshuffle(item),
+              click: (e) => handleClick(item, e),
+            }}
+          >
+            <Tooltip
+              className="photo-preview-tooltip"
+              direction={isNearNorthEdge ? "bottom" : "top"}
+              offset={[0, -8]}
+            >
+              <PreviewCard
+                preview={item.preview}
+                photos={shown[item.location.id] ?? []}
+                showLocationCount={false}
+              />
+            </Tooltip>
+          </CircleMarker>
+        );
+      })}
     </MapContainer>
   );
 }

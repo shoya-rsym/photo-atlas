@@ -136,7 +136,7 @@ export default function HomePage() {
                 </h2>
                 <span className="text-xs text-muted">近ごろ</span>
               </div>
-              <RecentPhotos photos={recentPhotos} compact />
+              <RecentPhotos photos={recentPhotos.slice(0, 4)} compact />
             </section>
             <PopularTags tags={photoClues} />
           </aside>

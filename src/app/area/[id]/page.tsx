@@ -130,7 +130,7 @@ export default async function AreaPage({ params }: Props) {
             fit="units"
             ariaLabel={`${area.name}の地図`}
             hint="都道府県を選ぶと、そこに残る写真がひらきます。"
-            variant="home"
+            variant="area"
             idPrefix="mobile"
           />
         </section>
@@ -178,7 +178,7 @@ export default async function AreaPage({ params }: Props) {
             fit="units"
             ariaLabel={`${area.name}の地図`}
             hint="都道府県にカーソルを重ねると写真がひらきます。選ぶと、その地域へ辿れます。"
-            variant="home"
+            variant="area"
             idPrefix="desktop"
           />
         </section>
