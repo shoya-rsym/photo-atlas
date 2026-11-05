@@ -111,10 +111,10 @@
     "id": "session_memory_014",
     "locationId": "location_152",
     "sessionDate": "2025-07-28",
-    "text": "遠くのざわめきが薄れ、周囲の音も少しずつ落ち着いていた。",
-    "generatedBy": "template",
+    "text": "岩の輪を抜けた浅瀬が、砂の白から深い沖へ色を変えた。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T04:59:04.150Z",
-    "updatedAt": "2026-10-31T04:59:04.150Z"
+    "updatedAt": "2026-11-05T05:27:09.663Z"
   },
   {
     "id": "session_memory_015",
@@ -192,37 +192,37 @@
     "id": "session_memory_023",
     "locationId": "osm_way_495904855",
     "sessionDate": "2025-09-13",
-    "text": "光がやわらぎ、景色の色合いが穏やかに見える時間帯だった。",
-    "generatedBy": "template",
+    "text": "青い光の細道を抜けると、壁の模様が一枚ずつ近づいた。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T05:21:55.042Z",
-    "updatedAt": "2026-10-31T05:21:55.042Z"
+    "updatedAt": "2026-11-05T05:27:09.908Z"
   },
   {
     "id": "session_memory_024",
     "locationId": "osm_way_562241668",
     "sessionDate": "2025-09-14",
-    "text": "人の流れが落ち着き、周囲に静かな間が生まれていた。",
-    "generatedBy": "template",
+    "text": "赤や紫の傘が壁を埋め、奥の通路まで円が続いていた。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T05:23:08.520Z",
-    "updatedAt": "2026-10-31T05:23:08.520Z"
+    "updatedAt": "2026-11-05T05:27:10.080Z"
   },
   {
     "id": "session_memory_025",
     "locationId": "osm_node_4317821122",
     "sessionDate": "2026-03-03",
-    "text": "風が通り抜け、光の揺らぎが静かに残っている。",
-    "generatedBy": "template",
+    "text": "立ち姿の列が遠くまで続き、色の違いだけがひとつずつ残った。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T05:25:49.873Z",
-    "updatedAt": "2026-10-31T05:25:49.873Z"
+    "updatedAt": "2026-11-05T05:27:10.263Z"
   },
   {
     "id": "session_memory_026",
     "locationId": "osm_way_1151898785",
     "sessionDate": "2026-03-03",
-    "text": "風が通り抜け、光の揺らぎが静かに残っている。",
-    "generatedBy": "template",
+    "text": "花の枝先が淡く重なり、足元の白い小道を消していた。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T05:26:48.271Z",
-    "updatedAt": "2026-10-31T05:26:48.271Z"
+    "updatedAt": "2026-11-05T05:27:10.458Z"
   },
   {
     "id": "session_memory_027",
@@ -237,10 +237,10 @@
     "id": "session_memory_028",
     "locationId": "osm_way_929031490",
     "sessionDate": "2025-07-29",
-    "text": "人の流れが落ち着き、周囲に静かな間が生まれていた。",
-    "generatedBy": "template",
+    "text": "木組みの大きな屋根を抜けた先で、水辺の花が街の光を受けた。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T05:33:08.475Z",
-    "updatedAt": "2026-10-31T05:33:08.475Z"
+    "updatedAt": "2026-11-05T05:27:10.663Z"
   },
   {
     "id": "session_memory_029",
@@ -255,37 +255,37 @@
     "id": "session_memory_030",
     "locationId": "osm_way_929035663",
     "sessionDate": "2025-07-29",
-    "text": "遠くのざわめきが薄れ、周囲の音も少しずつ落ち着いていた。",
-    "generatedBy": "template",
+    "text": "雪の縁を残した町の先で、橙色の山肌が水辺へ映った。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T05:36:26.474Z",
-    "updatedAt": "2026-10-31T05:36:26.474Z"
+    "updatedAt": "2026-11-05T05:27:10.862Z"
   },
   {
     "id": "session_memory_031",
     "locationId": "osm_way_929364826",
     "sessionDate": "2025-07-28",
-    "text": "日差しが傾き、普段の景色にやわらかな余白が生まれていた。",
-    "generatedBy": "template",
+    "text": "青紫の花房のあいだを、緑の小径が細く曲がっていた。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T05:40:07.473Z",
-    "updatedAt": "2026-10-31T05:40:07.473Z"
+    "updatedAt": "2026-11-05T05:27:11.047Z"
   },
   {
     "id": "session_memory_032",
     "locationId": "osm_way_197980653",
     "sessionDate": "2025-07-27",
-    "text": "風が通り抜け、光の揺らぎが静かに残っている。",
-    "generatedBy": "template",
+    "text": "木の棚に並ぶ黒い円盤の横で、金色のラッパが幾度も光った。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T05:41:08.984Z",
-    "updatedAt": "2026-10-31T05:41:08.984Z"
+    "updatedAt": "2026-11-05T05:27:11.237Z"
   },
   {
     "id": "session_memory_033",
     "locationId": "osm_way_1352442122",
     "sessionDate": "2025-07-26",
-    "text": "遠くのざわめきが薄れ、周囲の音も少しずつ落ち着いていた。",
-    "generatedBy": "template",
+    "text": "白い模型の回廊を抜けると、鮮紅の壁面が視界を満たした。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T05:42:57.554Z",
-    "updatedAt": "2026-10-31T05:42:57.554Z"
+    "updatedAt": "2026-11-05T05:27:11.734Z"
   },
   {
     "id": "session_memory_034",
@@ -300,19 +300,19 @@
     "id": "session_memory_035",
     "locationId": "osm_node_4796184322",
     "sessionDate": "2025-08-05",
-    "text": "遠くのざわめきが薄れ、周囲の音も少しずつ落ち着いていた。",
-    "generatedBy": "template",
+    "text": "軒下に浮かぶ丸い灯りの間で、木の梁が深く影を引いていた。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T05:48:22.972Z",
-    "updatedAt": "2026-10-31T05:48:22.972Z"
+    "updatedAt": "2026-11-05T05:27:12.094Z"
   },
   {
     "id": "session_memory_036",
     "locationId": "osm_relation_63499",
     "sessionDate": "2025-08-06",
-    "text": "水辺に光の揺らぎが重なり、周囲の景色が穏やかに見えていた。",
-    "generatedBy": "template",
+    "text": "黄色い花の列の向こうで、夕日が水際に長い影を落とした。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T05:49:31.626Z",
-    "updatedAt": "2026-10-31T05:49:31.626Z"
+    "updatedAt": "2026-11-05T05:27:12.456Z"
   },
   {
     "id": "session_memory_037",
@@ -345,10 +345,10 @@
     "id": "session_memory_040",
     "locationId": "osm_way_256223124",
     "sessionDate": "2026-08-24",
-    "text": "人の流れが落ち着き、周囲に静かな間が生まれていた。",
-    "generatedBy": "template",
+    "text": "夕焼けの広場から提灯の灯る店内へ、明かりが近づいていた。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T06:55:09.906Z",
-    "updatedAt": "2026-10-31T06:55:09.906Z"
+    "updatedAt": "2026-11-05T05:27:12.787Z"
   },
   {
     "id": "session_memory_041",
@@ -363,10 +363,10 @@
     "id": "session_memory_042",
     "locationId": "osm_relation_10341225",
     "sessionDate": "2025-07-27",
-    "text": "光がやわらぎ、景色の色合いが穏やかに見える時間帯だった。",
-    "generatedBy": "template",
+    "text": "赤い郵便箱と古い木の店先が、細い通りに並んでいた。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T07:04:27.177Z",
-    "updatedAt": "2026-10-31T07:04:27.177Z"
+    "updatedAt": "2026-11-05T05:29:02.985Z"
   },
   {
     "id": "session_memory_043",
@@ -381,46 +381,46 @@
     "id": "session_memory_044",
     "locationId": "osm_way_300077872",
     "sessionDate": "2026-02-20",
-    "text": "日差しが傾き、普段の景色にやわらかな余白が生まれていた。",
-    "generatedBy": "template",
+    "text": "青空の下の黒い屋根が、夜の灯りでは金色にほどけた。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T08:04:58.830Z",
-    "updatedAt": "2026-10-31T08:04:58.830Z"
+    "updatedAt": "2026-11-05T05:29:03.425Z"
   },
   {
     "id": "session_memory_045",
     "locationId": "osm_node_8207895833",
     "sessionDate": "2026-02-21",
-    "text": "風が通り抜け、光の揺らぎが静かに残っている。",
-    "generatedBy": "template",
+    "text": "縄を編んだ大きな形が、雪と紅葉のあいだにひっそり立っていた。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T08:08:54.055Z",
-    "updatedAt": "2026-10-31T08:08:54.055Z"
+    "updatedAt": "2026-11-05T05:29:04.101Z"
   },
   {
     "id": "session_memory_046",
     "locationId": "osm_node_12020203527",
     "sessionDate": "2026-06-23",
-    "text": "遠くのざわめきが薄れ、周囲の音も少しずつ落ち着いていた。",
-    "generatedBy": "template",
+    "text": "青や紫の花房の間で、緑の小道がゆるく折れていた。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T08:10:20.938Z",
-    "updatedAt": "2026-10-31T08:10:20.938Z"
+    "updatedAt": "2026-11-05T05:29:04.385Z"
   },
   {
     "id": "session_memory_047",
     "locationId": "osm_way_523178334",
     "sessionDate": "2025-08-28",
-    "text": "風が通り抜け、光の揺らぎが静かに残っている。",
-    "generatedBy": "template",
+    "text": "魚影の重なる青い水槽から、床の虹色へ光がこぼれた。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T08:11:44.395Z",
-    "updatedAt": "2026-10-31T08:11:44.395Z"
+    "updatedAt": "2026-11-05T05:29:04.638Z"
   },
   {
     "id": "session_memory_048",
     "locationId": "osm_node_1420933547",
     "sessionDate": "2025-08-28",
-    "text": "光がやわらぎ、景色の色合いが穏やかに見える時間帯だった。",
-    "generatedBy": "template",
+    "text": "白い展示壁を曲がるたび、形の違う作品が静かに現れた。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T08:12:42.105Z",
-    "updatedAt": "2026-10-31T08:12:42.105Z"
+    "updatedAt": "2026-11-05T05:29:04.891Z"
   },
   {
     "id": "session_memory_049",
@@ -435,28 +435,28 @@
     "id": "session_memory_050",
     "locationId": "osm_way_361739159",
     "sessionDate": "2026-02-06",
-    "text": "光がやわらぎ、景色の色合いが穏やかに見える時間帯だった。",
-    "generatedBy": "template",
+    "text": "交差する木の梁の下で、本棚の列が遠くまで伸びていた。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T09:02:59.829Z",
-    "updatedAt": "2026-10-31T09:02:59.829Z"
+    "updatedAt": "2026-11-05T05:29:05.129Z"
   },
   {
     "id": "session_memory_051",
     "locationId": "osm_way_1479321855",
     "sessionDate": "2026-02-06",
-    "text": "風が通り抜け、光の揺らぎが静かに残っている。",
-    "generatedBy": "template",
+    "text": "黒い魚の形を抜けると、夕焼けの港が水面にひらけた。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T09:05:36.128Z",
-    "updatedAt": "2026-10-31T09:05:36.128Z"
+    "updatedAt": "2026-11-05T05:29:05.367Z"
   },
   {
     "id": "session_memory_052",
     "locationId": "osm_way_579849930",
     "sessionDate": "2026-02-06",
-    "text": "遠くのざわめきが薄れ、周囲の音も少しずつ落ち着いていた。",
-    "generatedBy": "template",
+    "text": "港の手すりに残る夕焼けが、船影の下へゆっくりほどけた。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T09:07:36.433Z",
-    "updatedAt": "2026-10-31T09:07:36.433Z"
+    "updatedAt": "2026-11-05T05:29:05.602Z"
   },
   {
     "id": "session_memory_053",
@@ -471,19 +471,19 @@
     "id": "session_memory_054",
     "locationId": "osm_relation_8273220",
     "sessionDate": "2025-09-21",
-    "text": "水辺に光の揺らぎが重なり、周囲の景色が穏やかに見えていた。",
-    "generatedBy": "template",
+    "text": "朱色の橋が海へ伸び、森の小道には光の斑が落ちた。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T09:19:45.172Z",
-    "updatedAt": "2026-10-31T09:19:45.172Z"
+    "updatedAt": "2026-11-05T05:29:05.837Z"
   },
   {
     "id": "session_memory_055",
     "locationId": "osm_node_1401927618",
     "sessionDate": "2025-09-21",
-    "text": "光がやわらぎ、景色の色合いが穏やかに見える時間帯だった。",
-    "generatedBy": "template",
+    "text": "枝垂れる淡い花の先で、地面の桃色が帯になって広がった。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T09:20:56.163Z",
-    "updatedAt": "2026-10-31T09:20:56.163Z"
+    "updatedAt": "2026-11-05T05:29:06.267Z"
   },
   {
     "id": "session_memory_056",
@@ -507,10 +507,10 @@
     "id": "session_memory_058",
     "locationId": "location_054",
     "sessionDate": "2026-05-07",
-    "text": "光がやわらぎ、景色の色合いが穏やかに見える時間帯だった。",
-    "generatedBy": "template",
+    "text": "大小の水槽を渡る青い光に、床の虹色がひとすじ混ざっていた。",
+    "generatedBy": "copilot",
     "createdAt": "2026-10-31T09:27:15.279Z",
-    "updatedAt": "2026-10-31T09:27:15.279Z"
+    "updatedAt": "2026-11-05T05:29:06.651Z"
   },
   {
     "id": "session_memory_059",
@@ -763,5 +763,1814 @@
     "generatedBy": "copilot",
     "createdAt": "2026-11-04T07:57:25.080Z",
     "updatedAt": "2026-11-04T07:57:25.080Z"
+  },
+  {
+    "id": "session_memory_086",
+    "locationId": "location_001",
+    "sessionDate": "2020-10-26",
+    "text": "赤い斜面の奥へ光が沈み、輪郭だけが静かに残った。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:15:37.498Z",
+    "updatedAt": "2026-11-05T04:15:37.498Z"
+  },
+  {
+    "id": "session_memory_087",
+    "locationId": "osm_way_378128429",
+    "sessionDate": "2022-04-15",
+    "text": "青の奥を横切る大きな影が、静けさを深くしていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:17:28.518Z",
+    "updatedAt": "2026-11-05T04:17:28.518Z"
+  },
+  {
+    "id": "session_memory_088",
+    "locationId": "location_002",
+    "sessionDate": "2022-04-15",
+    "text": "枠の向こうの水平線に、空の明るさだけが先へ続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:17:29.491Z",
+    "updatedAt": "2026-11-05T04:17:29.491Z"
+  },
+  {
+    "id": "session_memory_089",
+    "locationId": "location_151",
+    "sessionDate": "2022-04-15",
+    "text": "水の底の模様と雲の白さが、ひとつの遠さに溶けていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:17:29.839Z",
+    "updatedAt": "2026-11-05T04:17:29.839Z"
+  },
+  {
+    "id": "session_memory_090",
+    "locationId": "location_004",
+    "sessionDate": "2022-04-15",
+    "text": "曲がる階段の奥で、鮮やかな色だけが行き先を変えていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:17:30.329Z",
+    "updatedAt": "2026-11-05T04:17:30.329Z"
+  },
+  {
+    "id": "session_memory_091",
+    "locationId": "location_148",
+    "sessionDate": "2025-04-05",
+    "text": "海の青を囲む輪郭が、いつのまにか景色の一部になっていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:19:01.438Z",
+    "updatedAt": "2026-11-05T04:19:01.438Z"
+  },
+  {
+    "id": "session_memory_092",
+    "locationId": "location_147",
+    "sessionDate": "2025-04-04",
+    "text": "朱色の縁をなぞる影が、橋の先まで静かに続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:19:02.849Z",
+    "updatedAt": "2026-11-05T04:19:02.849Z"
+  },
+  {
+    "id": "session_memory_093",
+    "locationId": "location_146",
+    "sessionDate": "2025-04-04",
+    "text": "水面の向こうに山影が重なり、遠さだけがゆっくりほどけていった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:19:03.606Z",
+    "updatedAt": "2026-11-05T04:19:03.606Z"
+  },
+  {
+    "id": "session_memory_094",
+    "locationId": "location_145",
+    "sessionDate": "2025-04-04",
+    "text": "花の屋根をくぐる階段に、遠い街の明るさまで届いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:19:05.393Z",
+    "updatedAt": "2026-11-05T04:19:05.393Z"
+  },
+  {
+    "id": "session_memory_095",
+    "locationId": "location_144",
+    "sessionDate": "2025-04-30",
+    "text": "石のアーチが水面に重なり、流れの行き先まで静かだった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:20:26.268Z",
+    "updatedAt": "2026-11-05T04:20:26.268Z"
+  },
+  {
+    "id": "session_memory_096",
+    "locationId": "location_141",
+    "sessionDate": "2026-03-14",
+    "text": "柵の線の向こうで、白い波だけが何度も形を変えていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:20:26.613Z",
+    "updatedAt": "2026-11-05T04:20:26.613Z"
+  },
+  {
+    "id": "session_memory_097",
+    "locationId": "location_142",
+    "sessionDate": "2026-03-14",
+    "text": "黄色の波が空の青まで押し上げ、境目が遠くほどけていった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:20:26.891Z",
+    "updatedAt": "2026-11-05T04:20:26.891Z"
+  },
+  {
+    "id": "session_memory_098",
+    "locationId": "location_140",
+    "sessionDate": "2026-03-14",
+    "text": "山の稜線と水の青が触れる場所に、空だけが広く残った。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:20:27.193Z",
+    "updatedAt": "2026-11-05T04:20:27.193Z"
+  },
+  {
+    "id": "session_memory_099",
+    "locationId": "location_005",
+    "sessionDate": "2024-11-16",
+    "text": "花の青に顔の輪郭が寄り添い、境目だけが淡くほどけた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:21:33.391Z",
+    "updatedAt": "2026-11-05T04:21:33.391Z"
+  },
+  {
+    "id": "session_memory_100",
+    "locationId": "location_137",
+    "sessionDate": "2023-11-05",
+    "text": "青空を映す壁面のそばで、階段の奥行きが静かに続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:21:33.755Z",
+    "updatedAt": "2026-11-05T04:21:33.755Z"
+  },
+  {
+    "id": "session_memory_101",
+    "locationId": "location_053",
+    "sessionDate": "2024-05-11",
+    "text": "緑の中で赤がひときわ重なり、遠くの空まで明るく見えた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:21:34.236Z",
+    "updatedAt": "2026-11-05T04:21:34.236Z"
+  },
+  {
+    "id": "session_memory_102",
+    "locationId": "location_135",
+    "sessionDate": "2023-11-24",
+    "text": "赤橙の葉陰を抜けるたび、青紫の色が景色に残っていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:37:57.696Z",
+    "updatedAt": "2026-11-05T04:37:57.696Z"
+  },
+  {
+    "id": "session_memory_103",
+    "locationId": "location_136",
+    "sessionDate": "2023-11-24",
+    "text": "赤い葉の奥に空が抜け、歩幅の先まで秋がひらいていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:45:14.217Z",
+    "updatedAt": "2026-11-05T04:45:14.217Z"
+  },
+  {
+    "id": "session_memory_104",
+    "locationId": "location_036",
+    "sessionDate": "2020-05-05",
+    "text": "紫の房が降りる先で、濡れた道まで光を抱えていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:45:14.435Z",
+    "updatedAt": "2026-11-05T04:45:14.435Z"
+  },
+  {
+    "id": "session_memory_105",
+    "locationId": "location_133",
+    "sessionDate": "2021-10-27",
+    "text": "青い水面と稜線のあいだで、陽射しだけが近くにあった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:45:14.689Z",
+    "updatedAt": "2026-11-05T04:45:14.689Z"
+  },
+  {
+    "id": "session_memory_106",
+    "locationId": "location_008",
+    "sessionDate": "2024-07-20",
+    "text": "波の白さを追ううち、輪の向こうまで青がつながっていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:45:15.095Z",
+    "updatedAt": "2026-11-05T04:45:15.095Z"
+  },
+  {
+    "id": "session_memory_107",
+    "locationId": "location_131",
+    "sessionDate": "2023-08-17",
+    "text": "花の黄色が空の青へ伸び、遠い雲まで近くなった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:45:15.335Z",
+    "updatedAt": "2026-11-05T04:45:15.335Z"
+  },
+  {
+    "id": "session_memory_108",
+    "locationId": "location_132",
+    "sessionDate": "2023-08-17",
+    "text": "黄色い花の向こうに、風車と青空が同じ高さで並んだ。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:45:15.587Z",
+    "updatedAt": "2026-11-05T04:45:15.587Z"
+  },
+  {
+    "id": "session_memory_109",
+    "locationId": "location_130",
+    "sessionDate": "2023-12-15",
+    "text": "白い花の間を歩くうち、噴水の明るさが静かに残った。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:45:15.870Z",
+    "updatedAt": "2026-11-05T04:45:15.870Z"
+  },
+  {
+    "id": "session_memory_110",
+    "locationId": "location_129",
+    "sessionDate": "2023-12-16",
+    "text": "濡れた地面に灯りが滲み、足元まで別の色になった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:45:16.158Z",
+    "updatedAt": "2026-11-05T04:45:16.158Z"
+  },
+  {
+    "id": "session_memory_111",
+    "locationId": "location_128",
+    "sessionDate": "2024-07-19",
+    "text": "緑の小径を上がるほど、空と海の青が近づいてきた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:45:16.412Z",
+    "updatedAt": "2026-11-05T04:45:16.412Z"
+  },
+  {
+    "id": "session_memory_112",
+    "locationId": "location_127",
+    "sessionDate": "2024-07-20",
+    "text": "朱の門を抜けた先で、石の鳥居が緑を切り取っていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:45:16.665Z",
+    "updatedAt": "2026-11-05T04:45:16.665Z"
+  },
+  {
+    "id": "session_memory_113",
+    "locationId": "location_126",
+    "sessionDate": "2024-07-20",
+    "text": "水面に伸びる陽射しを抜けると、木陰の緑が続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:45:16.912Z",
+    "updatedAt": "2026-11-05T04:45:16.912Z"
+  },
+  {
+    "id": "session_memory_114",
+    "locationId": "location_125",
+    "sessionDate": "2024-05-21",
+    "text": "白い花の奥へ視線を預けると、赤がひとつ浮かび上がった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:45:17.129Z",
+    "updatedAt": "2026-11-05T04:45:17.129Z"
+  },
+  {
+    "id": "session_memory_115",
+    "locationId": "location_123",
+    "sessionDate": "2024-05-28",
+    "text": "窓辺の静けさを出ると、花のアーチが緑の奥へ続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:45:17.325Z",
+    "updatedAt": "2026-11-05T04:45:17.325Z"
+  },
+  {
+    "id": "session_memory_116",
+    "locationId": "location_124",
+    "sessionDate": "2024-05-28",
+    "text": "港の黒い船体から、夕空の高層街へ色が移っていった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:45:17.515Z",
+    "updatedAt": "2026-11-05T04:45:17.515Z"
+  },
+  {
+    "id": "session_memory_117",
+    "locationId": "location_121",
+    "sessionDate": "2024-06-05",
+    "text": "水面に伸びる街の灯りが、黄色い裾まで届きそうだった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:45:17.740Z",
+    "updatedAt": "2026-11-05T04:45:17.740Z"
+  },
+  {
+    "id": "session_memory_118",
+    "locationId": "location_122",
+    "sessionDate": "2024-06-05",
+    "text": "淡い空の色と手前の花の青が、ゆっくり重なっていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:45:18.279Z",
+    "updatedAt": "2026-11-05T04:45:18.279Z"
+  },
+  {
+    "id": "session_memory_119",
+    "locationId": "location_118",
+    "sessionDate": "2020-03-02",
+    "text": "黄色い花の先で、桜色と水辺の青がひと続きになった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:45:18.522Z",
+    "updatedAt": "2026-11-05T04:45:18.522Z"
+  },
+  {
+    "id": "session_memory_120",
+    "locationId": "location_119",
+    "sessionDate": "2020-03-02",
+    "text": "海の青から夕映えへ、赤い花の色が静かに橋渡ししていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:45:18.778Z",
+    "updatedAt": "2026-11-05T04:45:18.778Z"
+  },
+  {
+    "id": "session_memory_121",
+    "locationId": "location_117",
+    "sessionDate": "2021-08-29",
+    "text": "波打ち際の白さが引くたび、砂の色まで青く見えていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:45:19.026Z",
+    "updatedAt": "2026-11-05T04:45:19.026Z"
+  },
+  {
+    "id": "session_memory_122",
+    "locationId": "location_116",
+    "sessionDate": "2021-08-29",
+    "text": "青空を背にした像と、緑に沈む朱の橋が並んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:45:19.254Z",
+    "updatedAt": "2026-11-05T04:45:19.254Z"
+  },
+  {
+    "id": "session_memory_123",
+    "locationId": "location_115",
+    "sessionDate": "2021-11-07",
+    "text": "山の稜線から沈む日まで、湖面が一続きに受け止めていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:45:19.445Z",
+    "updatedAt": "2026-11-05T04:45:19.445Z"
+  },
+  {
+    "id": "session_memory_124",
+    "locationId": "location_114",
+    "sessionDate": "2022-03-05",
+    "text": "桜色の枝の下へ進むほど、菜の花の黄色が近づいてきた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:45:19.682Z",
+    "updatedAt": "2026-11-05T04:45:19.682Z"
+  },
+  {
+    "id": "session_memory_125",
+    "locationId": "location_113",
+    "sessionDate": "2022-03-05",
+    "text": "黄色い花の道で、紫の装いだけが静かに浮かんでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:47:25.813Z",
+    "updatedAt": "2026-11-05T04:47:25.813Z"
+  },
+  {
+    "id": "session_memory_126",
+    "locationId": "location_009",
+    "sessionDate": "2022-03-05",
+    "text": "沈む光が水面にほどけ、岩影の輪郭まで金色に変わった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:47:26.175Z",
+    "updatedAt": "2026-11-05T04:47:26.175Z"
+  },
+  {
+    "id": "session_memory_127",
+    "locationId": "location_112",
+    "sessionDate": "2022-11-03",
+    "text": "花の色が空の青に触れ、背の高い鉄塔まで遠くなった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:47:26.490Z",
+    "updatedAt": "2026-11-05T04:47:26.490Z"
+  },
+  {
+    "id": "session_memory_128",
+    "locationId": "location_110",
+    "sessionDate": "2023-03-27",
+    "text": "淡い枝の下から灯りの列へ、景色が夜色に変わっていった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:47:26.805Z",
+    "updatedAt": "2026-11-05T04:47:26.805Z"
+  },
+  {
+    "id": "session_memory_129",
+    "locationId": "location_109",
+    "sessionDate": "2023-11-15",
+    "text": "紅葉の枝先と足元の黄葉のあいだに、街の遠さがあった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:47:27.094Z",
+    "updatedAt": "2026-11-05T04:47:27.094Z"
+  },
+  {
+    "id": "session_memory_130",
+    "locationId": "location_108",
+    "sessionDate": "2022-03-20",
+    "text": "川沿いに続く桜の枝から、朱い橋の色だけが浮かんだ。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:47:27.347Z",
+    "updatedAt": "2026-11-05T04:47:27.347Z"
+  },
+  {
+    "id": "session_memory_131",
+    "locationId": "location_107",
+    "sessionDate": "2022-07-24",
+    "text": "紫の花の列が遠のく先で、青空と濃い緑が並んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:47:27.598Z",
+    "updatedAt": "2026-11-05T04:47:27.598Z"
+  },
+  {
+    "id": "session_memory_132",
+    "locationId": "location_106",
+    "sessionDate": "2022-07-24",
+    "text": "サボテンの影を抜けた先で、花壇の色がひらいていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:47:27.888Z",
+    "updatedAt": "2026-11-05T04:47:27.888Z"
+  },
+  {
+    "id": "session_memory_133",
+    "locationId": "location_139",
+    "sessionDate": "2022-09-03",
+    "text": "朱の欄干を曲がる先で、山の青が建物を包んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:47:28.180Z",
+    "updatedAt": "2026-11-05T04:47:28.180Z"
+  },
+  {
+    "id": "session_memory_134",
+    "locationId": "location_086",
+    "sessionDate": "2022-10-11",
+    "text": "花の帯が山の裾まで続き、滝の白さが景色を結んだ。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:47:28.444Z",
+    "updatedAt": "2026-11-05T04:47:28.444Z"
+  },
+  {
+    "id": "session_memory_135",
+    "locationId": "location_102",
+    "sessionDate": "2022-10-30",
+    "text": "かぼちゃの橙と花の色が、木陰の奥で静かに並んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:47:28.741Z",
+    "updatedAt": "2026-11-05T04:47:28.741Z"
+  },
+  {
+    "id": "session_memory_136",
+    "locationId": "location_101",
+    "sessionDate": "2022-11-27",
+    "text": "ガラスの丸みを背に、帆の白さが水面を横切っていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:47:29.081Z",
+    "updatedAt": "2026-11-05T04:47:29.081Z"
+  },
+  {
+    "id": "session_memory_137",
+    "locationId": "location_100",
+    "sessionDate": "2022-11-05",
+    "text": "水面に浮かぶ小さな灯りと、背の高い葉の間に庭の色が続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:49:45.656Z",
+    "updatedAt": "2026-11-05T04:49:45.656Z"
+  },
+  {
+    "id": "session_memory_138",
+    "locationId": "location_059",
+    "sessionDate": "2023-01-10",
+    "text": "濡れた道に光が滲むほど、白い樹の輪郭が遠くなった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:49:45.913Z",
+    "updatedAt": "2026-11-05T04:49:45.913Z"
+  },
+  {
+    "id": "session_memory_139",
+    "locationId": "location_098",
+    "sessionDate": "2023-01-10",
+    "text": "雪の白さに沈む枝のあいだ、青い装いだけが近かった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:49:46.162Z",
+    "updatedAt": "2026-11-05T04:49:46.162Z"
+  },
+  {
+    "id": "session_memory_140",
+    "locationId": "location_028",
+    "sessionDate": "2023-01-10",
+    "text": "水辺の青い灯りと昼の石壁が、同じ道に並んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:49:46.409Z",
+    "updatedAt": "2026-11-05T04:49:46.409Z"
+  },
+  {
+    "id": "session_memory_141",
+    "locationId": "location_003",
+    "sessionDate": "2023-02-11",
+    "text": "紅白の花が重なる枝先で、青空がひときわ澄んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:49:46.677Z",
+    "updatedAt": "2026-11-05T04:49:46.677Z"
+  },
+  {
+    "id": "session_memory_142",
+    "locationId": "location_041",
+    "sessionDate": "2023-03-05",
+    "text": "大きな白い形を過ぎても、光の色が夜の中に続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:49:46.907Z",
+    "updatedAt": "2026-11-05T04:49:46.907Z"
+  },
+  {
+    "id": "session_memory_143",
+    "locationId": "location_097",
+    "sessionDate": "2023-05-08",
+    "text": "花色の向こうに山が浮かび、水面が空をつないでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:49:47.142Z",
+    "updatedAt": "2026-11-05T04:49:47.142Z"
+  },
+  {
+    "id": "session_memory_144",
+    "locationId": "location_086",
+    "sessionDate": "2023-05-11",
+    "text": "赤い花の先に旗が重なり、遠い山まで色が途切れなかった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:49:47.346Z",
+    "updatedAt": "2026-11-05T04:49:47.346Z"
+  },
+  {
+    "id": "session_memory_145",
+    "locationId": "location_095",
+    "sessionDate": "2023-04-13",
+    "text": "大きな赤の丸みと桜色の枝が、室内に春を留めていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:49:47.530Z",
+    "updatedAt": "2026-11-05T04:49:47.530Z"
+  },
+  {
+    "id": "session_memory_146",
+    "locationId": "location_091",
+    "sessionDate": "2023-04-13",
+    "text": "ガラスの広がりを抜け、赤い人形の列が静かに続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:49:47.830Z",
+    "updatedAt": "2026-11-05T04:49:47.830Z"
+  },
+  {
+    "id": "session_memory_147",
+    "locationId": "location_093",
+    "sessionDate": "2023-04-13",
+    "text": "山の稜線を背に、桜色から菜の花の黄色へ景色が移った。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:49:48.010Z",
+    "updatedAt": "2026-11-05T04:49:48.010Z"
+  },
+  {
+    "id": "session_memory_148",
+    "locationId": "location_092",
+    "sessionDate": "2023-04-13",
+    "text": "朱い橋を渡った先で、窓辺の光と小さな街並みが続いた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:49:48.246Z",
+    "updatedAt": "2026-11-05T04:49:48.246Z"
+  },
+  {
+    "id": "session_memory_149",
+    "locationId": "location_090",
+    "sessionDate": "2023-04-13",
+    "text": "白い帆影と青い水面の向こうに、橋の線が伸びていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:52:01.263Z",
+    "updatedAt": "2026-11-05T04:52:01.263Z"
+  },
+  {
+    "id": "session_memory_150",
+    "locationId": "location_094",
+    "sessionDate": "2023-04-13",
+    "text": "橙のうねりから極彩色の面へ、夜の明るさが跳ねた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:52:01.665Z",
+    "updatedAt": "2026-11-05T04:52:01.665Z"
+  },
+  {
+    "id": "session_memory_151",
+    "locationId": "location_089",
+    "sessionDate": "2023-04-13",
+    "text": "雲の端が金色にほどけ、船影の向こうへ水面が続いた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:52:01.968Z",
+    "updatedAt": "2026-11-05T04:52:01.968Z"
+  },
+  {
+    "id": "session_memory_152",
+    "locationId": "location_088",
+    "sessionDate": "2023-08-24",
+    "text": "灯台の白さを離れても、水平線の青がずっと近かった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:52:02.284Z",
+    "updatedAt": "2026-11-05T04:52:02.284Z"
+  },
+  {
+    "id": "session_memory_153",
+    "locationId": "location_087",
+    "sessionDate": "2023-08-15",
+    "text": "ひまわりの黄色を越え、雲の白さが青空にほどけていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:52:02.593Z",
+    "updatedAt": "2026-11-05T04:52:02.593Z"
+  },
+  {
+    "id": "session_memory_154",
+    "locationId": "location_086",
+    "sessionDate": "2023-08-15",
+    "text": "紫の花畑の先で、黄色い列が山裾まで広がっていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:52:02.904Z",
+    "updatedAt": "2026-11-05T04:52:02.904Z"
+  },
+  {
+    "id": "session_memory_155",
+    "locationId": "location_084",
+    "sessionDate": "2023-11-21",
+    "text": "紅葉の赤が池にほどけ、石橋の向こうへ庭の緑が広がっていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:52:03.190Z",
+    "updatedAt": "2026-11-05T04:52:03.190Z"
+  },
+  {
+    "id": "session_memory_156",
+    "locationId": "location_083",
+    "sessionDate": "2023-12-01",
+    "text": "枝の赤をくぐり、石壁の先に白い天守が現れた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:52:03.480Z",
+    "updatedAt": "2026-11-05T04:52:03.480Z"
+  },
+  {
+    "id": "session_memory_157",
+    "locationId": "location_082",
+    "sessionDate": "2023-12-01",
+    "text": "朱の欄干の向こう、秋色の山並みが谷まで重なっていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:52:03.953Z",
+    "updatedAt": "2026-11-05T04:52:03.953Z"
+  },
+  {
+    "id": "session_memory_158",
+    "locationId": "location_081",
+    "sessionDate": "2023-12-01",
+    "text": "湖面に秋の色が重なり、岸辺の橋が遠い峰へ視線を運んだ。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:52:04.393Z",
+    "updatedAt": "2026-11-05T04:52:04.393Z"
+  },
+  {
+    "id": "session_memory_159",
+    "locationId": "location_080",
+    "sessionDate": "2024-05-06",
+    "text": "紫の花を抜けた先に、朱の灯りが緑を分けていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:52:04.790Z",
+    "updatedAt": "2026-11-05T04:52:04.790Z"
+  },
+  {
+    "id": "session_memory_160",
+    "locationId": "location_079",
+    "sessionDate": "2024-07-25",
+    "text": "舵輪の円を越えても、水平線の青が行き先に残っていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:52:05.142Z",
+    "updatedAt": "2026-11-05T04:52:05.142Z"
+  },
+  {
+    "id": "session_memory_161",
+    "locationId": "location_077",
+    "sessionDate": "2024-09-25",
+    "text": "青い水辺の先に、色ガラスの魚がひとつ輝いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:54:39.360Z",
+    "updatedAt": "2026-11-05T04:54:39.360Z"
+  },
+  {
+    "id": "session_memory_162",
+    "locationId": "location_076",
+    "sessionDate": "2024-09-18",
+    "text": "段々に重なる緑の壁の上へ、白い雲がひらいていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:54:39.739Z",
+    "updatedAt": "2026-11-05T04:54:39.739Z"
+  },
+  {
+    "id": "session_memory_163",
+    "locationId": "location_068",
+    "sessionDate": "2024-09-18",
+    "text": "朱い橋を渡るほど、岩の海岸と青空が近づいていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:54:40.082Z",
+    "updatedAt": "2026-11-05T04:54:40.082Z"
+  },
+  {
+    "id": "session_memory_164",
+    "locationId": "location_070",
+    "sessionDate": "2024-09-18",
+    "text": "曲線の橋から眺める海に、低い雲が広がっていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:54:40.769Z",
+    "updatedAt": "2026-11-05T04:54:40.769Z"
+  },
+  {
+    "id": "session_memory_165",
+    "locationId": "location_075",
+    "sessionDate": "2024-09-18",
+    "text": "棚田の段差が丘をなぞり、その先に白い雲の層が重なった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:54:41.093Z",
+    "updatedAt": "2026-11-05T04:54:41.093Z"
+  },
+  {
+    "id": "session_memory_166",
+    "locationId": "location_074",
+    "sessionDate": "2024-09-18",
+    "text": "輪の向こうに青い水面が広がり、石像の輪郭が残っていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:54:41.580Z",
+    "updatedAt": "2026-11-05T04:54:41.580Z"
+  },
+  {
+    "id": "session_memory_167",
+    "locationId": "location_067",
+    "sessionDate": "2024-09-18",
+    "text": "夕日の光が岩間の海へ落ち、黄色い裾を染めていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:54:41.932Z",
+    "updatedAt": "2026-11-05T04:54:41.932Z"
+  },
+  {
+    "id": "session_memory_168",
+    "locationId": "location_069",
+    "sessionDate": "2024-09-18",
+    "text": "緑の岬にかかる橋の先で、海が一気に青く開けていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:54:42.225Z",
+    "updatedAt": "2026-11-05T04:54:42.225Z"
+  },
+  {
+    "id": "session_memory_169",
+    "locationId": "location_073",
+    "sessionDate": "2024-09-18",
+    "text": "波の白さを挟んで、岩の突起が水面にいくつも残っていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:54:42.568Z",
+    "updatedAt": "2026-11-05T04:54:42.568Z"
+  },
+  {
+    "id": "session_memory_170",
+    "locationId": "location_072",
+    "sessionDate": "2024-09-18",
+    "text": "岩の階段を降りた先に、海の青さが静かに広がった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:54:42.979Z",
+    "updatedAt": "2026-11-05T04:54:42.979Z"
+  },
+  {
+    "id": "session_memory_171",
+    "locationId": "location_071",
+    "sessionDate": "2024-09-18",
+    "text": "朱い欄干の先で、松の影と海の青が重なっていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:54:43.559Z",
+    "updatedAt": "2026-11-05T04:54:43.559Z"
+  },
+  {
+    "id": "session_memory_172",
+    "locationId": "location_001",
+    "sessionDate": "2019-05-10",
+    "text": "紫の小花の海から黄色い畑へ、色の境目が続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:54:43.884Z",
+    "updatedAt": "2026-11-05T04:54:43.884Z"
+  },
+  {
+    "id": "session_memory_173",
+    "locationId": "location_066",
+    "sessionDate": "2019-08-17",
+    "text": "木陰の池から灯りの通路へ、緑の気配がひとつにつながった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:56:48.061Z",
+    "updatedAt": "2026-11-05T04:56:48.061Z"
+  },
+  {
+    "id": "session_memory_174",
+    "locationId": "location_065",
+    "sessionDate": "2019-08-18",
+    "text": "川面を渡る橋の下で、雲の明るさだけが水に残っていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:56:48.360Z",
+    "updatedAt": "2026-11-05T04:56:48.360Z"
+  },
+  {
+    "id": "session_memory_175",
+    "locationId": "location_064",
+    "sessionDate": "2019-08-18",
+    "text": "水の引いた岸辺に雲の色が映り、山影が淡く重なった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:56:48.634Z",
+    "updatedAt": "2026-11-05T04:56:48.634Z"
+  },
+  {
+    "id": "session_memory_176",
+    "locationId": "location_063",
+    "sessionDate": "2019-12-02",
+    "text": "暗い筐体の光から、赤い葉の近さへ景色が切り替わった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:56:48.930Z",
+    "updatedAt": "2026-11-05T04:56:48.930Z"
+  },
+  {
+    "id": "session_memory_177",
+    "locationId": "location_062",
+    "sessionDate": "2019-12-15",
+    "text": "透明な傘に映る赤い葉と、濡れた緑が並んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:56:49.190Z",
+    "updatedAt": "2026-11-05T04:56:49.190Z"
+  },
+  {
+    "id": "session_memory_178",
+    "locationId": "location_061",
+    "sessionDate": "2019-12-20",
+    "text": "雪の白さのそばで、街の灯りが細かく瞬いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:56:49.416Z",
+    "updatedAt": "2026-11-05T04:56:49.416Z"
+  },
+  {
+    "id": "session_memory_179",
+    "locationId": "location_060",
+    "sessionDate": "2019-12-15",
+    "text": "赤い木立を抜けた先に、窓の多い建物が立っていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:56:49.676Z",
+    "updatedAt": "2026-11-05T04:56:49.676Z"
+  },
+  {
+    "id": "session_memory_180",
+    "locationId": "location_059",
+    "sessionDate": "2019-12-30",
+    "text": "雪の街角に、青白く光る樹の輪郭が立っていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:56:49.915Z",
+    "updatedAt": "2026-11-05T04:56:49.915Z"
+  },
+  {
+    "id": "session_memory_181",
+    "locationId": "location_058",
+    "sessionDate": "2020-01-01",
+    "text": "薄暗い階段の先で、白い光と木の床が向かい合っていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:56:50.169Z",
+    "updatedAt": "2026-11-05T04:56:50.169Z"
+  },
+  {
+    "id": "session_memory_182",
+    "locationId": "location_057",
+    "sessionDate": "2020-02-11",
+    "text": "暗い水槽に浮かぶ魚と、頭上の葉の影が交互に残った。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:56:50.441Z",
+    "updatedAt": "2026-11-05T04:56:50.441Z"
+  },
+  {
+    "id": "session_memory_183",
+    "locationId": "location_056",
+    "sessionDate": "2020-02-18",
+    "text": "赤い看板の灯りと、人波の暗い輪郭が並んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:56:50.669Z",
+    "updatedAt": "2026-11-05T04:56:50.669Z"
+  },
+  {
+    "id": "session_memory_184",
+    "locationId": "location_055",
+    "sessionDate": "2020-03-21",
+    "text": "桜の枝の影から色花壇へ、庭の明るさが移っていった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T04:56:50.913Z",
+    "updatedAt": "2026-11-05T04:56:50.913Z"
+  },
+  {
+    "id": "session_memory_185",
+    "locationId": "location_054",
+    "sessionDate": "2020-03-22",
+    "text": "梅の枝の淡い色から、木のトンネルの奥へ道が続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:00:44.036Z",
+    "updatedAt": "2026-11-05T05:00:44.036Z"
+  },
+  {
+    "id": "session_memory_186",
+    "locationId": "location_052",
+    "sessionDate": "2020-07-26",
+    "text": "噴水の白い筋と、木陰に続く小道が同じ庭に残った。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:00:44.625Z",
+    "updatedAt": "2026-11-05T05:00:44.625Z"
+  },
+  {
+    "id": "session_memory_187",
+    "locationId": "location_053",
+    "sessionDate": "2020-07-27",
+    "text": "水の白い弧を離れると、木立の影が庭の奥まで続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:00:45.392Z",
+    "updatedAt": "2026-11-05T05:00:45.392Z"
+  },
+  {
+    "id": "session_memory_188",
+    "locationId": "location_051",
+    "sessionDate": "2020-08-28",
+    "text": "色の帯が丘に重なり、窓の中にも同じ景色が残っていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:00:45.931Z",
+    "updatedAt": "2026-11-05T05:00:45.931Z"
+  },
+  {
+    "id": "session_memory_189",
+    "locationId": "location_050",
+    "sessionDate": "2020-08-28",
+    "text": "蔦の暗い小径から開けた空へ、花の色が続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:00:46.675Z",
+    "updatedAt": "2026-11-05T05:00:46.675Z"
+  },
+  {
+    "id": "session_memory_190",
+    "locationId": "location_047",
+    "sessionDate": "2020-08-28",
+    "text": "線路の先へ続くホームに、白い雲がひとつ浮かんでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:00:47.175Z",
+    "updatedAt": "2026-11-05T05:00:47.175Z"
+  },
+  {
+    "id": "session_memory_191",
+    "locationId": "location_049",
+    "sessionDate": "2020-08-28",
+    "text": "色の帯をいくつも越えて、空の青さが遠くまで続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:00:47.585Z",
+    "updatedAt": "2026-11-05T05:00:47.585Z"
+  },
+  {
+    "id": "session_memory_192",
+    "locationId": "location_048",
+    "sessionDate": "2020-08-28",
+    "text": "黄色い花の高さを越えて、赤い帯と山の青が並んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:00:47.998Z",
+    "updatedAt": "2026-11-05T05:00:47.998Z"
+  },
+  {
+    "id": "session_memory_193",
+    "locationId": "location_047",
+    "sessionDate": "2020-08-30",
+    "text": "広い草地の先に、山並みと小さな人影が浮かんでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:00:48.412Z",
+    "updatedAt": "2026-11-05T05:00:48.412Z"
+  },
+  {
+    "id": "session_memory_194",
+    "locationId": "location_044",
+    "sessionDate": "2020-09-20",
+    "text": "波の白さから夜の椰子の灯りへ、海辺の色が移った。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:00:48.845Z",
+    "updatedAt": "2026-11-05T05:00:48.845Z"
+  },
+  {
+    "id": "session_memory_195",
+    "locationId": "location_046",
+    "sessionDate": "2020-09-20",
+    "text": "海の青を背にした鐘と、赤い花の道が並んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:00:49.289Z",
+    "updatedAt": "2026-11-05T05:00:49.289Z"
+  },
+  {
+    "id": "session_memory_196",
+    "locationId": "location_045",
+    "sessionDate": "2020-09-20",
+    "text": "窓の格子が庭の緑を切り取り、木の室内へ淡い光を運んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:00:49.707Z",
+    "updatedAt": "2026-11-05T05:01:32.261Z"
+  },
+  {
+    "id": "session_memory_197",
+    "locationId": "location_043",
+    "sessionDate": "2020-09-20",
+    "text": "港の手すりから青い湾を見渡し、椰子の木立へ景色が続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:04:15.812Z",
+    "updatedAt": "2026-11-05T05:04:15.812Z"
+  },
+  {
+    "id": "session_memory_198",
+    "locationId": "location_001",
+    "sessionDate": "2020-10-24",
+    "text": "丘を埋める赤い低木と、空を広く覆う白い雲が並んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:04:16.186Z",
+    "updatedAt": "2026-11-05T05:04:16.186Z"
+  },
+  {
+    "id": "session_memory_199",
+    "locationId": "location_040",
+    "sessionDate": "2021-05-18",
+    "text": "湖に沿う柵の向こうで、並木の影が水面に重なっていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:04:16.505Z",
+    "updatedAt": "2026-11-05T05:04:16.505Z"
+  },
+  {
+    "id": "session_memory_200",
+    "locationId": "location_039",
+    "sessionDate": "2021-05-18",
+    "text": "木の欄干を渡ると、水の流れと深い木陰が並んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:04:16.827Z",
+    "updatedAt": "2026-11-05T05:04:16.827Z"
+  },
+  {
+    "id": "session_memory_201",
+    "locationId": "location_038",
+    "sessionDate": "2021-05-18",
+    "text": "街の建物を背にした橋から、薔薇の赤い小道へ続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:04:17.127Z",
+    "updatedAt": "2026-11-05T05:04:17.127Z"
+  },
+  {
+    "id": "session_memory_202",
+    "locationId": "location_037",
+    "sessionDate": "2021-05-21",
+    "text": "白い花の回廊を抜けた先に、薔薇の色が重なっていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:04:17.496Z",
+    "updatedAt": "2026-11-05T05:04:17.496Z"
+  },
+  {
+    "id": "session_memory_203",
+    "locationId": "location_035",
+    "sessionDate": "2021-08-08",
+    "text": "浅い海と広い砂の境で、雲の影が遠くまで伸びていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:04:17.829Z",
+    "updatedAt": "2026-11-05T05:04:17.829Z"
+  },
+  {
+    "id": "session_memory_204",
+    "locationId": "location_034",
+    "sessionDate": "2021-08-14",
+    "text": "水面と刈り込まれた緑のあいだに、街の高層棟が立っていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:04:18.124Z",
+    "updatedAt": "2026-11-05T05:04:18.124Z"
+  },
+  {
+    "id": "session_memory_205",
+    "locationId": "location_033",
+    "sessionDate": "2021-08-18",
+    "text": "岩を越える水の白さが、深い緑の流れに幾重にも続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:04:18.446Z",
+    "updatedAt": "2026-11-05T05:04:18.446Z"
+  },
+  {
+    "id": "session_memory_206",
+    "locationId": "location_032",
+    "sessionDate": "2021-08-19",
+    "text": "青い海と草の稜線が続き、岩の先まで木道が伸びていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:04:18.810Z",
+    "updatedAt": "2026-11-05T05:04:18.810Z"
+  },
+  {
+    "id": "session_memory_207",
+    "locationId": "location_031",
+    "sessionDate": "2021-08-19",
+    "text": "砂浜に残る文字のそばで、浅い波が水平に重なっていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:06:30.770Z",
+    "updatedAt": "2026-11-05T05:06:30.770Z"
+  },
+  {
+    "id": "session_memory_208",
+    "locationId": "location_030",
+    "sessionDate": "2021-08-19",
+    "text": "暗い室内に並ぶ彩色ガラスが、光の断片を縦に重ねていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:06:31.118Z",
+    "updatedAt": "2026-11-05T05:06:31.118Z"
+  },
+  {
+    "id": "session_memory_209",
+    "locationId": "location_029",
+    "sessionDate": "2021-08-20",
+    "text": "木の梁に吊るされた灯りが、暗い室内を小さく照らしていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:06:31.439Z",
+    "updatedAt": "2026-11-05T05:06:31.439Z"
+  },
+  {
+    "id": "session_memory_210",
+    "locationId": "location_028",
+    "sessionDate": "2021-08-20",
+    "text": "石造りの運河沿いに、夕焼けの色から夜の灯りへ移った。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:06:31.700Z",
+    "updatedAt": "2026-11-05T05:06:31.700Z"
+  },
+  {
+    "id": "session_memory_211",
+    "locationId": "location_027",
+    "sessionDate": "2021-08-20",
+    "text": "温室の花棚から木陰の門まで、緑の濃さが続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:06:31.978Z",
+    "updatedAt": "2026-11-05T05:06:31.978Z"
+  },
+  {
+    "id": "session_memory_212",
+    "locationId": "location_026",
+    "sessionDate": "2021-08-20",
+    "text": "紫の花道の先で、石を渡る流れが芝地を横切った。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:06:32.264Z",
+    "updatedAt": "2026-11-05T05:06:32.264Z"
+  },
+  {
+    "id": "session_memory_213",
+    "locationId": "location_025",
+    "sessionDate": "2021-08-20",
+    "text": "船の手すりに傾く夕日が、港の水面と街の輪郭を照らした。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:06:32.534Z",
+    "updatedAt": "2026-11-05T05:06:32.534Z"
+  },
+  {
+    "id": "session_memory_214",
+    "locationId": "location_024",
+    "sessionDate": "2021-10-31",
+    "text": "赤や黄の枝が古い門を囲み、奥の部屋には色の面が並んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:06:32.787Z",
+    "updatedAt": "2026-11-05T05:06:32.787Z"
+  },
+  {
+    "id": "session_memory_215",
+    "locationId": "location_023",
+    "sessionDate": "2021-10-31",
+    "text": "竹垣に挟まれた石畳を進むと、紅葉の色が頭上に広がった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:06:33.041Z",
+    "updatedAt": "2026-11-05T05:06:33.041Z"
+  },
+  {
+    "id": "session_memory_216",
+    "locationId": "location_022",
+    "sessionDate": "2021-10-31",
+    "text": "赤い葉の奥に木の門が見え、明るい緑が足元に残った。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:06:33.251Z",
+    "updatedAt": "2026-11-05T05:06:33.251Z"
+  },
+  {
+    "id": "session_memory_217",
+    "locationId": "location_021",
+    "sessionDate": "2021-10-31",
+    "text": "朱や金に色づいた枝が、細い木橋の両側から重なっていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:07:59.826Z",
+    "updatedAt": "2026-11-05T05:07:59.826Z"
+  },
+  {
+    "id": "session_memory_218",
+    "locationId": "location_020",
+    "sessionDate": "2021-10-31",
+    "text": "昼の紅葉から夜の灯りへ、枝先の赤が庭を渡っていった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:08:00.738Z",
+    "updatedAt": "2026-11-05T05:08:00.738Z"
+  },
+  {
+    "id": "session_memory_219",
+    "locationId": "location_019",
+    "sessionDate": "2021-11-01",
+    "text": "赤い枝を抜ける石段の先で、街並みが遠くまで見えた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:08:01.554Z",
+    "updatedAt": "2026-11-05T05:08:01.554Z"
+  },
+  {
+    "id": "session_memory_220",
+    "locationId": "location_018",
+    "sessionDate": "2021-12-27",
+    "text": "窓の縁に切り取られた雪の街並みが、白く遠くまで続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:08:02.275Z",
+    "updatedAt": "2026-11-05T05:08:02.275Z"
+  },
+  {
+    "id": "session_memory_221",
+    "locationId": "location_017",
+    "sessionDate": "2021-12-27",
+    "text": "赤煉瓦の壁沿いに雪が残り、花飾りが白い歩道に映えた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:08:02.536Z",
+    "updatedAt": "2026-11-05T05:08:02.536Z"
+  },
+  {
+    "id": "session_memory_222",
+    "locationId": "location_016",
+    "sessionDate": "2022-02-28",
+    "text": "金色の窓灯りが暗い建物を縁取り、丸天井へ続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:08:02.825Z",
+    "updatedAt": "2026-11-05T05:08:02.825Z"
+  },
+  {
+    "id": "session_memory_223",
+    "locationId": "location_014",
+    "sessionDate": "2022-02-27",
+    "text": "障子窓に沈む夕日から、青い入り江の小道へ景色が続いた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:08:03.091Z",
+    "updatedAt": "2026-11-05T05:08:03.091Z"
+  },
+  {
+    "id": "session_memory_224",
+    "locationId": "location_012",
+    "sessionDate": "2022-02-28",
+    "text": "花の壁から温室の池まで、緑の葉が歩道を覆っていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:08:03.337Z",
+    "updatedAt": "2026-11-05T05:08:03.337Z"
+  },
+  {
+    "id": "session_memory_225",
+    "locationId": "location_011",
+    "sessionDate": "2022-03-18",
+    "text": "白い石造りの建物を囲む噴水と、低い花壇が広がっていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:08:03.629Z",
+    "updatedAt": "2026-11-05T05:08:03.629Z"
+  },
+  {
+    "id": "session_memory_226",
+    "locationId": "osm_relation_2689476",
+    "sessionDate": "2026-06-10",
+    "text": "紫陽花の紫から壁画の赤へ、街の色が大きく切り替わった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:08:03.924Z",
+    "updatedAt": "2026-11-05T05:08:03.924Z"
+  },
+  {
+    "id": "session_memory_227",
+    "locationId": "osm_way_439668255",
+    "sessionDate": "2026-04-14",
+    "text": "桜の淡い枝先が赤い旗の列に重なり、道を覆っていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:09:40.011Z",
+    "updatedAt": "2026-11-05T05:09:40.011Z"
+  },
+  {
+    "id": "session_memory_228",
+    "locationId": "osm_node_537509957",
+    "sessionDate": "2022-09-24",
+    "text": "暗い店内に並ぶ円形の的が、赤や白の光を放っていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:09:40.220Z",
+    "updatedAt": "2026-11-05T05:09:40.220Z"
+  },
+  {
+    "id": "session_memory_229",
+    "locationId": "osm_node_537509957",
+    "sessionDate": "2022-09-25",
+    "text": "標的の数字を見上げる背中と、手前に向けた笑顔が同じ画面に入った。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:09:40.435Z",
+    "updatedAt": "2026-11-05T05:09:40.435Z"
+  },
+  {
+    "id": "session_memory_230",
+    "locationId": "osm_way_36805734",
+    "sessionDate": "2025-09-01",
+    "text": "青い水路沿いに高層棟が並び、芝の広場へ道が伸びていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:09:40.605Z",
+    "updatedAt": "2026-11-05T05:09:40.605Z"
+  },
+  {
+    "id": "session_memory_231",
+    "locationId": "osm_node_355843942",
+    "sessionDate": "2025-09-01",
+    "text": "緑の観覧車が夜空に浮かび、岸辺の灯りが水面に続いた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:09:40.779Z",
+    "updatedAt": "2026-11-05T05:09:40.779Z"
+  },
+  {
+    "id": "session_memory_232",
+    "locationId": "osm_relation_15036966",
+    "sessionDate": "2025-07-27",
+    "text": "白い砂浜と透き通る水の境に、低い橋が海へ伸びていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:09:40.984Z",
+    "updatedAt": "2026-11-05T05:09:40.984Z"
+  },
+  {
+    "id": "session_memory_233",
+    "locationId": "osm_way_541344321",
+    "sessionDate": "2025-07-26",
+    "text": "石と木の細い桟橋から、浅瀬の青が左右へ広がっていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:09:41.201Z",
+    "updatedAt": "2026-11-05T05:09:41.201Z"
+  },
+  {
+    "id": "session_memory_234",
+    "locationId": "osm_node_5775510855",
+    "sessionDate": "2026-06-25",
+    "text": "壁いっぱいの飾り絵から、額入りの衣装や薔薇の面へ移った。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:09:41.359Z",
+    "updatedAt": "2026-11-05T05:09:41.359Z"
+  },
+  {
+    "id": "session_memory_235",
+    "locationId": "osm_node_7894395983",
+    "sessionDate": "2026-06-25",
+    "text": "揺れる吊り橋の先で、岩間の流れが深い緑に消えていった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:09:41.536Z",
+    "updatedAt": "2026-11-05T05:09:41.536Z"
+  },
+  {
+    "id": "session_memory_236",
+    "locationId": "location_137",
+    "sessionDate": "2026-03-03",
+    "text": "投影された紫や黄色の光が、石壁を横切って夜の路面に散った。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:09:41.709Z",
+    "updatedAt": "2026-11-05T05:09:41.709Z"
+  },
+  {
+    "id": "session_memory_237",
+    "locationId": "osm_node_3914881285",
+    "sessionDate": "2025-10-30",
+    "text": "木々の間を埋める赤い花が、細い土の道を縁取っていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:11:34.140Z",
+    "updatedAt": "2026-11-05T05:11:34.140Z"
+  },
+  {
+    "id": "session_memory_238",
+    "locationId": "osm_node_2146147848",
+    "sessionDate": "2025-07-29",
+    "text": "石造りの橋から古い町並みへ、川沿いの道が続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:11:34.416Z",
+    "updatedAt": "2026-11-05T05:11:34.416Z"
+  },
+  {
+    "id": "session_memory_239",
+    "locationId": "osm_way_92903",
+    "sessionDate": "2025-07-28",
+    "text": "色柄の反物が幾重にも並び、室内に布の壁を作っていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:11:34.673Z",
+    "updatedAt": "2026-11-05T05:11:34.673Z"
+  },
+  {
+    "id": "session_memory_240",
+    "locationId": "osm_way_876150436",
+    "sessionDate": "2025-07-27",
+    "text": "布の色見本が壁に並び、向かいの展示ケースに衣装があった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:11:34.898Z",
+    "updatedAt": "2026-11-05T05:11:34.898Z"
+  },
+  {
+    "id": "session_memory_241",
+    "locationId": "osm_node_2146147848",
+    "sessionDate": "2025-07-26",
+    "text": "青い暖簾の文字の下に、縞模様の着物が一枚掛かっていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:11:35.072Z",
+    "updatedAt": "2026-11-05T05:11:35.072Z"
+  },
+  {
+    "id": "session_memory_242",
+    "locationId": "osm_way_1443438835",
+    "sessionDate": "2025-08-05",
+    "text": "赤い柵の向こうに青い海が広がり、石灯籠が並んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:11:35.236Z",
+    "updatedAt": "2026-11-05T05:11:35.236Z"
+  },
+  {
+    "id": "session_memory_243",
+    "locationId": "osm_way_941820450",
+    "sessionDate": "2025-08-06",
+    "text": "噴水の水柱と海辺の白い船形が、青空の下に並んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:11:35.408Z",
+    "updatedAt": "2026-11-05T05:11:35.408Z"
+  },
+  {
+    "id": "session_memory_244",
+    "locationId": "osm_node_298348191",
+    "sessionDate": "2025-08-06",
+    "text": "石段の先に海がひらき、室内の金色の絵巻へ視線が移った。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:11:35.586Z",
+    "updatedAt": "2026-11-05T05:11:35.586Z"
+  },
+  {
+    "id": "session_memory_245",
+    "locationId": "osm_node_13463494951",
+    "sessionDate": "2025-08-06",
+    "text": "吊るされた色とりどりの飾りが、細い石畳の通りを覆っていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:11:35.764Z",
+    "updatedAt": "2026-11-05T05:11:35.764Z"
+  },
+  {
+    "id": "session_memory_246",
+    "locationId": "osm_way_154083968",
+    "sessionDate": "2026-08-22",
+    "text": "縦長の告知板を挟み、明るいロビーの窓が奥へ続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:11:35.928Z",
+    "updatedAt": "2026-11-05T05:11:35.928Z"
+  },
+  {
+    "id": "session_memory_247",
+    "locationId": "osm_node_4595589961",
+    "sessionDate": "2026-08-22",
+    "text": "ガラス面に並ぶ人物画と、通路の外光が同じ画面に重なっていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:12:53.675Z",
+    "updatedAt": "2026-11-05T05:12:53.675Z"
+  },
+  {
+    "id": "session_memory_248",
+    "locationId": "osm_way_560495239",
+    "sessionDate": "2026-08-22",
+    "text": "夕焼けの川面を横切る橋に、街の灯りが点々と浮かんだ。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:12:53.972Z",
+    "updatedAt": "2026-11-05T05:12:53.972Z"
+  },
+  {
+    "id": "session_memory_249",
+    "locationId": "osm_node_13694492100",
+    "sessionDate": "2026-08-23",
+    "text": "青い魚の壁画から模型展示まで、水の色が室内をつないでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:12:54.196Z",
+    "updatedAt": "2026-11-05T05:12:54.196Z"
+  },
+  {
+    "id": "session_memory_250",
+    "locationId": "osm_node_13694412134",
+    "sessionDate": "2026-08-23",
+    "text": "窓の外の港の青と、室内に並ぶ色鮮やかな告知板が続いた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:12:54.385Z",
+    "updatedAt": "2026-11-05T05:12:54.385Z"
+  },
+  {
+    "id": "session_memory_251",
+    "locationId": "osm_node_7555097105",
+    "sessionDate": "2026-08-23",
+    "text": "大きな橙色の文字の向こうに、川沿いの塔と青空が並んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:12:54.569Z",
+    "updatedAt": "2026-11-05T05:12:54.569Z"
+  },
+  {
+    "id": "session_memory_252",
+    "locationId": "osm_node_5694147943",
+    "sessionDate": "2026-08-23",
+    "text": "受付カウンター脇の大きな告知板に、色鮮やかな絵が並んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:12:54.799Z",
+    "updatedAt": "2026-11-05T05:12:54.799Z"
+  },
+  {
+    "id": "session_memory_253",
+    "locationId": "osm_way_351085658",
+    "sessionDate": "2026-08-23",
+    "text": "古い石造りの外壁から、地図や船模型の展示室へ移った。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:12:55.033Z",
+    "updatedAt": "2026-11-05T05:12:55.033Z"
+  },
+  {
+    "id": "session_memory_254",
+    "locationId": "osm_node_12277882814",
+    "sessionDate": "2026-08-23",
+    "text": "青い暖簾の下に告知板が立ち、格子状の石畳が続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:12:55.267Z",
+    "updatedAt": "2026-11-05T05:12:55.267Z"
+  },
+  {
+    "id": "session_memory_255",
+    "locationId": "osm_way_81050878",
+    "sessionDate": "2026-08-23",
+    "text": "白い室内の壁面に告知板が並び、二人の姿が前景に立っていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:12:55.464Z",
+    "updatedAt": "2026-11-05T05:12:55.464Z"
+  },
+  {
+    "id": "session_memory_256",
+    "locationId": "osm_way_422603794",
+    "sessionDate": "2026-08-23",
+    "text": "階段脇の大きな告知板に、鮮やかな衣装の絵が描かれていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:12:55.611Z",
+    "updatedAt": "2026-11-05T05:12:55.611Z"
+  },
+  {
+    "id": "session_memory_257",
+    "locationId": "osm_node_4448575180",
+    "sessionDate": "2026-08-23",
+    "text": "展示ポスターからマイクの並ぶ収録室まで、色の強い壁面が続いた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:14:30.442Z",
+    "updatedAt": "2026-11-05T05:14:30.442Z"
+  },
+  {
+    "id": "session_memory_258",
+    "locationId": "osm_way_449619613",
+    "sessionDate": "2026-08-24",
+    "text": "大型の機関車から小型模型まで、車輪と線路の展示が並んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:14:30.714Z",
+    "updatedAt": "2026-11-05T05:14:30.714Z"
+  },
+  {
+    "id": "session_memory_259",
+    "locationId": "osm_way_744674936",
+    "sessionDate": "2026-08-24",
+    "text": "障子窓の格子が庭の緑を区切り、長い木廊下を奥へ導いた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:14:30.942Z",
+    "updatedAt": "2026-11-05T05:14:30.942Z"
+  },
+  {
+    "id": "session_memory_260",
+    "locationId": "osm_way_387175789",
+    "sessionDate": "2026-08-24",
+    "text": "赤い門と大きな白い立体造形が、商店の壁面に並んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:14:31.203Z",
+    "updatedAt": "2026-11-05T05:14:31.203Z"
+  },
+  {
+    "id": "session_memory_261",
+    "locationId": "osm_way_154083968",
+    "sessionDate": "2026-08-24",
+    "text": "暗い街路に赤い立体文字が並び、ハート飾りが浮かんでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:14:31.637Z",
+    "updatedAt": "2026-11-05T05:14:31.637Z"
+  },
+  {
+    "id": "session_memory_262",
+    "locationId": "osm_node_11730800647",
+    "sessionDate": "2026-08-24",
+    "text": "棚の前の告知板と、鮮やかな人物の立ち絵が並んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:14:31.837Z",
+    "updatedAt": "2026-11-05T05:14:31.837Z"
+  },
+  {
+    "id": "session_memory_263",
+    "locationId": "osm_node_1173032224",
+    "sessionDate": "2026-08-25",
+    "text": "赤い衣装の人物画と案内板が、暗い棚の前に重なっていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:14:32.017Z",
+    "updatedAt": "2026-11-05T05:14:32.017Z"
+  },
+  {
+    "id": "session_memory_264",
+    "locationId": "osm_way_57007660",
+    "sessionDate": "2026-08-25",
+    "text": "色彩豊かなガラス窓の前に、床の切り抜きと告知板が並んだ。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:14:32.190Z",
+    "updatedAt": "2026-11-05T05:14:32.190Z"
+  },
+  {
+    "id": "session_memory_265",
+    "locationId": "osm_node_7555097105",
+    "sessionDate": "2026-08-25",
+    "text": "青い光の回廊から桃色の輪へ、夜の灯りが形を変えた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:14:32.368Z",
+    "updatedAt": "2026-11-05T05:14:32.368Z"
+  },
+  {
+    "id": "session_memory_266",
+    "locationId": "osm_node_2291926846",
+    "sessionDate": "2026-02-20",
+    "text": "五輪の看板から大きな書き文字の幕へ、明るい展示が続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:14:32.549Z",
+    "updatedAt": "2026-11-05T05:14:32.549Z"
+  },
+  {
+    "id": "session_memory_267",
+    "locationId": "osm_way_220401982",
+    "sessionDate": "2026-02-20",
+    "text": "広い参道から赤提灯の商店街へ、木造の門が続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:16:11.629Z",
+    "updatedAt": "2026-11-05T05:16:11.629Z"
+  },
+  {
+    "id": "session_memory_268",
+    "locationId": "osm_way_149397097",
+    "sessionDate": "2026-02-21",
+    "text": "石畳の商店街を抜けると、赤い祠と白い狐像が現れた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:16:11.927Z",
+    "updatedAt": "2026-11-05T05:16:11.927Z"
+  },
+  {
+    "id": "session_memory_269",
+    "locationId": "osm_node_7177668185",
+    "sessionDate": "2026-02-21",
+    "text": "青い星空の床に紫の光が重なり、展示の色が夜に広がった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:16:12.211Z",
+    "updatedAt": "2026-11-05T05:16:12.211Z"
+  },
+  {
+    "id": "session_memory_270",
+    "locationId": "osm_node_2458664748",
+    "sessionDate": "2026-02-06",
+    "text": "駅の案内板から色とりどりの祭り飾りへ、街の色が移った。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:16:12.456Z",
+    "updatedAt": "2026-11-05T05:16:12.456Z"
+  },
+  {
+    "id": "session_memory_271",
+    "locationId": "osm_way_238007288",
+    "sessionDate": "2026-02-06",
+    "text": "金と赤の大きな山車が連なり、花飾りと竜の形が重なった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:16:12.708Z",
+    "updatedAt": "2026-11-05T05:16:12.708Z"
+  },
+  {
+    "id": "session_memory_272",
+    "locationId": "osm_node_12069264071",
+    "sessionDate": "2026-02-06",
+    "text": "雪の縁を残した商店街の歩道に、青空と馬像が並んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:16:12.960Z",
+    "updatedAt": "2026-11-05T05:16:12.960Z"
+  },
+  {
+    "id": "session_memory_273",
+    "locationId": "osm_way_751202911",
+    "sessionDate": "2026-02-06",
+    "text": "幾重にも重なる飾り面に、仮面や花の色が密集していた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:16:13.160Z",
+    "updatedAt": "2026-11-05T05:16:13.160Z"
+  },
+  {
+    "id": "session_memory_274",
+    "locationId": "osm_way_550010220",
+    "sessionDate": "2026-02-06",
+    "text": "古い木造家屋と川沿いの橋が、青空の下に並んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:16:13.348Z",
+    "updatedAt": "2026-11-05T05:16:13.348Z"
+  },
+  {
+    "id": "session_memory_275",
+    "locationId": "osm_way_560902679",
+    "sessionDate": "2026-02-06",
+    "text": "吹き抜けを貫く青や桃色の管が、ガラスの階を横切った。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:16:13.536Z",
+    "updatedAt": "2026-11-05T05:16:13.536Z"
+  },
+  {
+    "id": "session_memory_276",
+    "locationId": "osm_node_7682007438",
+    "sessionDate": "2026-02-06",
+    "text": "市場の入口から壁の写真展示まで、木の棚に品が並んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:16:13.715Z",
+    "updatedAt": "2026-11-05T05:16:13.715Z"
+  },
+  {
+    "id": "session_memory_277",
+    "locationId": "osm_way_557052452",
+    "sessionDate": "2026-02-06",
+    "text": "雪の斜面からガラスの展望窓へ、街の青さが広がっていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:18:03.360Z",
+    "updatedAt": "2026-11-05T05:18:03.360Z"
+  },
+  {
+    "id": "session_memory_278",
+    "locationId": "osm_way_555012891",
+    "sessionDate": "2026-02-06",
+    "text": "黄色い木組みの展示室に、海岸の写真や地図が並んでいた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:18:03.767Z",
+    "updatedAt": "2026-11-05T05:18:03.767Z"
+  },
+  {
+    "id": "session_memory_279",
+    "locationId": "osm_node_264226195",
+    "sessionDate": "2026-02-06",
+    "text": "草の斜面から岩場の浜へ降りる小径が、青い海に続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:18:04.114Z",
+    "updatedAt": "2026-11-05T05:18:04.114Z"
+  },
+  {
+    "id": "session_memory_280",
+    "locationId": "osm_node_262311854",
+    "sessionDate": "2026-02-06",
+    "text": "石垣の端から眺めると、白い波と青い水平線が重なった。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:18:04.646Z",
+    "updatedAt": "2026-11-05T05:18:04.646Z"
+  },
+  {
+    "id": "session_memory_281",
+    "locationId": "osm_node_2417938988",
+    "sessionDate": "2026-02-06",
+    "text": "赤い鳥居の先に海がひらき、彩色された社殿が続いていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:18:04.908Z",
+    "updatedAt": "2026-11-05T05:18:04.908Z"
+  },
+  {
+    "id": "session_memory_282",
+    "locationId": "osm_way_1479329564",
+    "sessionDate": "2026-02-06",
+    "text": "海沿いの歩道は青空に開け、案内板の先で白波が砕けた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:18:05.163Z",
+    "updatedAt": "2026-11-05T05:18:05.163Z"
+  },
+  {
+    "id": "session_memory_283",
+    "locationId": "osm_way_1479329569",
+    "sessionDate": "2026-02-06",
+    "text": "大きな青い魚の口が、金網と木々の間から突き出していた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:18:05.349Z",
+    "updatedAt": "2026-11-05T05:18:05.349Z"
+  },
+  {
+    "id": "session_memory_284",
+    "locationId": "osm_node_3914881285",
+    "sessionDate": "2022-09-25",
+    "text": "頭上の深緑の枝の下で、鮮紅の花が黒い小道を縁取った。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:18:05.605Z",
+    "updatedAt": "2026-11-05T05:18:05.605Z"
+  },
+  {
+    "id": "session_memory_285",
+    "locationId": "osm_way_772670439",
+    "sessionDate": "2025-06-30",
+    "text": "高層棟の前から、青い光の回廊や白い翼の壁面へ移った。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:18:05.866Z",
+    "updatedAt": "2026-11-05T05:18:05.866Z"
+  },
+  {
+    "id": "session_memory_286",
+    "locationId": "location_066",
+    "sessionDate": "2025-06-30",
+    "text": "円形の青い看板に黒い文字が並び、二人の姿が前に立っていた。",
+    "generatedBy": "copilot",
+    "createdAt": "2026-11-05T05:18:06.108Z",
+    "updatedAt": "2026-11-05T05:18:06.108Z"
   }
 ]
