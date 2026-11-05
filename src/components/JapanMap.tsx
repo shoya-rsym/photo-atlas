@@ -401,7 +401,6 @@ export default function JapanMap({
                     onPointerLeave={(e) => {
                       if (e.pointerType !== "mouse") return;
                       if (
-                        variant === "home" &&
                         e.relatedTarget instanceof Node &&
                         previewRef.current?.contains(e.relatedTarget)
                       ) {
@@ -579,8 +578,20 @@ export default function JapanMap({
 
       {variant !== "home" ? (
         <aside
+          ref={previewRef}
           aria-live="polite"
           className="rounded-lg border border-border bg-card p-4"
+          onPointerLeave={(e) => {
+            if (e.pointerType !== "mouse") return;
+            if (
+              e.relatedTarget instanceof Element &&
+              e.relatedTarget.closest(".map-unit[role='link']")
+            ) {
+              return;
+            }
+            setHoveredId(null);
+            reveal(selectedId);
+          }}
         >
           {activeUnit && shown?.id === activeUnit.id ? (
             <div>

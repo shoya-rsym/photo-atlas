@@ -148,7 +148,12 @@ export default function SearchView({ photos }: Props) {
         {results.length === 0 ? (
           <p className="text-muted">この手がかりでは写真が見つかりませんでした。</p>
         ) : (
-          <PhotoGrid photos={results} showLocation />
+          <PhotoGrid
+            key={JSON.stringify(filters)}
+            photos={results}
+            showLocation
+            loadOnScroll
+          />
         )}
       </section>
     </div>
