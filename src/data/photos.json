@@ -1501,7 +1501,9 @@
     "createdAt": "2026-10-28T13:22:51.832Z",
     "locationId": "location_151",
     "tags": ["ar_photo", "tag_008", "tag_010"],
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "photoMemory": "押しては引いて押しては引いて。その靴、濡らしちゃだめですよ",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo0150",
@@ -1974,7 +1976,9 @@
     "createdAt": "2026-10-28T13:22:51.875Z",
     "locationId": "location_002",
     "tags": ["ar_photo", "tag_008"],
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "photoMemory": "この地を守る神は、それはそれはあらゆるところに鎮座しております",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo0193",
@@ -12002,7 +12006,9 @@
     "locationId": "location_107",
     "tags": ["ar_photo", "tag_031", "tag_028", "tag_014", "tag_007"],
     "characterIds": ["character_001"],
-    "date": "2022-07-24"
+    "date": "2022-07-24",
+    "photoMemory": "高原の気分はきまぐれで、風は結構マイペースで",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo1824",
@@ -12585,7 +12591,9 @@
     "locationId": "location_105",
     "tags": ["ar_photo", "tag_003", "tag_004", "tag_014", "tag_043", "tag_005"],
     "characterIds": ["character_001"],
-    "date": "2022-09-13"
+    "date": "2022-09-13",
+    "photoMemory": "如何にもな秋の色合いを、お城が頑張ってくれました",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo1877",
@@ -16140,7 +16148,9 @@
     "locationId": "location_089",
     "tags": ["ar_photo", "tag_013", "tag_010", "tag_038", "tag_008"],
     "characterIds": ["character_001"],
-    "date": "2023-04-13"
+    "date": "2023-04-13",
+    "photoMemory": "波風とともに来る客船は、春もついでに連れてきてるかも",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo2201",
@@ -17141,7 +17151,9 @@
     "locationId": "location_081",
     "tags": ["ar_photo", "tag_039", "tag_001", "tag_025", "tag_014"],
     "characterIds": ["character_001"],
-    "date": "2023-12-01"
+    "date": "2023-12-01",
+    "photoMemory": "凜は台の上か何かに乗ってます",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo2292",
@@ -18496,7 +18508,10 @@
     "locationId": "location_066",
     "tags": ["ar_photo", "tag_034", "tag_024", "tag_014", "tag_007"],
     "date": "2019-08-17",
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "photoMemory": "わーしわし。神様はなでられたがり",
+    "photoMemorySource": "manual",
+    "isFavorite": true
   },
   {
     "id": "photo2415",
@@ -18529,7 +18544,9 @@
     "locationId": "location_065",
     "tags": ["ar_photo", "tag_014", "tag_007", "tag_036", "tag_028", "tag_010", "tag_031"],
     "date": "2019-08-18",
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "photoMemory": "彼の地でキミは何ヲ思う",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo2418",
@@ -27358,7 +27375,9 @@
     "createdAt": "2026-10-31T04:59:46.168Z",
     "locationId": "osm_way_188840517",
     "tags": ["ar_photo", "tag_007", "tag_014", "tag_008", "tag_011"],
-    "characterIds": ["character_001", "character_002"]
+    "characterIds": ["character_001", "character_002"],
+    "photoMemory": "いざ！海へ！",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo3224",
@@ -31879,7 +31898,9 @@
     "createdAt": "2026-10-31T05:40:07.480Z",
     "locationId": "osm_way_929364826",
     "tags": ["ar_photo", "tag_014", "tag_011", "tag_005", "tag_004"],
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "photoMemory": "薄明るく灯る様々な色は、ほんのりと温かかった",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo3635",
@@ -35817,7 +35838,9 @@
     "createdAt": "2026-10-31T08:04:58.835Z",
     "locationId": "osm_way_300077872",
     "tags": ["ar_photo", "tag_014", "tag_020", "tag_011", "tag_021", "tag_040", "tag_017", "tag_018", "night_view", "event"],
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "photoMemory": "風は、冬にしてはあたたかく。水鳥と同じ速さで吹く",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo3993",
@@ -39755,7 +39778,9 @@
     "createdAt": "2026-10-31T09:25:50.184Z",
     "locationId": "osm_way_705639494",
     "tags": ["ar_photo", "tag_014", "tag_007", "tag_028", "tag_003", "tag_008", "tag_029", "tag_032"],
-    "characterIds": ["character_002"]
+    "characterIds": ["character_002"],
+    "photoMemory": "犬のような兎のような馬のような車のような",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo4351",
