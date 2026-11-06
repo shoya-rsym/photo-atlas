@@ -122,19 +122,6 @@ type Location = {
 };
 ```
 
-例
-
-```json
-{
-  "id": "yokohama_station",
-  "name": "横浜駅",
-  "prefectureId": "kanagawa",
-  "address": "神奈川県横浜市西区高島2丁目16",
-  "lat": 35.465,
-  "lng": 139.622
-}
-```
-
 ---
 
 # Subregion
@@ -304,6 +291,28 @@ type SessionMemory = {
 - Session Summaryは `dominantPatterns`、`uniqueFeatures`、`visualRhythm`、`colorCharacter`、`spaceCharacter`、`memorySeeds` で構成する。解析対象画像ID、Vision Provider、解析件数とともに `.local/session-memory-analysis.json` に保存する。公開される `session-memories.json` にはMemory本文と生成元だけを保存する。
 - `generatedBy` は既存データとの互換性のため `template` / `ai` / `copilot` / `manual` を許容する。管理画面で本文を編集すると `manual` になる。
 - 生成文は20〜40文字程度を目安とし、場所名・キャラクター名・撮影行為・ストーリーを含めない。
+
+---
+
+# LocationStory
+
+撮影場所と撮影日が同じ写真群に紐づく、背景や旅の文脈を伝える読み物。SessionMemoryとは異なり、300文字程度を目安とする。撮影日不明の写真には紐づけない。
+
+```typescript
+type LocationStory = {
+  id: string;
+  locationId: string;
+  sessionDate: string;
+  text: string;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+};
+```
+
+- `location-stories.json` に保持する。
+- セッションキーは `locationId + sessionDate`。版管理のため、同じセッションに複数版を保存でき、Viewerには最大の`version`を表示する。
+- Story Viewerは該当セッションの写真だけを表示する。
 
 ## MemoryReview
 
@@ -574,3 +583,4 @@ session-memories.json
 - Character
 - JapanMapRegion
 - SessionMemory
+- LocationStory

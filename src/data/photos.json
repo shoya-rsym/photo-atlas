@@ -14334,7 +14334,9 @@
     "locationId": "location_042",
     "tags": ["ar_photo", "tag_041", "tag_020", "tag_021", "tag_028", "tag_014"],
     "characterIds": ["character_001"],
-    "date": "2023-01-10"
+    "date": "2023-01-10",
+    "photoMemory": "一つ二つ、沈み込む。帰りも同じだけ",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo2037",

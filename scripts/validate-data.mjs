@@ -11,6 +11,7 @@ const tags = read("tags");
 const characters = read("characters");
 const photos = read("photos");
 const sessionMemories = read("session-memories");
+const locationStories = read("location-stories");
 const memoryLibrary = read("memory-library");
 const memoryCandidates = read("memory-candidates");
 const regions = read("japan-map-regions");
@@ -26,7 +27,7 @@ function checkIds(label, list) {
     if (!item.id || !ID_PATTERN.test(item.id)) errors.push(`${label}: 不正なID ${item.id}`);
     if (seen.has(item.id)) errors.push(`${label}: 重複ID ${item.id}`);
     seen.add(item.id);
-    if (!item.name && !["photos", "session-memories"].includes(label)) {
+    if (!item.name && !["photos", "session-memories", "location-stories"].includes(label)) {
       errors.push(`${label}: name未設定 ${item.id}`);
     }
   }
@@ -40,6 +41,7 @@ const tagIds = checkIds("tags", tags);
 const characterIds = checkIds("characters", characters);
 checkIds("photos", photos);
 checkIds("session-memories", sessionMemories);
+checkIds("location-stories", locationStories);
 
 for (const p of prefectures) {
   if (!areaIds.has(p.areaId)) errors.push(`prefectures: areaId不正 ${p.id}`);
@@ -158,6 +160,32 @@ for (const memory of sessionMemories) {
   const key = `${memory.locationId}|${memory.sessionDate}`;
   if (sessionKeys.has(key)) errors.push(`session-memories: セッション重複 ${key}`);
   sessionKeys.add(key);
+}
+const storyVersionKeys = new Set();
+for (const story of locationStories) {
+  if (!locationIds.has(story.locationId)) {
+    errors.push(`location-stories: locationId不正 ${story.id}`);
+  }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(story.sessionDate)) {
+    errors.push(`location-stories: sessionDate形式不正 ${story.id}`);
+  }
+  if (typeof story.text !== "string" || !story.text.trim()) {
+    errors.push(`location-stories: text不正 ${story.id}`);
+  }
+  if (!Number.isInteger(story.version) || story.version < 1) {
+    errors.push(`location-stories: version不正 ${story.id}`);
+  }
+  if (Number.isNaN(Date.parse(story.createdAt))) {
+    errors.push(`location-stories: createdAt形式不正 ${story.id}`);
+  }
+  if (Number.isNaN(Date.parse(story.updatedAt))) {
+    errors.push(`location-stories: updatedAt形式不正 ${story.id}`);
+  }
+  const key = `${story.locationId}|${story.sessionDate}|${story.version}`;
+  if (storyVersionKeys.has(key)) {
+    errors.push(`location-stories: セッション版重複 ${key}`);
+  }
+  storyVersionKeys.add(key);
 }
   const reviewIds = new Set();
   for (const review of memoryLibrary) {

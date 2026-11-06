@@ -1,11 +1,12 @@
 import {
   areas,
   locations,
+  locationStories,
   photos,
   prefectures,
 } from "@/lib/data";
 import { sortPhotosByDate } from "@/lib/photos";
-import type { Area, Location, Photo, Prefecture } from "@/types";
+import type { Area, Location, LocationStory, Photo, Prefecture } from "@/types";
 
 export type LocationStatistics = {
   photoCount: number;
@@ -41,6 +42,17 @@ export function getPrefecturesByArea(areaId: string): Prefecture[] {
 
 export function getLocationsByPrefecture(prefectureId: string): Location[] {
   return locations.filter((l) => l.prefectureId === prefectureId);
+}
+
+export function getLocationStories(locationId: string): LocationStory[] {
+  return locationStories
+    .filter((story) => story.locationId === locationId)
+    .sort(
+      (a, b) =>
+        a.sessionDate.localeCompare(b.sessionDate) ||
+        b.version - a.version ||
+        b.updatedAt.localeCompare(a.updatedAt),
+    );
 }
 
 /** 撮影日降順（撮影日不明は最後尾） */

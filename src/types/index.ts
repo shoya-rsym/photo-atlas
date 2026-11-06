@@ -7,6 +7,7 @@ export type { Tag } from "./tag";
 export type { Character } from "./character";
 export type { Photo } from "./photo";
 export type { SessionMemory } from "./session-memory";
+export type { LocationStory } from "./location-story";
 export type {
   JapanMapRegion,
   AreaTooltipData,

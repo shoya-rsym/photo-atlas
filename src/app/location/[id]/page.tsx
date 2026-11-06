@@ -6,26 +6,35 @@ import { SessionMemoryText } from "@/components/MemoryDisclosure";
 import PhotoGrid from "@/components/PhotoGrid";
 import PhotoTags from "@/components/PhotoTags";
 import SummaryCards from "@/components/SummaryCards";
+import StoryViewerButton from "@/components/StoryViewerButton";
 import VisualHero from "@/components/VisualHero";
 import { locations, sessionMemories } from "@/lib/data";
 import { getRepresentativePhoto, UNKNOWN_DATE_LABEL } from "@/lib/photos";
 import {
   findLocation,
   getLocationStatistics,
+  getLocationStories,
   getLocationTrail,
   getPhotosByLocation,
   getTagIdsByLocation,
 } from "@/lib/queries";
-import type { Photo, SessionMemory } from "@/types";
+import type { LocationStory, Photo, SessionMemory } from "@/types";
 
 type Props = { params: Promise<{ id: string }> };
 type PhotoSession = {
   date?: string;
   photos: Photo[];
   memory?: SessionMemory;
+  story?: LocationStory;
 };
 
-function PhotoSessions({ sessions }: { sessions: PhotoSession[] }) {
+function PhotoSessions({
+  sessions,
+  locationName,
+}: {
+  sessions: PhotoSession[];
+  locationName: string;
+}) {
   if (sessions.length === 0) {
     return (
       <p className="rounded-xl border border-border bg-card p-6 text-muted">
@@ -38,9 +47,22 @@ function PhotoSessions({ sessions }: { sessions: PhotoSession[] }) {
     <div className="space-y-8">
       {sessions.map((session) => (
         <section key={session.date ?? "unknown"} className="space-y-3">
-          <h3 className="text-sm font-semibold text-muted">
-            {session.date ?? UNKNOWN_DATE_LABEL} · {session.photos.length} 枚
-          </h3>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h3 className="text-sm font-semibold text-muted">
+              {session.date ?? UNKNOWN_DATE_LABEL} · {session.photos.length} 枚
+            </h3>
+            <StoryViewerButton
+              story={session.story?.text}
+              locationName={locationName}
+              sessionDate={session.date}
+              photos={session.photos.map(({ id, title, image, date }) => ({
+                id,
+                title,
+                image,
+                date,
+              }))}
+            />
+          </div>
           {session.memory ? (
             <SessionMemoryText
               text={session.memory.text}
@@ -84,6 +106,12 @@ export default async function LocationPage({ params }: Props) {
       .filter((memory) => memory.locationId === location.id)
       .map((memory) => [memory.sessionDate, memory]),
   );
+  const storiesByDate = new Map<string, LocationStory>();
+  for (const story of getLocationStories(location.id)) {
+    if (!storiesByDate.has(story.sessionDate)) {
+      storiesByDate.set(story.sessionDate, story);
+    }
+  }
   const photosByDate = new Map<string, PhotoSession>();
   for (const photo of photos) {
     const key = photo.date ?? "";
@@ -91,6 +119,7 @@ export default async function LocationPage({ params }: Props) {
       date: photo.date,
       photos: [],
       memory: photo.date ? memoriesByDate.get(photo.date) : undefined,
+      story: photo.date ? storiesByDate.get(photo.date) : undefined,
     };
     session.photos.push(photo);
     photosByDate.set(key, session);
@@ -161,7 +190,7 @@ export default async function LocationPage({ params }: Props) {
               ここに残る写真
             </h2>
           </div>
-          <PhotoSessions sessions={sessions} />
+          <PhotoSessions sessions={sessions} locationName={location.name} />
         </section>
       </div>
 
@@ -210,7 +239,7 @@ export default async function LocationPage({ params }: Props) {
               ここに残る写真
             </h2>
           </div>
-          <PhotoSessions sessions={sessions} />
+          <PhotoSessions sessions={sessions} locationName={location.name} />
         </section>
       </div>
     </>

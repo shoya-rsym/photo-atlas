@@ -7,6 +7,7 @@ import photosJson from "@/data/photos.json";
 import japanMapRegionsJson from "@/data/japan-map-regions.json";
 import subregionsJson from "@/data/subregions.json";
 import sessionMemoriesJson from "@/data/session-memories.json";
+import locationStoriesJson from "@/data/location-stories.json";
 import type {
   Area,
   Character,
@@ -16,6 +17,7 @@ import type {
   Prefecture,
   Subregion,
   SessionMemory,
+  LocationStory,
   Tag,
 } from "@/types";
 
@@ -32,6 +34,7 @@ export const sessionMemories: SessionMemory[] = sessionMemoriesJson.map((memory)
   }
   return { ...memory, generatedBy: memory.generatedBy };
 });
+export const locationStories: LocationStory[] = locationStoriesJson;
 
 function isPhotoMemorySource(
   value: string | undefined,

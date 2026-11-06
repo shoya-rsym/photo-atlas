@@ -17,6 +17,8 @@ tags.json
 characters.json
 japan-map-regions.json
 subregions.json
+session-memories.json
+location-stories.json
 ```
 
 ---
@@ -92,6 +94,26 @@ subregions.json
 ```
 
 subregionId は任意。
+
+---
+
+# location-stories.json
+
+撮影場所と撮影日が同じ写真群に紐づくStory。撮影日不明の写真には紐づけない。版を追加する場合は同じ `locationId` と `sessionDate` を使い、`version` を増やす。
+
+```json
+[
+  {
+    "id": "location_story_yokohama_20260507_v1",
+    "locationId": "yokohama_station",
+    "sessionDate": "2026-05-07",
+    "text": "駅を出たあと、海の方へ歩くにつれて街の音が少しずつ遠のいていった。",
+    "version": 1,
+    "createdAt": "2026-05-08T09:00:00.000Z",
+    "updatedAt": "2026-05-08T09:00:00.000Z"
+  }
+]
+```
 
 ---
 

@@ -97,6 +97,22 @@ lng
 
 ---
 
+# LocationStory
+
+location-stories.json
+
+---
+
+- `id` は必須かつ一意
+- `locationId` は locations.json に存在すること
+- `sessionDate` は `YYYY-MM-DD` 形式
+- `text` は空でない文字列
+- `version` は1以上の整数
+- `createdAt` と `updatedAt` は日時形式
+- `locationId + sessionDate + version` の組み合わせは一意
+
+---
+
 # Subregion
 
 subregions.json
