@@ -64,6 +64,8 @@ const STATIC = {
   "/manage.js": ["public/manage.js", "text/javascript; charset=utf-8"],
   "/memory-review.js": ["public/memory-review.js", "text/javascript; charset=utf-8"],
   "/favorite-memory.js": ["public/favorite-memory.js", "text/javascript; charset=utf-8"],
+  "/map-browse.js": ["public/map-browse.js", "text/javascript; charset=utf-8"],
+  "/maps/japan-regions.svg": ["../../public/maps/japan-regions.svg", "image/svg+xml"],
 };
 
 const IMAGE_TYPES = { jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp" };

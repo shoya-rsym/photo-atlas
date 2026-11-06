@@ -10,6 +10,7 @@
     <header class="top">
       <h1>Photo Management Tool</h1>
       <a href="/">→ 写真登録</a>
+      <button id="openMapBrowse" type="button">地図から写真を編集</button>
       <button id="manageLocations" type="button">撮影地点情報を編集</button>
       <button id="manageCharacters" type="button">キャラクター管理</button>
       <button id="manageSessionMemories" type="button">Session Memory管理</button>
@@ -17,8 +18,8 @@
       <span class="muted" id="totals"></span>
     </header>
 
-    <main class="layout manage">
-      <aside class="panel bulk" id="bulk">
+    <main class="layout manage" id="manageLayout">
+      <aside class="panel bulk" id="bulkPanel">
         <h2>一括編集 <span id="selCount" class="muted"></span></h2>
         <p class="muted" id="bulkHint">写真をクリックで選択（Shift+クリックで範囲選択）</p>
         <div id="bulkBody" hidden>
@@ -61,7 +62,7 @@
         </div>
       </aside>
 
-      <section class="panel">
+      <section class="panel" id="photoListPanel">
         <div class="row toolbar">
           <input id="search" type="search" placeholder="検索: タイトル・タグ・キャラクター・地点名・Memory・コメント（スペース区切りでAND）" />
           <select id="filter">
@@ -142,6 +143,64 @@
           <button type="button" data-page-action="last">最後</button>
         </div>
       </section>
+
+      <section id="mapBrowse" class="panel map-browse" hidden>
+        <div class="bar">
+          <div>
+            <h2>地図から写真を辿る</h2>
+            <p class="muted">都道府県、撮影地点、写真の順に選択できます。Favorite Memoryとコメントは入力後に自動保存されます。</p>
+          </div>
+          <button id="closeMapBrowse" type="button">一覧編集へ戻る</button>
+        </div>
+        <div class="map-browse-layout">
+          <div class="map-browse-map-panel">
+            <div class="bar">
+              <span id="mapBrowseMapStatus" class="muted" role="status" aria-live="polite">地図を読み込んでいます…</span>
+              <button id="mapBrowseClearPrefecture" type="button">選択解除</button>
+            </div>
+            <div id="mapBrowseMap" class="map-browse-map"></div>
+          </div>
+          <aside class="map-browse-navigation">
+            <h2 id="mapBrowsePrefectureTitle">都道府県を選択</h2>
+            <div id="mapBrowseLocations" class="map-browse-locations">
+              <p class="muted">地図上の都道府県を選択してください。</p>
+            </div>
+            <h2 id="mapBrowseLocationTitle">撮影地点</h2>
+            <div id="mapBrowsePhotos" class="map-browse-photos">
+              <p class="muted">撮影地点を選択すると写真が表示されます。</p>
+            </div>
+          </aside>
+        </div>
+        <article id="mapBrowsePhotoDetail" class="map-browse-detail" hidden>
+          <div class="map-browse-viewer">
+            <img id="mapBrowseImage" alt="" />
+            <div class="bar">
+              <button id="mapBrowsePrevious" type="button">前の写真</button>
+              <span id="mapBrowsePhotoCaption" class="muted"></span>
+              <button id="mapBrowseNext" type="button">次の写真</button>
+            </div>
+          </div>
+          <div class="map-browse-editor">
+            <p id="mapBrowsePhotoMeta" class="muted"></p>
+            <label class="check">
+              <input id="mapBrowseFavorite" type="checkbox" />
+              お気に入り（管理者間で共有）
+            </label>
+            <label>
+              コメント
+              <textarea id="mapBrowseComment" rows="4" placeholder="写真に添えるコメント"></textarea>
+            </label>
+            <label>
+              Favorite Memory（120文字まで）
+              <textarea id="mapBrowseMemory" rows="3" maxlength="120" placeholder="写真から想像を広げる短い一文"></textarea>
+            </label>
+            <div class="row">
+              <button id="mapBrowseGenerateMemory" type="button" disabled>Favorite Memory作成プロンプトを生成</button>
+              <span id="mapBrowseSaveStatus" class="info" role="status" aria-live="polite"></span>
+            </div>
+          </div>
+        </article>
+      </section>
     </main>
 
     <dialog id="editor" class="editor">
@@ -166,14 +225,14 @@
           </div>
           <h2>コメント</h2>
           <textarea id="edComment" rows="3"></textarea>
-          <h2>Photo / Favorite Memory（任意・120文字まで）</h2>
+          <h2>Favorite Memory（任意・120文字まで）</h2>
           <textarea id="edPhotoMemory" rows="2" maxlength="120" placeholder="写真から想像を広げる短い一文"></textarea>
           <div id="edPhotoMemoryCount" class="info"></div>
           <label class="check"><input id="edFavorite" type="checkbox" /> お気に入り写真（全管理者で共有）</label>
           <p id="edFavoriteMemoryInfo" class="info"></p>
           <div class="row">
-            <button id="edFavoriteMemoryGenerate" type="button" hidden>Favorite Memory候補を作成・再生成</button>
-            <button id="edFavoriteMemoryDelete" type="button" class="danger" hidden>Photo / Favorite Memoryを削除</button>
+            <button id="edFavoriteMemoryGenerate" type="button" hidden>Favorite Memory作成プロンプトを生成</button>
+            <button id="edFavoriteMemoryDelete" type="button" class="danger" hidden>Favorite Memoryを削除</button>
           </div>
           <label class="check"><input id="edCover" type="checkbox" /> この地点の代表写真にする（他の代表は解除）</label>
         </div>
@@ -367,5 +426,6 @@
     <script type="module" src="/manage.js"></script>
     <script type="module" src="/memory-review.js"></script>
     <script type="module" src="/favorite-memory.js"></script>
+    <script type="module" src="/map-browse.js"></script>
   </body>
 </html>

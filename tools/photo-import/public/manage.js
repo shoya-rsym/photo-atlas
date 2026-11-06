@@ -1299,7 +1299,6 @@ async function saveEditor() {
     return;
   }
   try {
-    const previousFavorite = state.editing.isFavorite === true;
     const editedPhotoId = state.editing.id;
     const res = await api("/api/photos/update", {
       id: editedPhotoId,
@@ -1317,9 +1316,7 @@ async function saveEditor() {
     });
     $("editor").close();
     await reload();
-    const updatedPhoto = state.photos.find((photo) => photo.id === editedPhotoId);
     showResult(`${editedPhotoId} を更新しました`, res);
-    if (!previousFavorite && updatedPhoto?.isFavorite) openFavoriteMemoryGenerator(updatedPhoto);
   } catch (error) {
     $("edError").textContent = error.message;
     $("edError").hidden = false;
@@ -1427,6 +1424,9 @@ function bind() {
   });
   $("edPhotoMemory").addEventListener("input", () => {
     $("edPhotoMemoryCount").textContent = `${[...$("edPhotoMemory").value].length} / 120`;
+  });
+  $("edFavorite").addEventListener("change", () => {
+    $("edFavoriteMemoryGenerate").hidden = !$("edFavorite").checked;
   });
   $("undoLastChange").addEventListener("click", async () => {
     try {
@@ -1557,6 +1557,8 @@ function bind() {
     showResult(`${photoId} のFavorite Memoryを保存しました`, result);
   });
 }
+
+document.addEventListener("photo-atlas:photos-updated", reload);
 
 await reload();
 bind();

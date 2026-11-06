@@ -178,3 +178,42 @@ dialog.editor { width: min(900px, 94vw); }
 .similar-photo .title { padding: 4px 0; font-size: 12px; font-weight: 600; overflow-wrap: anywhere; }
 .similar-photo .meta { font-size: 11px; color: var(--muted); overflow-wrap: anywhere; }
 .similar-photo .check { font-size: 12px; }
+
+.layout.manage.browse-mode { grid-template-columns: minmax(0, 1fr); }
+.map-browse { grid-column: 1 / -1; min-width: 0; }
+.map-browse > .bar h2 { margin: 0 0 4px; color: var(--text); font-size: 18px; }
+.map-browse-layout { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr); gap: 12px; align-items: start; }
+.map-browse-map-panel, .map-browse-navigation, .map-browse-viewer, .map-browse-editor { min-width: 0; padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: #101013; }
+.map-browse-map { display: grid; min-height: 280px; place-items: center; overflow: hidden; }
+.map-browse-svg { display: block; width: 100%; max-height: 68vh; }
+.map-browse-svg g[data-prefecture-id] { cursor: pointer; fill: #3f3f46; stroke: #09090b; stroke-width: 1.4; transition: fill 120ms, opacity 120ms; }
+.map-browse-svg g[data-prefecture-id].has-photos { fill: #075985; }
+.map-browse-svg g[data-prefecture-id]:hover, .map-browse-svg g[data-prefecture-id]:focus { fill: #0ea5e9; outline: none; }
+.map-browse-svg g[data-prefecture-id].selected { fill: #0284c7; }
+.map-browse-locations { display: grid; gap: 6px; max-height: 34vh; overflow: auto; }
+.map-browse-location { display: flex; justify-content: space-between; gap: 8px; width: 100%; text-align: left; }
+.map-browse-location small, .map-browse-thumbnail small { color: var(--muted); }
+.map-browse-location.selected, .map-browse-thumbnail.selected { border-color: var(--accent); }
+.map-browse-navigation h2:not(:first-child) { margin-top: 16px; }
+.map-browse-photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(82px, 1fr)); gap: 6px; max-height: 38vh; overflow: auto; }
+.map-browse-thumbnail { min-width: 0; padding: 4px; text-align: left; }
+.map-browse-thumbnail img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 3px; background: #27272a; }
+.map-browse-thumbnail span, .map-browse-thumbnail small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.map-browse-thumbnail span { margin-top: 3px; font-size: 11px; }
+.map-browse-thumbnail small { font-size: 10px; }
+.map-browse-detail { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr); gap: 12px; margin-top: 12px; align-items: start; }
+.map-browse-viewer img { display: block; width: 100%; max-height: 72vh; object-fit: contain; border-radius: 4px; background: #000; }
+.map-browse-viewer .bar { margin-bottom: 0; }
+.map-browse-editor { display: grid; gap: 10px; }
+.map-browse-editor > p { margin: 0; }
+.map-browse-editor > label:not(.check) { display: grid; gap: 4px; color: var(--muted); }
+.map-browse-editor textarea { resize: vertical; }
+.map-browse-editor .check { margin: 0; }
+.map-browse-editor .row { align-items: center; }
+.map-browse-editor .info { margin: 0; }
+@media (max-width: 800px) {
+  .map-browse-layout, .map-browse-detail { grid-template-columns: 1fr; }
+  .map-browse-svg { max-height: 56vh; }
+  .map-browse-locations, .map-browse-photos { max-height: 32vh; }
+  .map-browse-viewer img { max-height: 58vh; }
+}
