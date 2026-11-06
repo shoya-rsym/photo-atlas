@@ -148,7 +148,7 @@
         <div class="bar">
           <div>
             <h2>地図から写真を辿る</h2>
-            <p class="muted">都道府県、撮影地点、写真の順に選択できます。Favorite Memoryとコメントは入力後に自動保存されます。</p>
+            <p class="muted">都道府県、撮影地点、写真の順に選択できます。Favorite Memoryとコメントは入力後に自動保存され、Storyは撮影場所・日付の単位で編集できます。</p>
           </div>
           <button id="closeMapBrowse" type="button">一覧編集へ戻る</button>
         </div>
@@ -198,6 +198,20 @@
               <button id="mapBrowseGenerateMemory" type="button" disabled>Favorite Memory作成プロンプトを生成</button>
               <span id="mapBrowseSaveStatus" class="info" role="status" aria-live="polite"></span>
             </div>
+            <section class="map-browse-story" aria-labelledby="mapBrowseStoryTitle">
+              <h2 id="mapBrowseStoryTitle">撮影セッションのStory</h2>
+              <p id="mapBrowseStorySession" class="muted"></p>
+              <p class="muted">この場所・撮影日の写真群に紐づきます。保存すると新しい版として記録されます。</p>
+              <label>
+                Story本文
+                <textarea id="mapBrowseStory" rows="7" maxlength="10000" placeholder="この撮影セッションにまつわる背景や旅の文脈"></textarea>
+              </label>
+              <div class="row">
+                <button id="mapBrowseStorySave" type="button" class="primary" disabled>Storyを保存</button>
+                <button id="mapBrowseStoryDelete" type="button" class="danger" disabled>Storyを削除</button>
+                <span id="mapBrowseStoryStatus" class="info" role="status" aria-live="polite"></span>
+              </div>
+            </section>
           </div>
         </article>
       </section>

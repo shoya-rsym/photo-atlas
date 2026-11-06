@@ -211,6 +211,10 @@ dialog.editor { width: min(900px, 94vw); }
 .map-browse-editor .check { margin: 0; }
 .map-browse-editor .row { align-items: center; }
 .map-browse-editor .info { margin: 0; }
+.map-browse-story { display: grid; gap: 8px; margin-top: 8px; padding-top: 12px; border-top: 1px solid var(--border); }
+.map-browse-story h2, .map-browse-story p { margin: 0; }
+.map-browse-story label { display: grid; gap: 4px; color: var(--muted); }
+.map-browse-story textarea { resize: vertical; }
 @media (max-width: 800px) {
   .map-browse-layout, .map-browse-detail { grid-template-columns: 1fr; }
   .map-browse-svg { max-height: 56vh; }

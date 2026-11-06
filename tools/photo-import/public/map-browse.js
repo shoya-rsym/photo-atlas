@@ -11,6 +11,8 @@ const state = {
   photosByLocation: new Map(),
   drafts: new Map(),
   timers: new Map(),
+  storyDrafts: new Map(),
+  storySavingKey: null,
   selectedPrefectureId: null,
   selectedLocationId: null,
   selectedPhotoId: null,
@@ -44,6 +46,28 @@ function photosForLocation(locationId) {
 
 function photosForPrefecture(prefectureId) {
   return state.photosByPrefecture.get(prefectureId) ?? [];
+}
+
+function storySessionKey(locationId, sessionDate) {
+  return `${locationId}|${sessionDate}`;
+}
+
+function locationStoryForSession(locationId, sessionDate) {
+  return (state.master.locationStories ?? [])
+    .filter(
+      (story) =>
+        story.locationId === locationId && story.sessionDate === sessionDate,
+    )
+    .reduce(
+      (latest, story) =>
+        !latest ||
+        story.version > latest.version ||
+        (story.version === latest.version &&
+          story.updatedAt > latest.updatedAt)
+          ? story
+          : latest,
+      null,
+    );
 }
 
 function sortPhotos(photos) {
@@ -264,7 +288,37 @@ function renderPhotoDetail() {
     photosForLocation(photo.locationId).length - 1;
   $("mapBrowseSaveStatus").textContent =
     draft.version > draft.savedVersion ? "未保存の変更があります" : "";
+  renderStoryEditor(photo, location);
   renderLocationPhotos();
+}
+
+function renderStoryEditor(photo, location) {
+  const hasSessionDate = Boolean(photo.date);
+  const key = hasSessionDate
+    ? storySessionKey(photo.locationId, photo.date)
+    : null;
+  const story = hasSessionDate
+    ? locationStoryForSession(photo.locationId, photo.date)
+    : null;
+  const persistedText = story?.text ?? "";
+  const draftText = key && state.storyDrafts.has(key)
+    ? state.storyDrafts.get(key)
+    : persistedText;
+  const isDirty = draftText.trim() !== persistedText;
+
+  $("mapBrowseStorySession").textContent = hasSessionDate
+    ? `${location?.name ?? photo.locationId} / ${photo.date}${story ? ` / 現在の版 v${story.version}` : " / 未登録"}`
+    : "撮影日不明の写真にはStoryを設定できません。";
+  $("mapBrowseStory").value = draftText;
+  $("mapBrowseStory").disabled =
+    !hasSessionDate || state.storySavingKey === key;
+  $("mapBrowseStorySave").disabled =
+    !hasSessionDate || !isDirty || state.storySavingKey === key;
+  $("mapBrowseStoryDelete").disabled =
+    !story || isDirty || state.storySavingKey === key;
+  $("mapBrowseStoryStatus").textContent = isDirty
+    ? "未保存の編集があります"
+    : "";
 }
 
 function selectPrefecture(prefectureId) {
@@ -436,6 +490,17 @@ async function openBrowse() {
 
 async function closeBrowse() {
   await flushDrafts();
+  const hasUnsavedStory = [...state.storyDrafts].some(([key, text]) => {
+    const [locationId, sessionDate] = key.split("|");
+    return text.trim() !==
+      (locationStoryForSession(locationId, sessionDate)?.text ?? "");
+  });
+  if (
+    hasUnsavedStory &&
+    !window.confirm("Storyに未保存の編集があります。保存せずに一覧へ戻りますか？")
+  ) {
+    return;
+  }
   $("mapBrowse").hidden = true;
   $("bulkPanel").hidden = false;
   $("photoListPanel").hidden = false;
@@ -463,6 +528,143 @@ $("mapBrowseComment").addEventListener("input", () => {
 $("mapBrowseMemory").addEventListener("input", () => {
   const update = updateDraftFromForm();
   if (update) scheduleSave(update.id);
+});
+$("mapBrowseStory").addEventListener("input", () => {
+  const photo = state.photoById.get(state.selectedPhotoId);
+  if (!photo?.date) return;
+  const key = storySessionKey(photo.locationId, photo.date);
+  state.storyDrafts.set(key, $("mapBrowseStory").value);
+  const story = locationStoryForSession(photo.locationId, photo.date);
+  const hasChanges = $("mapBrowseStory").value.trim() !== (story?.text ?? "");
+  $("mapBrowseStorySave").disabled =
+    !hasChanges || state.storySavingKey === key;
+  $("mapBrowseStoryStatus").textContent = hasChanges
+    ? "未保存の編集があります"
+    : "";
+});
+$("mapBrowseStorySave").addEventListener("click", async () => {
+  const photo = state.photoById.get(state.selectedPhotoId);
+  if (!photo?.date) return;
+  const locationId = photo.locationId;
+  const sessionDate = photo.date;
+  const key = storySessionKey(locationId, sessionDate);
+  const text = $("mapBrowseStory").value.trim();
+  if (!text) {
+    $("mapBrowseStoryStatus").textContent = "Story本文を入力してください。";
+    return;
+  }
+
+  state.storySavingKey = key;
+  renderStoryEditor(photo, state.locationById.get(locationId));
+  $("mapBrowseStoryStatus").textContent = "保存中…";
+  let statusMessage = "";
+  try {
+    const result = await request("/api/location-stories/save", {
+      locationId,
+      sessionDate,
+      text,
+    });
+    const stories = state.master.locationStories ?? [];
+    if (
+      !stories.some((story) => story.id === result.locationStory.id)
+    ) {
+      stories.push(result.locationStory);
+      state.master.locationStories = stories;
+    } else {
+      state.master.locationStories = stories.map((story) =>
+        story.id === result.locationStory.id ? result.locationStory : story,
+      );
+    }
+    state.storyDrafts.delete(key);
+    if (
+      state.selectedPhotoId &&
+      storySessionKey(
+        state.photoById.get(state.selectedPhotoId)?.locationId,
+        state.photoById.get(state.selectedPhotoId)?.date,
+      ) === key
+    ) {
+      renderPhotoDetail();
+      statusMessage = result.unchanged
+        ? "変更はありません"
+        : `保存しました（v${result.locationStory.version}）`;
+    }
+  } catch (error) {
+    statusMessage = `保存に失敗しました: ${error.message}`;
+  } finally {
+    state.storySavingKey = null;
+    const currentPhoto = state.photoById.get(state.selectedPhotoId);
+    if (currentPhoto) {
+      const currentKey = currentPhoto.date
+        ? storySessionKey(currentPhoto.locationId, currentPhoto.date)
+        : null;
+      renderStoryEditor(
+        currentPhoto,
+        state.locationById.get(currentPhoto.locationId),
+      );
+      if (currentKey === key && statusMessage) {
+        $("mapBrowseStoryStatus").textContent = statusMessage;
+      }
+    }
+  }
+});
+$("mapBrowseStoryDelete").addEventListener("click", async () => {
+  const photo = state.photoById.get(state.selectedPhotoId);
+  if (!photo?.date) return;
+  const locationId = photo.locationId;
+  const sessionDate = photo.date;
+  const key = storySessionKey(locationId, sessionDate);
+  const story = locationStoryForSession(locationId, sessionDate);
+  if (
+    !story ||
+    !window.confirm(
+      `${state.locationById.get(locationId)?.name ?? locationId} / ${sessionDate} のStoryと全バージョンを削除しますか？未保存の編集も破棄されます。`,
+    )
+  ) {
+    return;
+  }
+
+  state.storySavingKey = key;
+  renderStoryEditor(photo, state.locationById.get(locationId));
+  $("mapBrowseStoryStatus").textContent = "削除中…";
+  let statusMessage = "";
+  try {
+    await request("/api/location-stories/delete", {
+      locationId,
+      sessionDate,
+    });
+    state.master.locationStories = (state.master.locationStories ?? []).filter(
+      (item) =>
+        item.locationId !== locationId || item.sessionDate !== sessionDate,
+    );
+    state.storyDrafts.delete(key);
+    if (
+      state.selectedPhotoId &&
+      storySessionKey(
+        state.photoById.get(state.selectedPhotoId)?.locationId,
+        state.photoById.get(state.selectedPhotoId)?.date,
+      ) === key
+    ) {
+      renderPhotoDetail();
+      statusMessage = "Storyを削除しました";
+    }
+  } catch (error) {
+    statusMessage = `削除に失敗しました: ${error.message}`;
+  } finally {
+    state.storySavingKey = null;
+    const currentPhoto = state.photoById.get(state.selectedPhotoId);
+    if (currentPhoto) {
+      const currentKey = currentPhoto.date
+        ? storySessionKey(currentPhoto.locationId, currentPhoto.date)
+        : null;
+      renderStoryEditor(
+        currentPhoto,
+        state.locationById.get(currentPhoto.locationId),
+      );
+      if (currentKey === key && statusMessage) {
+        $("mapBrowseStoryStatus").textContent = statusMessage;
+      }
+    }
+  }
 });
 $("mapBrowseFavorite").addEventListener("change", () => {
   const update = updateDraftFromForm();

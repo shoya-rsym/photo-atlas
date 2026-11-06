@@ -26,7 +26,9 @@ import {
   findSimilarPhotos,
   getSessionMemoryBackfillCandidates,
   createSessionMemoryPrompt,
+  deleteLocationStory,
   parseSessionMemoryResponse,
+  saveLocationStory,
   saveGeneratedSessionMemory,
   getMemoryReviewData,
   getUndoStatus,
@@ -255,6 +257,26 @@ const server = createServer(async (req, res) => {
           res,
           200,
           await updateSessionMemory(String(body.id), body.text),
+        );
+      }
+      if (path === "/api/location-stories/save") {
+        const body = await json();
+        return send(
+          res,
+          200,
+          await saveLocationStory(
+            body.locationId,
+            body.sessionDate,
+            body.text,
+          ),
+        );
+      }
+      if (path === "/api/location-stories/delete") {
+        const body = await json();
+        return send(
+          res,
+          200,
+          await deleteLocationStory(body.locationId, body.sessionDate),
         );
       }
       if (path === "/api/session-memories/prompt") {

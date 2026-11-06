@@ -18936,7 +18936,9 @@
     "locationId": "location_058",
     "tags": ["ar_photo", "tag_034", "tag_024", "tag_035"],
     "date": "2020-01-01",
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "photoMemory": "新年あけましておめでとうございます。",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo2455",

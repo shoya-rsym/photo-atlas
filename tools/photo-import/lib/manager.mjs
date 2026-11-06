@@ -44,6 +44,7 @@ const UNDO_DATA_FILES = [
   "tags",
   "characters",
   "session-memories",
+  "location-stories",
   "session-memory-analysis",
   "memory-library",
   "memory-candidates",
@@ -1114,6 +1115,128 @@ export function updateSessionMemory(id, rawText) {
     );
     return finish(photos, locations, { sessionMemory: updatedMemory });
   }, { label: "Session Memoryの編集" });
+}
+
+function latestLocationStory(stories, locationId, sessionDate) {
+  return stories
+    .filter(
+      (story) =>
+        story.locationId === locationId && story.sessionDate === sessionDate,
+    )
+    .sort(
+      (a, b) =>
+        b.version - a.version || b.updatedAt.localeCompare(a.updatedAt),
+    )[0];
+}
+
+async function writeLocationStories(stories) {
+  const file = dataFile("location-stories");
+  const before = await readFile(file, "utf8");
+  try {
+    await writeAtomic(file, formatJsonList(stories, "expanded"));
+    const validation = await runValidation();
+    if (!validation.ok) {
+      throw new Error(`Storyの保存後のデータ検証に失敗しました: ${validation.output}`);
+    }
+    return validation;
+  } catch (error) {
+    try {
+      await writeAtomic(file, before);
+    } catch (rollbackError) {
+      throw new AggregateError(
+        [error, rollbackError],
+        "Storyの保存に失敗し、変更前のデータへ復元できませんでした",
+      );
+    }
+    throw error;
+  }
+}
+
+export function saveLocationStory(rawLocationId, rawSessionDate, rawText) {
+  return exclusive(async () => {
+    const locationId = String(rawLocationId ?? "").trim();
+    const sessionDate = String(rawSessionDate ?? "").trim();
+    const text = String(rawText ?? "").trim();
+    if (!locationId || !/^\d{4}-\d{2}-\d{2}$/u.test(sessionDate)) {
+      throw new Error("Storyの撮影場所または撮影日が不正です");
+    }
+    if (!text) throw new Error("Story本文を入力してください");
+    if ([...text].length > 10_000) {
+      throw new Error("Storyは10,000文字以内で入力してください");
+    }
+
+    const [photos, locations, stories] = await Promise.all([
+      readJson(dataFile("photos"), []),
+      readJson(dataFile("locations"), []),
+      readJson(dataFile("location-stories"), []),
+    ]);
+    if (!locations.some((location) => location.id === locationId)) {
+      throw new Error(`撮影地点が見つかりません: ${locationId}`);
+    }
+    if (
+      !photos.some(
+        (photo) =>
+          photo.locationId === locationId && photo.date === sessionDate,
+      )
+    ) {
+      throw new Error("Storyを設定する撮影セッションの写真がありません");
+    }
+
+    const current = latestLocationStory(stories, locationId, sessionDate);
+    if (current?.text === text) {
+      return { locationStory: current, unchanged: true };
+    }
+    const timestamp = new Date().toISOString();
+    const story = {
+      id: allocateId(
+        "location_story",
+        undefined,
+        new Set(stories.map((item) => item.id)),
+      ),
+      locationId,
+      sessionDate,
+      text,
+      version:
+        Math.max(
+          0,
+          ...stories
+            .filter(
+              (item) =>
+                item.locationId === locationId &&
+                item.sessionDate === sessionDate,
+            )
+            .map((item) => item.version),
+        ) + 1,
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    };
+    const validation = await writeLocationStories([...stories, story]);
+    return { locationStory: story, unchanged: false, validation };
+  }, { label: "撮影セッションStoryの保存" });
+}
+
+export function deleteLocationStory(rawLocationId, rawSessionDate) {
+  return exclusive(async () => {
+    const locationId = String(rawLocationId ?? "").trim();
+    const sessionDate = String(rawSessionDate ?? "").trim();
+    if (!locationId || !/^\d{4}-\d{2}-\d{2}$/u.test(sessionDate)) {
+      throw new Error("Storyの撮影場所または撮影日が不正です");
+    }
+    const stories = await readJson(dataFile("location-stories"), []);
+    const deleted = stories.filter(
+      (story) =>
+        story.locationId === locationId && story.sessionDate === sessionDate,
+    );
+    if (deleted.length === 0) {
+      throw new Error("この撮影セッションにStoryはありません");
+    }
+    const remaining = stories.filter(
+      (story) =>
+        story.locationId !== locationId || story.sessionDate !== sessionDate,
+    );
+    const validation = await writeLocationStories(remaining);
+    return { deletedCount: deleted.length, validation };
+  }, { label: "撮影セッションStoryの削除" });
 }
 
 export function deleteSessionMemory(id) {
