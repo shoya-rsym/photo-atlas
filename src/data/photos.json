@@ -14553,7 +14553,8 @@
     "locationId": "location_042",
     "tags": ["ar_photo", "tag_041", "tag_020", "tag_021", "tag_028", "tag_017", "tag_018"],
     "characterIds": ["character_001"],
-    "date": "2023-01-10"
+    "date": "2023-01-10",
+    "isFavorite": true
   },
   {
     "id": "photo2056",
@@ -29797,7 +29798,9 @@
     "createdAt": "2026-10-31T05:19:45.881Z",
     "locationId": "osm_node_1423733597",
     "tags": ["ar_photo", "tag_014", "tag_010", "tag_041", "tag_036", "tag_031", "tag_028"],
-    "characterIds": ["character_001"]
+    "characterIds": ["character_001"],
+    "photoMemory": "吹き抜けていく風に、桃の海を泳ぐ魚たち",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo3444",
