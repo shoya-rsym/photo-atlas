@@ -6682,7 +6682,9 @@
     "locationId": "location_135",
     "tags": ["ar_photo", "tag_001", "tag_014", "tag_011", "tag_028", "tag_025"],
     "characterIds": ["character_001"],
-    "date": "2023-11-24"
+    "date": "2023-11-24",
+    "photoMemory": "椅子に少しだけ残るもみじから、なんとなくそこにいた人のことを思ってみる",
+    "photoMemorySource": "manual"
   },
   {
     "id": "photo1336",

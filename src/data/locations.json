@@ -80,9 +80,9 @@
     "id": "location_014",
     "name": "伊豆熱川",
     "prefectureId": "shizuoka",
-    "address": "東京都三宅島三宅村伊豆",
-    "lat": 34.107883,
-    "lng": 139.505798
+    "address": "静岡県賀茂郡東伊豆町奈良本969-3",
+    "lat": 34.81,
+    "lng": 139.07
   },
   {
     "id": "location_015",
@@ -1997,10 +1997,10 @@
   {
     "id": "osm_node_1401927618",
     "name": "東尋坊",
-    "prefectureId": "tokyo",
-    "address": "東京都台東区上野六丁目",
-    "lat": 35.7107939,
-    "lng": 139.7751562
+    "prefectureId": "fukui",
+    "address": "福井県坂井市64-1",
+    "lat": 36.188215,
+    "lng": 136.193334
   },
   {
     "id": "osm_way_772670439",
